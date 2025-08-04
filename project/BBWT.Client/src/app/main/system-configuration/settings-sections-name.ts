@@ -1,0 +1,21 @@
+export enum SettingsSectionsName {
+    FailedAttemptsPassword = "FailedAttemptsPassword",
+    UserPasswordSettings = "UserPasswordSettings",
+    UserSessionSettings = "UserSessionSettings",
+    MaintenanceSettings = "MaintenanceSettings",
+    ProjectSettings = "ProjectSettings",
+    LoadingTimeSettings = "LoadingTimeSettings",
+    RegistrationSettings = "RegistrationSettings",
+    UserLoginSettings = "UserLoginSettings",
+    SessionTimeSettings = "SessionTimeSettings",
+    FeedbackSettings = "FeedbackSettings",
+    GoogleSsoSettings = "GoogleSsoSettings",
+    FacebookSsoSettings = "FacebookSsoSettings",
+    LinkedInSsoSettings = "LinkedInSsoSettings",
+    RuntimeEditorSettings = "RuntimeEditorSettings",
+    PwaSettings = "PwaSettings",
+    ReCaptchaSettings = "ReCaptchaSettings",
+    TwoFactorSettings = "TwoFactorSettings",
+    FormioSettings = "FormioSettings",
+
+}

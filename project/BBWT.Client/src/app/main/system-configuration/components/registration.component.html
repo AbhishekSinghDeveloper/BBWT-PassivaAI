@@ -1,0 +1,78 @@
+<div *ngIf="settings" class="p-g" rte="Q9">
+    <form #form="ngForm" class="inputs-group p-g-12" (ngSubmit)="save()" rte="Qa">
+        <div class="inputs-group-row" rte="Qf">
+            <label for="checkPwned" class="inputs-group-row-name" rte="Qg">
+                Check password on
+                <a href="https://haveibeenpwned.com/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   rte="Qh">
+                    haveibeenpwned.com
+                </a>:
+            </label>
+            <div class="inputs-group-row-value" rte="Qi">
+                <p-checkbox [(ngModel)]="settings.checkPwned"
+                            [binary]="true"
+                            id="checkPwned"
+                            name="checkPwned"
+                            rte="Qj">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="Qk">
+            <label for="selfRegisterUserCompanyId" class="inputs-group-row-name" rte="Ql">
+                Self-registered user company:
+            </label>
+            <div class="inputs-group-row-value" rte="Qm">
+                <p-dropdown [(ngModel)]="settings.selfRegisterUserCompanyId"
+                            [options]="companiesOptions"
+                            [showClear]="true"
+                            id="selfRegisterUserCompanyId"
+                            name="selfRegisterUserCompanyId"
+                            placeholder="No Company"
+                            rte="Qn">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1rh">
+            <label for="userInvitationExpireInDays" class="inputs-group-row-name" rte="1ri">
+                User invite expiry:
+                <bb-tooltip message="How many days a user invitation link remains valid." rte="1rj"></bb-tooltip>
+            </label>
+            <div class="inputs-group-row-value" rte="1rk">
+                <p-inputNumber [(ngModel)]="settings.userInvitationExpireInDays"
+                               [showButtons]="true"
+                               [min]="1"
+                               required
+                               id="userInvitationExpireInDays"
+                               name="userInvitationExpireInDays"
+                               class="inline-text-input"
+                               rte="1rl">
+                </p-inputNumber>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1rh">
+            <label for="emailConfirmationExpiry" class="inputs-group-row-name" rte="1ri">
+                Email confirmation expiry:
+                <bb-tooltip message="How many days an email confirmation link remains valid." rte="1rj"></bb-tooltip>
+            </label>
+            <div class="inputs-group-row-value" rte="1rk">
+                <p-inputNumber [(ngModel)]="settings.emailConfirmationExpireInDays"
+                               [showButtons]="true"
+                               [min]="1"
+                               required
+                               id="emailConfirmationExpiry"
+                               name="emailConfirmationExpiry"
+                               class="inline-text-input"
+                               rte="1rl">
+                </p-inputNumber>
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="Qo">
+            <button pButton type="submit" label="Save" [disabled]="!form.valid" rte="Qp"></button>
+        </div>
+    </form>
+</div>

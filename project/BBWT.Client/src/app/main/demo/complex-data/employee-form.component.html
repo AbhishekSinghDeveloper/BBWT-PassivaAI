@@ -1,0 +1,80 @@
+<div class="inputs-group" rte="1pu">
+    <div class="inputs-group-row" rte="1pv">
+        <label class="inputs-group-row-name" rte="1pw">Name:</label>
+        <div class="inputs-group-row-value" rte="1px">
+            <input
+                type="text"
+                pInputText
+                [formControl]="name"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(name) }"
+             rte="1py"/>
+            <div class="p-error" *ngIf="invalid(name)" rte="1pz">
+                <small *ngIf="name.errors.required" rte="1pA">Name is required.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pB">
+        <label class="inputs-group-row-name" rte="1pC">Age: </label>
+        <div class="inputs-group-row-value" rte="1pD">
+            <p-inputNumber
+                [formControl]="age"
+                mode="decimal"
+                locale="en-UK"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(age) }"
+                (onBlur)="onTouched()"
+             rte="1pE"></p-inputNumber>
+            <div class="p-error" *ngIf="invalid(age)" rte="1pF">
+                <small *ngIf="age.errors.required" rte="1pG">Age is required.</small>
+                <small *ngIf="age.errors.pattern" rte="1pH">Age value is invalid.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pI">
+        <label class="inputs-group-row-name" rte="1pJ">Phone:</label>
+        <div class="inputs-group-row-value" rte="1pK">
+            <input
+                type="text"
+                pInputText
+                [formControl]="phone"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(phone) }"
+             rte="1pL"/>
+            <div class="p-error" *ngIf="invalid(phone)" rte="1pM">
+                <small *ngIf="phone.errors.required" rte="1pN">Phone is required.</small>
+                <small *ngIf="phone.errors.pattern" rte="1pO">Phone value is invalid.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pP">
+        <label class="inputs-group-row-name" rte="1pQ">Email:</label>
+        <div class="inputs-group-row-value" rte="1pR">
+            <input
+                type="text"
+                pInputText
+                [formControl]="email"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(email) }"
+             rte="1pS"/>
+            <div class="p-error" *ngIf="invalid(email)" rte="1pT">
+                <small *ngIf="email.errors.required" rte="1pU">Email is required.</small>
+                <small *ngIf="email.errors.pattern" rte="1pV">Email value is invalid.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pW">
+        <label class="inputs-group-row-name" rte="1pX">Job Role:</label>
+        <div class="inputs-group-row-value" rte="1pY">
+            <input
+                type="text"
+                pInputText
+                [formControl]="jobRole"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(jobRole) }"
+             rte="1pZ"/>
+            <div class="p-error" *ngIf="invalid(jobRole)" rte="1q0">
+                <small *ngIf="jobRole.errors.required" rte="1q1">Job role is required.</small>
+            </div>
+        </div>
+    </div>
+</div>

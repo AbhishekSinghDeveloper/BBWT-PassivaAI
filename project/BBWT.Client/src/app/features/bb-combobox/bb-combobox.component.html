@@ -1,0 +1,14 @@
+<ng-select id="dropdown" name="dropdown"
+           [items]="itemsBuffer"
+           [bindLabel]="options.dataTextField"
+           [bindValue]="options.dataValueField"
+           [virtualScroll]="true"
+           [loading]="loading"
+           [placeholder]="options.placeholder"
+           [(ngModel)]="selectedValue"
+           (scroll)="onScroll($event)"
+           (change)="change($event)"
+           (open)="onOpen()"
+           (scrollToEnd)="onScrollToEnd()"
+           [typeahead]="typeahead" rte="4O">
+</ng-select>

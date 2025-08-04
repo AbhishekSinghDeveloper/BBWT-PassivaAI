@@ -1,0 +1,1 @@
+export { BbTooltipModule } from "./bb-tooltip.module";

@@ -1,0 +1,159 @@
+<h2 rte="9T">2-Factor Authentication Providers</h2>
+<p-message *ngIf="userService.isUserRequiredSetupTwoFactor"
+            class="setup-2fa-error-message"
+            severity="error"
+            text="You must complete your 2-Factor authentication set up"
+            rte="1d2">
+</p-message>
+
+<div class="panels-container" rte="9U">
+    <div class="two-step-login-panel" rte="9V">
+        <img src="assets/images/authenticator.png" class="login-item-logo" rte="9W"/>
+        <div class="text-container" rte="9X">
+            <div class="title-container" rte="9Y">
+                <h5 rte="9Z">Authenticator App</h5>
+                <i *ngIf="user.twoFactorEnabled" class="material-icons enabled-icon" rte="a0">
+                    check_circle
+                </i>
+            </div>
+            <p rte="a1">Use an authenticator app (such as Authy or Google Authenticator) to generate time-based verification codes.</p>
+        </div>
+        <p-button label="Manage" class="login-item-manage-button" (onClick)="showAuthFactorDialog()" rte="a2"></p-button>
+    </div>
+    <div class="two-step-login-panel" rte="a3">
+        <img src="assets/images/fido.png" class="login-item-logo" rte="a4"/>
+        <div class="text-container" rte="a5">
+            <div class="title-container" rte="a6">
+                <h5 rte="a7">FIDO U2F Security Key</h5>
+                <i *ngIf="user.u2fEnabled" class="material-icons enabled-icon" rte="a8">
+                    check_circle
+                </i>
+            </div>
+            <p rte="a9">Use any FIDO U2F enabled security key to access your account.</p>
+        </div>
+        <p-button label="Manage" class="login-item-manage-button" (onClick)="showU2fModal = true" rte="aa"></p-button>
+    </div>
+</div>
+
+<p-dialog [(visible)]="showAuthFactorModal"
+          header="Two-step Login - Authenticator App"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          (onShow)="enableAuthenticator()" rte="ab">
+    <ng-container *ngIf="user.twoFactorEnabled; else enablingInstruction">
+        <h5 rte="9Z">Recovery Code</h5>
+        <button *ngIf="!isShowRecoveryCode" pButton label="Show Recovery Code..." (click)="check2fa()"></button>
+
+        <p *ngIf="isShowRecoveryCode" rte="ad">
+            Put this code in a safe place.
+            <strong class="recovery-code" rte="ae">{{recoveryCode}}</strong>
+            If you lose your device and don't have the recovery code you will lose access to your account!
+        </p>
+        <button *ngIf="isShowRecoveryCode" pButton label="Get New Recovery Code" (click)="getNewRecoveryCode()"></button>
+
+        <h5 rte="9Z">Disabling 2FA</h5>
+        <form #disable2FAForm="ngForm"
+              (ngSubmit)="disable2FA()"
+              (keydown.enter)="disable2FAForm.valid"
+              class="inputs-group">
+            <div class="inputs-group-row">
+                <label for="disable2FACode" class="inputs-group-row-name">Verification code:</label>
+                <div class="inputs-group-row-value">
+                    <div class="input-with-button-container">
+                        <input [(ngModel)]="disable2FACode"
+                               pInputText
+                               id="disable2FACode"
+                               name="disable2FACode"
+                               required
+                               maxlength="20" />
+                        <button pButton [disabled]="disable2FAForm.invalid" type="submit" label="Disable"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-template #enablingInstruction>
+        <p rte="ag">To use an authenticator app go through the following steps:</p>
+        <ol class="instruction" rte="ah">
+            <li rte="ai">
+                Install a two-factor authentication app on your mobile device, such as
+                Microsoft Authenticator for
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825071" target="_blank" rel="noopener noreferrer" rte="al">Windows Phone</a>,
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825072" target="_blank" rel="noopener noreferrer" rte="am">Android</a> and
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825073" target="_blank" rel="noopener noreferrer" rte="an">iOS</a>
+                or Google Authenticator for
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en" target="_blank" rel="noopener noreferrer" rte="aj">Android</a>
+                and
+                <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8" target="_blank" rel="noopener noreferrer" rte="ak">iOS</a>,
+                or Authy for
+                <a href="https://play.google.com/store/apps/details?id=com.authy.authy" target="_blank" rel="noopener noreferrer" rte="1gq">Android</a> and
+                <a href="https://apps.apple.com/us/app/authy/id494168017" target="_blank" rel="noopener noreferrer" rte="1gr">iOS</a>.
+            </li>
+
+            <li *ngIf="authenticatorUri" rte="ao">
+                Scan the QR Code or enter this key
+                <strong class="shared-key" rte="ap">{{sharedKey}}</strong>
+                into your two factor authenticator app. Spaces and casing do not matter.
+                <qrcode [qrdata]="authenticatorUri" [size]="140" [level]="'M'" rte="aq"></qrcode>
+            </li>
+
+            <li rte="ar">
+                Once you have scanned the QR code or input the key above, your two factor authentication app will provide you with a unique code. Enter the code in the confirmation box below.<br />
+                <div class="inputs-group" rte="as">
+                    <label for="codeValue" class="inputs-group-row" rte="at">Verification code:</label>
+                    <div class="inputs-group-row-value" rte="au">
+                        <input [(ngModel)]="code"
+                               pInputText
+                               id="codeValue"
+                               name="codeValue"
+                               placeholder="Enter code"
+                               maxlength="20"  rte="av"/>
+                    </div>
+                </div>
+            </li>
+
+            <li rte="1gs">
+                Use your mobile app to get a two-factor code and enter it during the authentication process
+            </li>
+        </ol>
+    </ng-template>
+
+    <p-footer rte="aw">
+        <button pButton type="button" label="Close" class="p-button-secondary" (click)="showAuthFactorModal = false" rte="ax"></button>
+        <button *ngIf="!user.twoFactorEnabled" pButton type="button" label="Verify" (click)="verifyCode()" rte="ay"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="showU2fModal"
+          header="Two-step Login - FIDO U2F Security Key"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          (onShow)="getDeviceResponse()" rte="aA">
+    <div class="p-g" rte="aB">
+        <div *ngIf="!recoveryCode" class="p-g-12" rte="aC">
+            <p rte="aD">Supported platforms: Chrome, Opera, Vivaldi, or Firefox with FIDO U2F enabled.</p>
+            <p rte="aE">Add a FIDO U2F security key to your account (Don't have one ? <a href="https://www.yubico.com/solutions/fido-u2f/" rel="noopener noreferrer" target="_blank" rte="aF">Learn more</a>) :</p>
+            <ol rte="aG">
+                <li rte="aH">Plug the security key into your computer's USB port.</li>
+                <li rte="aI">If the security key has a button, touch it.</li>
+            </ol>
+            <ng-container *ngIf="!deviceResponse">
+                <p-progressSpinner [style]="{width: '50px', height: '50px'}" rte="aK"></p-progressSpinner>
+                <p rte="aL">Waiting for you to touch the button on your security key...</p>
+            </ng-container>
+        </div>
+        <div class="p-g-12" rte="aM">
+            <p rte="aN">Put this code in a safe place.</p>
+            <p rte="aO">If you lose your device and don't have the recovery code you will lose access to your account.</p>
+            <p style="font-size: 14px" rte="aP"><strong rte="aQ">{{recoveryCode}}</strong></p>
+        </div>
+    </div>
+
+    <p-footer rte="aR">
+        <button pButton type="button" label="Close" class="p-button-secondary" (click)="showU2fModal = false" rte="aS"></button>
+        <button *ngIf="!deviceRegistered" pButton type="button" label="Add key" [disabled]="!deviceResponse" (click)="sendDeviceResponse()" rte="aT"></button>
+        <button *ngIf="user.u2fEnabled" pButton type="button" label="Disable" (click)="disableU2F()" rte="aU"></button>
+    </p-footer>
+</p-dialog>

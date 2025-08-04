@@ -1,0 +1,798 @@
+<div class="card--hidden" rte="Lb">
+    <h1 rte="Lc">Search</h1>
+
+    <p rte="Ld">
+        Below we will describe three p-controls that can be used in grids /
+        forms for auto complete / search.
+    </p>
+
+    <h1 rte="Le"><small rte="Lf">Combo box</small></h1>
+    <p rte="Lg">
+        A combo box is a combination of a drop-down list or list box and a
+        single-line editable textbox, allowing the user to either type a value
+        directly or select a value from the list.<br /><br />
+        This p-control is used when you need to specify a value from a huge list
+        of data, which is impractical to load the whole at a time on the client
+        side.<br /><br />
+        BB Combo box supports server side data virtualisation - enables you to
+        display large datasets by using a fixed amount of list items in the
+        popup list of the ComboBox regardless of the dataset size.<br />
+        When the list is scrolled, the ComboBox reuses the existing items to
+        display the relevant data instead of creating new ones.
+    </p>
+    <div class="p-g" rte="Lh">
+        <div class="p-g-6 p-form-group" rte="Li">
+            <div class="fixed-label" rte="Lj">
+                <label for="combo" rte="Lk">Customer:</label>
+            </div>
+            <div class="p-g-12 p-md-4 combobox-container" rte="Ll">
+                <bb-combobox
+                    id="combo"
+                    name="combo"
+                    [options]="customersComboboxOptions"
+                    (changed)="customerComboboxChanged($event)"
+                    [(selectedValue)]="selectedCustomerId"
+                    rte="Lm"
+                ></bb-combobox>
+            </div>
+            <div class="p-g-12 p-md-4" *ngIf="selectedCustomerId" rte="1oG">
+                Selected customer ID: {{ selectedCustomerId }}
+            </div>
+        </div>
+    </div>
+    <br />
+    <p rte="Ln">HTML looks like this:</p>
+
+    <pre class="codeHighlight" rte="Lo">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;p-g-6 p-form-group&quot;&gt;
+            &lt;div class=&quot;fixed-label&quot;&gt;
+                &lt;label for=&quot;combo&quot;&gt;Customer:&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 combobox-container&quot;&gt;
+                &lt;bb-combobox
+                    id=&quot;combo&quot;
+                    name=&quot;combo&quot;
+                    [options]=&quot;customersComboboxOptions&quot;
+                    (changed)=&quot;customerComboboxChanged($event)&quot;
+                    [(selectedValue)]=&quot;selectedCustomerId&quot;
+                &gt;&lt;/bb-combobox&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4&quot; *ngIf=&quot;selectedCustomerId&quot;&gt;
+                Selected customer ID: {{ openProjection }} selectedCustomerId {{
+            closedProjection
+        }}
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="Lp">Typescript code</p>
+
+    <pre class="codeHighlight" rte="Lq">
+    &#64;Component(&#123;
+        selector: &quot;search&quot;,
+        templateUrl: &quot;./search.component.html&quot;
+    &#125;)
+    export class SearchComponent &#123;
+        selectedCustomerId: string;
+    
+        customersComboboxOptions = new BbComboboxOptions(&#123;
+            placeholder: &quot;Select a Customer&quot;,
+            dataValueField: &quot;id&quot;,
+            dataTextField: &quot;code&quot;,
+            dataSortField: &quot;code&quot;,
+            url: &quot;api/demo/customer/page&quot;
+        &#125;);
+    
+        customerComboboxChanged(customer: ICustomer) &#123;
+            console.log(customer);
+        &#125;
+    &#125;
+    <br>...<br>
+
+    // In your module declaration just
+
+    import &#123; BbComboboxModule &#125; from &quot;&#64;features/bb-combobox/bb-combobox.module&quot;;
+    <br>...<br>
+    &#64;NgModule(&#123;
+        imports: [ BbComboboxModule, ...],
+        ...
+    &#125;)
+    export class DemoModule &#123; &#125;
+    </pre>
+    <p rte="Lr">Server side code</p>
+    <pre class="codeHighlight" rte="Ls">
+    namespace BBWM.Demo.Northwind.Api
+    &#123;
+        [Route(&quot;api/demo/customer&quot;)]
+        public class CustomerController : DataControllerBase&lt;IDemoDataContext, Customer, CustomerDTO, CustomerDTO, int&gt;
+        &#123;
+            public CustomerController(IDataService&lt;IDemoDataContext&gt; dataService, ICustomerService customerService) 
+                : base(dataService)
+            &#123; &#125;
+        &#125;
+    &#125;
+    <br>...<br>
+    public class CustomerDTO : IDTO
+    &#123;
+        public int Id &#123; get; set; &#125;
+
+        public string Code &#123; get; set; &#125;
+    &#125;
+    </pre>
+    <br />
+
+    <h1 rte="Lt"><small rte="Lu">AutoComplete</small></h1>
+    <p rte="Lv">
+        AutoComplete is an input component that provides real-time suggestions
+        when being typed.
+        <br /><br />
+
+        This p-control is used as a regular text field when prompts are needed,
+        but it is not necessary (that is, the user can decide to ignore the
+        prompt and enter his own text). For example, when a further search is
+        needed for a part of a word, etc. <br /><br />
+
+        AutoComplete uses ngModel for two-way binding, requires a list of
+        suggestions and a completeMethod to query for the results. The
+        completeMethod gets the query text as event.query property and should
+        update the suggestions with the search results.<br /><br />
+        Also please see
+        <a
+            href="https://primefaces.org/primeng/showcase/#/autocomplete"
+            target="_blank"
+            rel="noopener noreferrer"
+            rte="Lw"
+            >PrimeNG docs</a
+        >
+        for details.
+    </p>
+
+    <p rte="Lx">
+        1. Type 'A' in the control below for a demonstration of AutoComplete
+        with
+        <b rte="Ly">client side dataSource / filtering</b>.
+    </p>
+
+    <div class="p-g" rte="Lz">
+        <div class="fixed-label" rte="LA">
+            <label for="autocomplete" rte="LB">Search Customer:</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="LC">
+            <p-autoComplete
+                id="autocomplete-clientside"
+                [(ngModel)]="clientSideInputText"
+                [suggestions]="clientSideCustomerSuggestions"
+                (completeMethod)="filterCustomersClientSide($event.query)"
+                placeholder="Enter customer code..."
+                minLength="1"
+                (onSelect)="customerChanged1($event)"
+                field="code"
+                [size]="40"
+                rte="LD"
+            >
+            </p-autoComplete>
+        </div>
+        <div
+            class="p-g-12 p-md-4"
+            *ngIf="clientSideSelectedCustomerId"
+            rte="1oH"
+        >
+            Selected customer ID: {{ clientSideSelectedCustomerId }}
+        </div>
+    </div>
+
+    <br />
+
+    <p rte="LE">HTML looks like this:</p>
+
+    <pre class="codeHighlight" rte="LF">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;autocomplete&quot;&gt;Search Customer:&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+            &lt;p-autoComplete
+                id=&quot;autocomplete-clientside&quot;
+                [(ngModel)]=&quot;clientSideInputText&quot;
+                [suggestions]=&quot;clientSideCustomerSuggestions&quot;
+                (completeMethod)=&quot;filterCustomersClientSide($event.query)&quot;
+                placeholder=&quot;Enter customer code...&quot;
+                minLength=&quot;1&quot;
+                (onSelect)=&quot;customerChanged1($event)&quot;
+                field=&quot;code&quot;
+                [size]=&quot;40&quot;&gt;
+            &lt;/p-autoComplete&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;p-g-12 p-md-4&quot; *ngIf=&quot;clientSideSelectedCustomerId&quot;&gt;
+            Selected customer ID: {{
+            openProjection
+        }} clientSideSelectedCustomerId {{ closedProjection }}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="LG">Typescript code</p>
+
+    <pre class="codeHighlight" rte="LH">
+    &#64;Component(&#123;
+        selector: &quot;search&quot;,
+        templateUrl: &quot;./search.component.html&quot;
+    &#125;)
+    export class SearchComponent &#123;
+        clientSideInputText: string;
+        clientSideSelectedCustomerId: EntityId;
+        clientSideCustomers: ICustomer[] = [
+            &#123; id: 1, code: &quot;ABC001&quot;, companyName: undefined &#125;,
+            &#123; id: 2, code: &quot;ABC002&quot;, companyName: undefined &#125;,
+            &#123; id: 3, code: &quot;ABC003&quot;, companyName: undefined &#125;,
+            &#123; id: 4, code: &quot;DEF001&quot;, companyName: undefined &#125;,
+            &#123; id: 5, code: &quot;DEF002&quot;, companyName: undefined &#125;,
+            &#123; id: 6, code: &quot;DEF003&quot;, companyName: undefined &#125;,
+            &#123; id: 7, code: &quot;GHI001&quot;, companyName: undefined &#125;,
+            &#123; id: 8, code: &quot;GHI002&quot;, companyName: undefined &#125;,
+            &#123; id: 9, code: &quot;GHI003&quot;, companyName: undefined &#125;
+        ];
+        clientSideCustomerSuggestions: ICustomer[] = [];
+    
+        constructor() &#123;&#125;
+    
+        filterCustomersClientSide(searchTerm: string) &#123;
+            this.clientSideCustomerSuggestions = [];
+            const searchTermNormalized = searchTerm.toLowerCase();
+    
+            for (let i = 0; i &lt; this.clientSideCustomers.length; i++) &#123;
+                const code = this.clientSideCustomers[i].code.toLowerCase();
+                if (code.indexOf(searchTermNormalized) &gt;= 0) &#123;
+                    this.clientSideCustomerSuggestions.push(this.clientSideCustomers[i]);
+                &#125;
+            &#125;
+        &#125;
+    
+        customerChanged1(customer: ICustomer) &#123;
+            this.clientSideSelectedCustomerId = customer.id;
+        &#125;
+    &#125;
+    </pre>
+
+    <br />
+    <p rte="LI">
+        2. In real projects more often it will use
+        <b rte="LJ">server-side filtering</b>:
+    </p>
+
+    <div class="p-g" rte="LK">
+        <div class="fixed-label" rte="LL">
+            <label for="autocomplete" rte="LM">Search Customer:</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="LN">
+            <p-autoComplete
+                id="autocomplete"
+                [(ngModel)]="serverSideInputText"
+                [dropdown]="true"
+                [suggestions]="serverSideCustomerSuggestions"
+                (completeMethod)="filterCustomersServerSide($event.query)"
+                placeholder="Enter customer code..."
+                [minLength]="1"
+                (onSelect)="customerChanged2($event)"
+                field="code"
+                [size]="40"
+                rte="LO"
+            >
+            </p-autoComplete>
+        </div>
+        <div
+            class="p-g-12 p-md-4"
+            *ngIf="serverSideSelectedCustomerId"
+            rte="1oI"
+        >
+            Selected customer ID: {{ serverSideSelectedCustomerId }}
+        </div>
+    </div>
+    <br />
+
+    <p rte="1oJ">HTML looks like this:</p>
+
+    <pre class="codeHighlight" rte="LQ">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;autocomplete&quot;&gt;Search Customer:&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+            &lt;p-autoComplete
+                id=&quot;autocomplete&quot;
+                [(ngModel)]=&quot;serverSideInputText&quot;
+                [dropdown]=&quot;true&quot;
+                [suggestions]=&quot;serverSideCustomerSuggestions&quot;
+                (completeMethod)=&quot;filterCustomersServerSide($event.query)&quot;
+                placeholder=&quot;Enter customer code...&quot;
+                [minLength]=&quot;1&quot;
+                (onSelect)=&quot;customerChanged2($event)&quot;
+                field=&quot;code&quot;
+                [size]=&quot;40&quot;
+            &gt;
+            &lt;/p-autoComplete&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;p-g-12 p-md-4&quot; *ngIf=&quot;serverSideSelectedCustomerId&quot;&gt;
+            Selected customer ID: {{
+            openProjection
+        }} serverSideSelectedCustomerId {{ closedProjection }}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="LR">Typescript code</p>
+
+    <pre class="codeHighlight" rte="LS">
+    &#64;Component(&#123;
+        selector: &quot;search&quot;,
+        templateUrl: &quot;./search.component.html&quot;
+    &#125;)
+    export class SearchComponent &#123;
+        serverSideInputText: string;
+        serverSideSelectedCustomerId: EntityId;
+        serverSideCustomerSuggestions: ICustomer[] = [];
+    
+        constructor(private customerService: CustomerService) &#123;&#125;
+    
+        async filterCustomersServerSide(searchTerm: string) &#123;
+            const filter = new StringFilter(&quot;code&quot;, searchTerm, StringFilterMatchMode.Contains);
+    
+            const customersPage = await this.customerService.getPage(&#123;
+                filters: [filter],
+                sortingField: &quot;code&quot;,
+                take: 10
+            &#125;);
+    
+            this.serverSideCustomerSuggestions = customersPage.items;
+        &#125;
+    
+        customerChanged2(customer: ICustomer) &#123;
+            this.serverSideSelectedCustomerId = customer.id;
+        &#125;
+    &#125;
+
+    <br>...<br>
+
+    &#64;Injectable(&#123;
+        providedIn: &quot;root&quot;
+    &#125;)
+    export class CustomerService extends PagedCrudService&lt;ICustomer&gt; &#123;
+        public readonly url = &quot;api/demo/customer&quot;;
+        public readonly entityTitle = &quot;Customer&quot;;
+
+        constructor(http: HttpClient, handlersFactory: HttpResponsesHandlersFactory) &#123;
+            super(http, handlersFactory);
+        &#125;
+    &#125;
+    </pre>
+
+    <p rte="LT">Server side code</p>
+
+    <pre class="codeHighlight" rte="LU">
+    namespace BBWM.Demo.Northwind.Api
+    &#123;
+        [Route(&quot;api/demo/customer&quot;)]
+        public class CustomerController : DataControllerBase&lt;IDemoDataContext, Customer, CustomerDTO, CustomerDTO, int&gt;
+        &#123;
+            private readonly ICustomerService _customerService;
+    
+            public CustomerController(IDataService&lt;IDemoDataContext&gt; dataService, ICustomerService customerService) 
+                : base(dataService) 
+            &#123; &#125;
+        &#125;
+    &#125;
+    <br>...<br>
+    public class CustomerDTO : IDTO
+    &#123;
+        public int Id &#123; get; set; &#125;
+
+        public string Code &#123; get; set; &#125;
+    &#125;
+    </pre>
+
+    <p rte="M8">
+        4. <b rte="M9">Multiple mode</b> is used to select more than one value
+        from the autocomplete. In this case, model reference should be an array.
+    </p>
+    <div class="p-g" rte="Ma">
+        <div class="fixed-label" rte="Mb">
+            <label for="autocomplete" rte="Mc">Search Customer:</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="Md">
+            <p-autoComplete
+                id="autocomplete"
+                [(ngModel)]="multipleSelectionInputTexts"
+                [dropdown]="true"
+                [suggestions]="multipleSelectionSuggestions"
+                [multiple]="true"
+                (completeMethod)="
+                    filterCustomersMultipleSelection($event.query)
+                "
+                [minLength]="1"
+                placeholder="Enter customer code..."
+                (onSelect)="multipleSelectionSelectCustomer($event)"
+                (onUnselect)="multipleSelectionUnselectCustomer($event)"
+                field="code"
+                [size]="40"
+                rte="Me"
+            >
+            </p-autoComplete>
+        </div>
+        <div
+            class="p-g-12 p-md-12"
+            *ngIf="multipleSelectionSelectedCustomerIDs?.length"
+            rte="1oK"
+        >
+            Selected customer IDs:
+            {{ multipleSelectionSelectedCustomerIDs | join }}
+        </div>
+    </div>
+    <br />
+
+    <p rte="1oL">HTML looks like this:</p>
+
+    <pre class="codeHighlight" rte="Mf">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;autocomplete&quot;&gt;Search Customer:&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+            &lt;p-autoComplete
+                id=&quot;autocomplete&quot;
+                [(ngModel)]=&quot;multipleSelectionInputTexts&quot;
+                [dropdown]=&quot;true&quot;
+                [suggestions]=&quot;multipleSelectionSuggestions&quot;
+                [multiple]=&quot;true&quot;
+                (completeMethod)=&quot;filterCustomersMultipleSelection($event.query)&quot;
+                [minLength]=&quot;1&quot;
+                placeholder=&quot;Enter customer code...&quot;
+                (onSelect)=&quot;multipleSelectionSelectCustomer($event)&quot;
+                (onUnselect)=&quot;multipleSelectionUnselectCustomer($event)&quot;
+                field=&quot;code&quot;
+                [size]=&quot;40&quot;
+            &gt;
+            &lt;/p-autoComplete&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;p-g-12 p-md-12&quot; *ngIf=&quot;multipleSelectionSelectedCustomerIDs?.length&quot;&gt;
+            Selected customer IDs: {{
+            multipleSelectionSelectedCustomerIDs | join
+        }}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="1oM">Typescript code</p>
+
+    <pre class="codeHighlight" rte="1oN">
+    &#64;Component(&#123;
+        selector: &quot;search&quot;,
+        templateUrl: &quot;./search.component.html&quot;
+    &#125;)
+    export class SearchComponent &#123;
+        clientSideCustomers: ICustomer[] = [
+            &#123; id: 1, code: &quot;ABC001&quot;, companyName: undefined &#125;,
+            &#123; id: 2, code: &quot;ABC002&quot;, companyName: undefined &#125;,
+            &#123; id: 3, code: &quot;ABC003&quot;, companyName: undefined &#125;,
+            &#123; id: 4, code: &quot;DEF001&quot;, companyName: undefined &#125;,
+            &#123; id: 5, code: &quot;DEF002&quot;, companyName: undefined &#125;,
+            &#123; id: 6, code: &quot;DEF003&quot;, companyName: undefined &#125;,
+            &#123; id: 7, code: &quot;GHI001&quot;, companyName: undefined &#125;,
+            &#123; id: 8, code: &quot;GHI002&quot;, companyName: undefined &#125;,
+            &#123; id: 9, code: &quot;GHI003&quot;, companyName: undefined &#125;
+        ];
+        multipleSelectionInputTexts: string[];
+        multipleSelectionSelectedCustomerIDs: EntityId[] = [];
+        multipleSelectionSuggestions: ICustomer[] = [];
+    
+        constructor() &#123;&#125;
+    
+        filterCustomersMultipleSelection(searchTerm: string) &#123;
+            this.multipleSelectionSuggestions = [];
+            const searchTermNormalized = searchTerm.toLowerCase();
+    
+            for (let i = 0; i &lt; this.clientSideCustomers.length; i++) &#123;
+                const code = this.clientSideCustomers[i].code.toLowerCase();
+                if (code.indexOf(searchTermNormalized) &gt;= 0) &#123;
+                    this.multipleSelectionSuggestions.push(this.clientSideCustomers[i]);
+                &#125;
+            &#125;
+        &#125;
+    
+        multipleSelectionSelectCustomer(customer: ICustomer) &#123;
+            if (!this.multipleSelectionSelectedCustomerIDs.includes(customer.id)) &#123;
+                this.multipleSelectionSelectedCustomerIDs = [
+                    ...this.multipleSelectionSelectedCustomerIDs,
+                    customer.id
+                ];
+            &#125;
+        &#125;
+    
+        multipleSelectionUnselectCustomer(customer: ICustomer) &#123;
+            this.multipleSelectionSelectedCustomerIDs =
+                this.multipleSelectionSelectedCustomerIDs.filter((id) =&gt; customer.id !== id);
+        &#125;
+    &#125;
+    </pre>
+
+    <p rte="Mg">
+        5. Item <b rte="Mh">ng-template</b> allows displaying custom content
+        inside the suggestions panel. The local ng-template variable passed to
+        the ng-template is an object in the suggestions array.
+    </p>
+    <div class="p-g" rte="Mi">
+        <div class="fixed-label" rte="Mj">
+            <label for="autocomplete" rte="Mk">Search Customer:</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="Ml">
+            <p-autoComplete
+                id="autocomplete"
+                [(ngModel)]="customTemplateInputText"
+                [suggestions]="customTemplateSuggestions"
+                [dropdown]="true"
+                (completeMethod)="filterCustomersCustomTemplate($event.query)"
+                placeholder="Enter customer code..."
+                [minLength]="1"
+                (onSelect)="customerChanged3($event)"
+                field="code"
+                [size]="40"
+                rte="Mm"
+            >
+                <ng-template let-customer pTemplate="item">
+                    <i class="material-icons" rte="1oO">person</i>
+                    <div
+                        [style]="{
+                            display: 'inline-block',
+                            'vertical-align': 'super'
+                        }"
+                        rte="1oP"
+                    >
+                        {{ customer.code }}
+                    </div>
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div
+            class="p-g-12 p-md-4"
+            *ngIf="customTemplateSelectedCustomerID"
+            rte="1oQ"
+        >
+            Selected customer ID: {{ customTemplateSelectedCustomerID }}
+        </div>
+    </div>
+    <br />
+
+    <p rte="1oR">HTML looks like this:</p>
+
+    <pre class="codeHighlight" rte="Mr">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;autocomplete&quot;&gt;Search Customer:&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+            &lt;p-autoComplete
+                id=&quot;autocomplete&quot;
+                [(ngModel)]=&quot;customTemplateInputText&quot;
+                [suggestions]=&quot;customTemplateSuggestions&quot;
+                [dropdown]=&quot;true&quot;
+                (completeMethod)=&quot;filterCustomersCustomTemplate($event.query)&quot;
+                placeholder=&quot;Enter customer code...&quot;
+                [minLength]=&quot;1&quot;
+                (onSelect)=&quot;customerChanged3($event)&quot;
+                field=&quot;code&quot;
+                [size]=&quot;40&quot;
+            &gt;
+                &lt;ng-template let-customer pTemplate=&quot;item&quot;&gt;
+                    &lt;i class=&quot;material-icons&quot;&gt;person&lt;/i&gt;
+                    &lt;div [style]=&quot;&#123; display: &apos;inline-block&apos;, &apos;vertical-align&apos;: &apos;super&apos; &#125;&quot;&gt;
+                        {{ openProjection }} customer.code {{
+            closedProjection
+        }}
+                    &lt;/div&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-autoComplete&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;p-g-12 p-md-4&quot; *ngIf=&quot;customTemplateSelectedCustomerID&quot;&gt;
+            Selected customer ID: {{
+            openProjection
+        }} customTemplateSelectedCustomerID {{ closedProjection }}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="1oS">Typescript code</p>
+
+    <pre class="codeHighlight" rte="1oT">
+    &#64;Component(&#123;
+        selector: &quot;search&quot;,
+        templateUrl: &quot;./search.component.html&quot;
+    &#125;)
+    export class SearchComponent &#123;
+        clientSideCustomers: ICustomer[] = [
+            &#123; id: 1, code: &quot;ABC001&quot;, companyName: undefined &#125;,
+            &#123; id: 2, code: &quot;ABC002&quot;, companyName: undefined &#125;,
+            &#123; id: 3, code: &quot;ABC003&quot;, companyName: undefined &#125;,
+            &#123; id: 4, code: &quot;DEF001&quot;, companyName: undefined &#125;,
+            &#123; id: 5, code: &quot;DEF002&quot;, companyName: undefined &#125;,
+            &#123; id: 6, code: &quot;DEF003&quot;, companyName: undefined &#125;,
+            &#123; id: 7, code: &quot;GHI001&quot;, companyName: undefined &#125;,
+            &#123; id: 8, code: &quot;GHI002&quot;, companyName: undefined &#125;,
+            &#123; id: 9, code: &quot;GHI003&quot;, companyName: undefined &#125;
+        ];
+        customTemplateInputText: string;
+        customTemplateSelectedCustomerID: EntityId;
+        customTemplateSuggestions: ICustomer[] = [];
+    
+        constructor() &#123;&#125;
+    
+        filterCustomersCustomTemplate(searchTerm: string) &#123;
+            this.customTemplateSuggestions = [];
+            const searchTermNormalized = searchTerm.toLowerCase();
+    
+            for (let i = 0; i &lt; this.clientSideCustomers.length; i++) &#123;
+                const code = this.clientSideCustomers[i].code.toLowerCase();
+                if (code.indexOf(searchTermNormalized) &gt;= 0) &#123;
+                    this.customTemplateSuggestions.push(this.clientSideCustomers[i]);
+                &#125;
+            &#125;
+        &#125;
+    
+        customerChanged3(customer: ICustomer) &#123;
+            this.customTemplateSelectedCustomerID = customer.id;
+        &#125;
+    &#125;
+    </pre>
+
+    <br />
+
+    <h1 rte="Ms"><small rte="Mt">Dropdown</small></h1>
+    <p rte="Mu">
+        Dropdown is used to select an item from a small collection of options
+        (unlike combobox). Custom content support and filtering are the notable
+        features.<br /><br />
+        Also please see
+        <a
+            href="https://primefaces.org/primeng/showcase/#/autocomplete"
+            target="_blank"
+            rel="noopener noreferrer"
+            rte="Mv"
+        >
+            PrimeNG docs
+        </a>
+        for details.
+    </p>
+
+    <div class="p-g" rte="Mw">
+        <div class="fixed-label" rte="Mx">
+            <label for="dropdown" rte="My">Search Customer:</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="Mz">
+            <p-dropdown
+                [(ngModel)]="dropdownSelectedCustomer"
+                [options]="clientSideCustomers"
+                placeholder="Enter customer code..."
+                optionLabel="code"
+                [style]="{ width: '100%' }"
+                rte="MA"
+            >
+                <ng-template pTemplate="selectedItem">
+                    <ng-container *ngIf="dropdownSelectedCustomer">
+                        <i class="material-icons" rte="1oU">person</i>
+                        <div
+                            [style]="{
+                                display: 'inline-block',
+                                'vertical-align': 'super'
+                            }"
+                            rte="1oV"
+                        >
+                            {{ dropdownSelectedCustomer.code }}
+                        </div>
+                    </ng-container>
+                </ng-template>
+                <ng-template let-customer pTemplate="item">
+                    <i class="material-icons" rte="1oW">person_outline</i>
+                    <div
+                        [style]="{
+                            display: 'inline-block',
+                            'vertical-align': 'super'
+                        }"
+                        rte="1oX"
+                    >
+                        {{ customer.code }}
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="p-g-12 p-md-4" *ngIf="dropdownSelectedCustomer" rte="1oY">
+            Selected customer ID: {{ dropdownSelectedCustomer.id }}
+        </div>
+    </div>
+    <br />
+
+    <p rte="1oZ">HTML looks like this:</p>
+
+    <pre class="codeHighlight" rte="1p0">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;dropdown&quot;&gt;Search Customer:&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+            &lt;p-dropdown
+                [(ngModel)]=&quot;dropdownSelectedCustomer&quot;
+                [options]=&quot;clientSideCustomers&quot;
+                placeholder=&quot;Enter customer code...&quot;
+                optionLabel=&quot;code&quot;
+                [style]=&quot;&#123; width: &apos;100%&apos; &#125;&quot;
+            &gt;
+                &lt;ng-template pTemplate=&quot;selectedItem&quot;&gt;
+                    &lt;ng-container *ngIf=&quot;dropdownSelectedCustomer&quot;&gt;
+                        &lt;i class=&quot;material-icons&quot;&gt;person&lt;/i&gt;
+                        &lt;div [style]=&quot;&#123; display: &apos;inline-block&apos;, &apos;vertical-align&apos;: &apos;super&apos; &#125;&quot;&gt;
+                            {{
+            openProjection
+        }} dropdownSelectedCustomer.code {{ closedProjection }}
+                        &lt;/div&gt;
+                    &lt;/ng-container&gt;
+                &lt;/ng-template&gt;
+                &lt;ng-template let-customer pTemplate=&quot;item&quot;&gt;
+                    &lt;i class=&quot;material-icons&quot;&gt;person_outline&lt;/i&gt;
+                    &lt;div [style]=&quot;&#123; display: &apos;inline-block&apos;, &apos;vertical-align&apos;: &apos;super&apos; &#125;&quot;&gt;
+                    {{ openProjection }} customer.code {{ closedProjection }}
+                    &lt;/div&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-dropdown&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;p-g-12 p-md-4&quot; *ngIf=&quot;dropdownSelectedCustomer&quot;&gt;
+            Selected customer ID: {{
+            openProjection
+        }} dropdownSelectedCustomer.id {{ closedProjection }}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="1p1">Typescript code</p>
+
+    <pre class="codeHighlight" rte="1p2">
+    &#64;Component(&#123;
+        selector: &quot;search&quot;,
+        templateUrl: &quot;./search.component.html&quot;
+    &#125;)
+    export class SearchComponent &#123;
+        clientSideCustomers: ICustomer[] = [
+            &#123; id: 1, code: &quot;ABC001&quot;, companyName: undefined &#125;,
+            &#123; id: 2, code: &quot;ABC002&quot;, companyName: undefined &#125;,
+            &#123; id: 3, code: &quot;ABC003&quot;, companyName: undefined &#125;,
+            &#123; id: 4, code: &quot;DEF001&quot;, companyName: undefined &#125;,
+            &#123; id: 5, code: &quot;DEF002&quot;, companyName: undefined &#125;,
+            &#123; id: 6, code: &quot;DEF003&quot;, companyName: undefined &#125;,
+            &#123; id: 7, code: &quot;GHI001&quot;, companyName: undefined &#125;,
+            &#123; id: 8, code: &quot;GHI002&quot;, companyName: undefined &#125;,
+            &#123; id: 9, code: &quot;GHI003&quot;, companyName: undefined &#125;
+        ];
+        dropdownSelectedCustomer: ICustomer;
+
+        constructor() &#123;&#125;
+    &#125;
+    
+    </pre>
+
+    <br />
+
+    <style>
+        .p-g {
+            border: 1px dotted brown;
+            padding: 10px;
+        }
+    </style>
+</div>

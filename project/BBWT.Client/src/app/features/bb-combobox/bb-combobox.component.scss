@@ -1,0 +1,58 @@
+::ng-deep .bb-combobox {
+/*::ng-deep {*/
+
+    .ng-select .ng-select-container .ng-value-container .ng-input > input {
+        margin-top: 13px;
+        margin-left: -5px;
+    }
+
+    .ng-select-container, .ng-value-container, .ng-input {
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .ng-select-container {
+        box-shadow: none !important;
+        border-bottom: 1px solid #bdbdbd !important;
+        padding-top: 16px;
+    }
+
+    .ng-select.ng-select-focused > .ng-select-container {
+        box-shadow: none !important;
+        border-bottom: 2px solid #722779 !important;
+    }
+
+    .ng-select-focused:not(.ng-select-opened) > .ng-select-container .ng-arrow-wrapper {
+        margin-top: 0 !important;
+    }
+
+    .ng-select-focused.ng-select-opened > .ng-select-container .ng-arrow-wrapper {
+        margin-top: 3px !important;
+    }
+
+    .ng-select-container:hover, .ng-value-container:hover, input:hover {
+        cursor: pointer !important;
+    }
+
+    .ng-option-selected {
+        background-color: #722779 !important;
+
+        .ng-option-label {
+            color: white !important;
+            font-weight: normal !important;
+        }
+    }
+
+    .ng-option-marked:not(.ng-option-selected) {
+        background-color: #bdbdbd !important;
+    }
+
+    .ng-arrow {
+        border: none !important;
+
+        &:before {
+            font-family: 'primeicons';
+            content: "\e902";
+        }
+    }
+}

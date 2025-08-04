@@ -1,0 +1,309 @@
+<div class="card--hidden" rte="8I">
+    <h1 rte="8J">Organization Details</h1>
+
+    <span *ngIf="organizationExist" class="validation-error" rte="8K">
+        A record with these details already exists. No new record has been
+        created.
+    </span>
+
+    <form #form="ngForm" class="inputs-group" (ngSubmit)="save()" rte="18o">
+        <p-tabView rte="8M">
+            <p-tabPanel header="Basic Details" rte="8N">
+                <div class="inputs-group-row" rte="8O">
+                    <label
+                        for="name"
+                        class="inputs-group-row-name asterisk-mark"
+                        rte="8P"
+                        >Name:</label
+                    >
+                    <div class="inputs-group-row-value" rte="8Q">
+                        <input
+                            [(ngModel)]="organization.name"
+                            #name="ngModel"
+                            pInputText
+                            id="name"
+                            name="name"
+                            notEmpty
+                            rte="8R"
+                        />
+                        <span
+                            *ngIf="name.touched && !name.valid"
+                            class="validation-error"
+                            rte="8S"
+                            >Organization name is required</span
+                        >
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="8T">
+                    <label
+                        for="description"
+                        class="inputs-group-row-name"
+                        rte="8U"
+                        >Description:</label
+                    >
+                    <div class="inputs-group-row-value" rte="8V">
+                        <input
+                            [(ngModel)]="organization.description"
+                            pInputText
+                            id="description"
+                            name="description"
+                            rte="8W"
+                        />
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="8X">
+                    <label for="address1" class="inputs-group-row-name" rte="8Y"
+                        >Address 1:</label
+                    >
+                    <div class="inputs-group-row-value" rte="8Z">
+                        <input
+                            [(ngModel)]="organization.address.address1"
+                            pInputText
+                            id="address1"
+                            name="address1"
+                            rte="90"
+                        />
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="91">
+                    <label for="address2" class="inputs-group-row-name" rte="92"
+                        >Address 2:</label
+                    >
+                    <div class="inputs-group-row-value" rte="93">
+                        <input
+                            [(ngModel)]="organization.address.address2"
+                            pInputText
+                            id="address2"
+                            name="address2"
+                            rte="94"
+                        />
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="95">
+                    <label for="address3" class="inputs-group-row-name" rte="96"
+                        >Address 3:</label
+                    >
+                    <div class="inputs-group-row-value" rte="97">
+                        <input
+                            [(ngModel)]="organization.address.address3"
+                            pInputText
+                            id="address3"
+                            name="address3"
+                            rte="98"
+                        />
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="99">
+                    <label for="address4" class="inputs-group-row-name" rte="9a"
+                        >Address 4:</label
+                    >
+                    <div class="inputs-group-row-value" rte="9b">
+                        <input
+                            [(ngModel)]="organization.address.address4"
+                            pInputText
+                            id="address4"
+                            name="address4"
+                            rte="9c"
+                        />
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="9d">
+                    <label for="postCode" class="inputs-group-row-name" rte="9e"
+                        >Post code:</label
+                    >
+                    <div class="inputs-group-row-value" rte="9f">
+                        <input
+                            [(ngModel)]="organization.address.postCode"
+                            pInputText
+                            id="postCode"
+                            name="postCode"
+                            rte="9g"
+                        />
+                    </div>
+                </div>
+            </p-tabPanel>
+
+            <p-tabPanel header="Branding" rte="9h">
+                <div class="inputs-group-row" rte="9i">
+                    <label for="name" class="inputs-group-row-name" rte="9j"
+                        >Disable branding for this organization:</label
+                    >
+                    <div class="inputs-group-row-value" rte="9k">
+                        <p-checkbox
+                            [(ngModel)]="organization.branding.disabled"
+                            [binary]="true"
+                            name="disabled"
+                            rte="9l"
+                        >
+                        </p-checkbox>
+                    </div>
+                </div>
+                <ng-container *ngIf="!organization.branding.disabled">
+                    <div class="inputs-group-row" rte="9n">
+                        <label
+                            for="Theme"
+                            class="inputs-group-row-name"
+                            rte="9o"
+                            >Theme:</label
+                        >
+                        <div class="inputs-group-row-value" rte="9p">
+                            <p-dropdown
+                                [(ngModel)]="organization.branding.theme"
+                                [options]="brandColors"
+                                [showClear]="true"
+                                id="Theme"
+                                name="theme"
+                                placeholder="Default"
+                                rte="9q"
+                            >
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="9r">
+                        <label
+                            for="iconUploader"
+                            class="inputs-group-row-name"
+                            rte="9s"
+                            >Icon:</label
+                        >
+                        <div
+                            class="inputs-group-row-value inputs-group-row-value-uploader"
+                            rte="9t"
+                        >
+                            <p-fileUpload
+                                #logoIconUploader
+                                id="iconUploader"
+                                name="logoIconFiles[]"
+                                mode="basic"
+                                accept=".ico"
+                                [auto]="true"
+                                (uploadHandler)="logoIconUploading($event)"
+                                (onError)="onLogoIconUploadingError($event)"
+                                [customUpload]="true"
+                                rte="9u"
+                            >
+                            </p-fileUpload>
+                            <div
+                                *ngIf="organization.branding.logoIcon"
+                                class="inputs-group-row-value-uploader-preview-container"
+                                rte="9v"
+                            >
+                                <img
+                                    [src]="organization.branding.logoIcon.url"
+                                    class="inputs-group-row-value-uploader-preview-image"
+                                    rte="9w"
+                                />
+                                <p-button
+                                    *ngIf="organization.branding.logoIconId"
+                                    icon="pi pi-trash"
+                                    (onClick)="clearLogoIcon()"
+                                    rte="9x"
+                                >
+                                </p-button>
+                            </div>
+                            <div
+                                class="inputs-group-row-value-uploader-description"
+                                rte="9y"
+                            >
+                                This graphic must be supplied in icon format
+                                (.ico). File size must not exceed 500Kb.
+                                Recommended proportions are 1x1. We also
+                                recommend a transparent background.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="9z">
+                        <label
+                            for="imageUploader"
+                            class="inputs-group-row-name"
+                            rte="9A"
+                            >Logo:</label
+                        >
+                        <div
+                            class="inputs-group-row-value inputs-group-row-value-uploader"
+                            rte="9B"
+                        >
+                            <p-fileUpload
+                                #logoImageUploader
+                                id="imageUploader"
+                                name="logoImageFiles[]"
+                                mode="basic"
+                                accept=".png,.gif,.jpg,.jpeg"
+                                [auto]="true"
+                                (uploadHandler)="logoImageUploading($event)"
+                                (onError)="onLogoImageUploadingError($event)"
+                                [customUpload]="true"
+                                rte="9C"
+                            >
+                            </p-fileUpload>
+                            <div
+                                *ngIf="organization.branding.logoImage"
+                                class="inputs-group-row-value-uploader-preview-container"
+                                rte="9D"
+                            >
+                                <img
+                                    [src]="
+                                        organization.branding.logoImage.thumbnailUrl
+                                    "
+                                    class="inputs-group-row-value-uploader-preview-image"
+                                    rte="9E"
+                                />
+                                <p-button
+                                    *ngIf="organization.branding.logoImageId"
+                                    icon="pi pi-trash"
+                                    (onClick)="clearLogoImage()"
+                                    rte="9F"
+                                >
+                                </p-button>
+                            </div>
+                            <div
+                                class="inputs-group-row-value-uploader-description"
+                                rte="9G"
+                            >
+                                This graphic must be supplied in PNG, GIF or
+                                JPEG formats. File size must not exceed 2Mb.
+                                Recommended proportions are 10x3 (e.g. 250x75
+                                pixels). We also recommend a transparent
+                                background.
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </p-tabPanel>
+            <p-tabPanel header="Email Details" rte="9H">
+                <p-editor
+                    [(ngModel)]="organization.branding.emailBody"
+                    id="emailBody"
+                    name="emailBody"
+                    [style]="{ height: '320px' }"
+                    rte="9I"
+                >
+                </p-editor>
+            </p-tabPanel>
+        </p-tabView>
+
+        <div class="buttons-panel buttons-panel-top-margin" rte="9J">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="back()"
+                rte="9K"
+            ></button>
+            <button
+                pButton
+                type="submit"
+                [disabled]="form.invalid"
+                label="Save"
+                rte="9L"
+            ></button>
+        </div>
+    </form>
+</div>

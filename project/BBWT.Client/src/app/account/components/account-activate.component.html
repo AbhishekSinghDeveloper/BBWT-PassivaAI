@@ -1,0 +1,84 @@
+<h1 rte="6j">Welcome</h1>
+
+<ng-container [ngSwitch]="status">
+    <p *ngSwitchCase="_accountActivateStatus.Loading" rte="6l">
+        Loading...
+    </p>
+    <ng-container *ngSwitchCase="_accountActivateStatus.ActivationCompleted">
+        <p rte="6n">Sorry, this account has already been activated.</p>
+        <p rte="6o">Please <a routerLink="/account/login" rte="6p">click here to log in</a>.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="_accountActivateStatus.LoadUserError">
+        <p rte="6n">Failed to load data.</p>
+        <p rte="6o">Please reload the page.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="_accountActivateStatus.ActivationCodeInvalid">
+        <p rte="6n">This link is not from your latest invite.</p>
+        <p rte="6o">Please check your inbox for a later version.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="_accountActivateStatus.InvitationNotFoundForUser">
+        <p rte="6n">Failed to load data. It appears that no activation code was issued for this user.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="_accountActivateStatus.OperationCompleted">
+        <p rte="6r">Your account has been activated.</p>
+        <p rte="6s">Please <a routerLink="/account/login" rte="6t">click here to log in</a>.</p>
+    </ng-container>
+    <form *ngSwitchCase="_accountActivateStatus.FormReady"
+          #form="ngForm"
+          autocomplete="off"
+          class="inputs-group top-placed-labels"
+          (ngSubmit)="onSubmit()" rte="6u">
+        <span class="page-sub-header" rte="6v">Please complete the following information and then press "Complete Registration" to access the site</span>
+
+        <div class="inputs-group-row" rte="6w">
+            <span class="inputs-group-row-value" rte="6x">{{email}}</span>
+        </div>
+        <div class="inputs-group-row" rte="6y">
+            <span class="p-float-label inputs-group-row-value" rte="6z">
+                <input #passwordInput="ngModel"
+                       pPassword
+                       showPassword
+                       noSideWhitespaces
+                       [(ngModel)]="password"
+                       [feedback]="false"
+                       id="password"
+                       name="Password"
+                       autocomplete="off"
+                       required
+                       strongPassword
+                       [maxLength]='200'
+                       [validCharactersSettings]="validCharacter"  rte="6A"/>
+                <label for="password" class="asterisk-mark" rte="6B">Password</label>
+                <password-score *ngIf="passwordInput.dirty" [password]="passwordInput.value" rte="18m"></password-score>
+                <span *ngIf="passwordInput.control.hasError('side-whitespaces')" class="validation-error" rte="18n">Your passwords can't start or end with a blank space</span>
+            </span>
+            <password-feedback *ngIf="passwordInput.dirty" [feedback]="passwordInput.errors?.strongPassword" [validCharactersSettings]="validCharacter" rte="6E"></password-feedback>
+        </div>
+        <div class="inputs-group-row" rte="6F">
+            <span class="p-float-label inputs-group-row-value" rte="6G">
+                <input #confirmPassword
+                       pPassword
+                       showPassword
+                       noWhitespaces
+                       id="confirmPassword"
+                       name="confirmPassword"
+                       type="password"
+                       autocomplete="off"
+                       required
+                       [match]="password"
+                       [feedback]="false"  rte="6H"/>
+                <label for="confirmPassword" class="asterisk-mark" rte="6I">Confirm password</label>
+            </span>
+            <password-match [confirmPassword]="confirmPassword.value" [password]="password" rte="6J"></password-match>
+        </div>
+
+        <div class="buttons-panel buttons-panel-center-alignment" rte="6K">
+            <button pButton type="button" label="Back to login" class="p-button-secondary" routerLink="/account/login" rte="6L"></button>
+            <button pButton
+                    type="submit"
+                    label="Complete registration"
+                    [disabled]="form.invalid || password !== confirmPassword.value" rte="6M">
+            </button>
+        </div>
+    </form>
+</ng-container>

@@ -1,0 +1,120 @@
+<!--
+Demonstrations list:
+- Validation based on DBDoc rules via DBDoc directives
+- Labels/controls positioning via "inputs-group" CSS class
+-->
+<div class="card--hidden" rte="y4">
+    <h1 *ngIf="!loadingOrder" rte="y5">Edit Order</h1>
+
+    <ng-container *ngIf="loadingOrder; else orderLoaded">
+        <div class="p-d-flex p-jc-center" rte="1jh">
+            <p-progressSpinner
+                [style]="{ width: '50px', height: '50px' }"
+                rte="1ji"
+            ></p-progressSpinner>
+        </div>
+    </ng-container>
+
+    <ng-template #orderLoaded>
+        <form
+            #form="ngForm"
+            autocomplete="off"
+            dbdoc-dto="PersonDTO"
+            class="inputs-group"
+            (ngSubmit)="save()"
+            rte="y6"
+        >
+            <div class="inputs-group-row" rte="y7">
+                <label for="name" class="inputs-group-row-name" rte="y8"
+                    >Customer:</label
+                >
+                <div class="inputs-group-row-value" rte="y9">
+                    <p-dropdown
+                        [(ngModel)]="order.customerId"
+                        placeholder="Select Customer"
+                        [options]="customerOptions"
+                        name="customerCode"
+                        rte="1jj"
+                    ></p-dropdown>
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="yd">
+                <label for="title" class="inputs-group-row-name" rte="ye"
+                    >Order Date:</label
+                >
+                <div class="inputs-group-row-value" rte="yf">
+                    <p-calendar
+                        [showIcon]="true"
+                        [(ngModel)]="order.orderDate"
+                        appendTo="body"
+                        name="orderDate"
+                        rte="1jk"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="yj">
+                <label for="gender" class="inputs-group-row-name" rte="yk"
+                    >Required Date:</label
+                >
+                <div class="inputs-group-row-value" rte="yl">
+                    <p-calendar
+                        [showIcon]="true"
+                        [(ngModel)]="order.requiredDate"
+                        appendTo="body"
+                        name="requiredDate"
+                        rte="1jl"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="yp">
+                <label for="email" class="inputs-group-row-name" rte="yq"
+                    >Shipped Date:</label
+                >
+                <div class="inputs-group-row-value" rte="yr">
+                    <p-calendar
+                        [showIcon]="true"
+                        [(ngModel)]="order.shippedDate"
+                        appendTo="body"
+                        name="shippedDate"
+                        rte="1jm"
+                    ></p-calendar>
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="yv">
+                <label for="address" class="inputs-group-row-name" rte="yw"
+                    >Is Paid:</label
+                >
+                <div class="inputs-group-row-value" rte="yx">
+                    <p-checkbox
+                        [binary]="true"
+                        [(ngModel)]="order.isPaid"
+                        name="isPaid"
+                        rte="1jn"
+                    ></p-checkbox>
+                </div>
+            </div>
+
+            <div class="buttons-panel save-buttons-container" rte="yL">
+                <button
+                    pButton
+                    type="button"
+                    label="Cancel"
+                    class="p-button-secondary"
+                    (click)="back()"
+                    rte="yM"
+                ></button>
+                <button
+                    pButton
+                    type="submit"
+                    label="Save"
+                    [disabled]="form.invalid"
+                    rte="yN"
+                ></button>
+            </div>
+        </form>
+    </ng-template>
+</div>

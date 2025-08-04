@@ -1,0 +1,26 @@
+<div class="card--hidden" rte="Y4">
+    <h1 rte="Y5">Products</h1>
+    <span class="page-sub-header" rte="1kS"
+        >This demo page employs best practices in BBWT3. Please use it as a
+        template.</span
+    >
+
+    <p rte="Y7">
+        There are currently
+        {{ grid.getTableProperty("totalRecords") }} records.<br />
+        You can
+        <data-generation
+            startGenerationMethodName="GenerateProducts"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="Y8"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <grid
+        #grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        rte="1kT"
+    ></grid>
+</div>

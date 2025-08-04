@@ -1,0 +1,16 @@
+:host {
+    .folder-database-details,
+    .table-paths-macros {
+        display: block;
+        margin-top: 30px;
+    }
+
+    .table-paths-macros {
+        .inputs-group {
+            max-width: 100%;
+            .inputs-group-row {
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

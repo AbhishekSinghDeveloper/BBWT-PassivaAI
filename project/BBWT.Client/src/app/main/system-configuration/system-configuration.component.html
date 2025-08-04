@@ -1,0 +1,67 @@
+<div class="card--hidden" rte="bX">
+    <h1 rte="bY">System Configuration</h1>
+
+    <p-tabView [scrollable]="true" (onChange)="onTabChanged($event)" rte="bZ">
+        <p-tabPanel header="{{ tabs.EmailServer }}" [selected]="
+                storedLastOpenedTabName === tabs.EmailServer ||
+                !storedLastOpenedTabName
+            " *role="systemAdmin" rte="c0">
+            <email-configuration rte="c1"></email-configuration>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Password }}" [selected]="storedLastOpenedTabName === tabs.Password"
+            *role="systemAdmin" rte="c4">
+            <password rte="c5"></password>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Login }}" [selected]="storedLastOpenedTabName === tabs.Login"
+            *role="[systemAdmin, superAdmin]" rte="c6">
+            <login rte="1bM"></login>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Session }}" [selected]="storedLastOpenedTabName === tabs.Session"
+            *role="[systemAdmin, superAdmin]" rte="c8">
+            <session rte="c9"></session>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Registration }}" [selected]="storedLastOpenedTabName === tabs.Registration"
+            *role="systemAdmin" rte="ca">
+            <registration rte="cb"></registration>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.AWSS3 }}" [selected]="storedLastOpenedTabName === tabs.AWSS3"
+            *role="[systemAdmin, superAdmin]" rte="ce">
+            <aws-s3 rte="cf"></aws-s3>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Maintenance }}" [selected]="storedLastOpenedTabName === tabs.Maintenance"
+            *role="[systemAdmin, superAdmin]" rte="cg">
+            <maintenance rte="ch"></maintenance>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Performance }}" [selected]="storedLastOpenedTabName === tabs.Performance"
+            *role="superAdmin" rte="ci">
+            <performance rte="cj"></performance>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Customisation }}" [selected]="storedLastOpenedTabName === tabs.Customisation"
+            *role="systemAdmin" rte="ck">
+            <project rte="cl"></project>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.AllowedIP }}" [selected]="storedLastOpenedTabName === tabs.AllowedIP"
+            *role="systemAdmin" rte="cm">
+            <allowed-ip rte="cn"></allowed-ip>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Feedback }}" [selected]="storedLastOpenedTabName === tabs.Feedback"
+            *role="[systemAdmin, superAdmin]" rte="co">
+            <feedback rte="cp"></feedback>
+        </p-tabPanel>
+        <p-tabPanel header="{{ tabs.Formio }}" [selected]="storedLastOpenedTabName === tabs.Formio"
+            *role="[systemAdmin, superAdmin]">
+            <formio-settings></formio-settings>
+        </p-tabPanel>
+        <ng-container *ngIf="pwaEnabled">
+            <p-tabPanel header="{{ tabs.Pwa }}" [selected]="storedLastOpenedTabName === tabs.Pwa"
+                *role="[systemAdmin, superAdmin]" rte="cq">
+                <pwa-settings rte="cr"></pwa-settings>
+            </p-tabPanel>
+        </ng-container>
+        <p-tabPanel header="{{ tabs.ParametersStore }}" [selected]="storedLastOpenedTabName === tabs.ParametersStore"
+            *role="[systemAdmin, superAdmin]" rte="cs">
+            <parameters-store rte="ct"></parameters-store>
+        </p-tabPanel>
+
+    </p-tabView>
+</div>

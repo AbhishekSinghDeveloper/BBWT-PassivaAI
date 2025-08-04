@@ -1,0 +1,189 @@
+<div class="card--hidden" rte="cu">
+    <h1 rte="cv">Report a Problem</h1>
+
+    <form #form="ngForm" class="inputs-group" rte="cw">
+        <div class="inputs-group-row" rte="cz">
+            <label
+                for="user"
+                class="inputs-group-row-name asterisk-mark"
+                rte="cA"
+                >User:</label
+            >
+            <div class="inputs-group-row-value" rte="cB">
+                <input
+                    id="user"
+                    name="user"
+                    [(ngModel)]="reportProblem.user"
+                    #user="ngModel"
+                    pInputText
+                    required
+                    [pattern]="validationPatterns.notEmpty"
+                    rte="cC"
+                />
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="cD">
+            <label
+                for="email"
+                class="inputs-group-row-name asterisk-mark"
+                rte="cE"
+                >Email:</label
+            >
+            <div class="inputs-group-row-value" rte="cF">
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    [(ngModel)]="reportProblem.email"
+                    [pattern]="validationPatterns.email"
+                    #email="ngModel"
+                    pInputText
+                    required
+                    rte="cG"
+                />
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="cH">
+            <label
+                for="subject"
+                class="inputs-group-row-name asterisk-mark"
+                rte="cI"
+                >Subject:</label
+            >
+            <div class="inputs-group-row-value" rte="cJ">
+                <input
+                    #subject="ngModel"
+                    [(ngModel)]="reportProblem.subject"
+                    pInputText
+                    id="subject"
+                    name="subject"
+                    required
+                    [pattern]="validationPatterns.notEmpty"
+                    rte="cK"
+                />
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="cL">
+            <label
+                for="description"
+                class="inputs-group-row-name asterisk-mark"
+                rte="cM"
+                >Problem description:</label
+            >
+            <div class="inputs-group-row-value" rte="cN">
+                <textarea
+                    #description="ngModel"
+                    [(ngModel)]="reportProblem.description"
+                    id="description"
+                    name="description"
+                    rows="10"
+                    pInputText
+                    required
+                    [pattern]="validationPatterns.notEmpty"
+                    rte="cO"
+                >
+                </textarea>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="cP">
+            <label class="inputs-group-row-name" rte="cQ"
+                >Problem severity:</label
+            >
+            <div class="inputs-group-row-value" rte="cR">
+                <div class="radio-button-item" rte="cS">
+                    <p-radioButton
+                        [(ngModel)]="reportProblem.severity"
+                        name="problemSeverity"
+                        value="SystemFailure"
+                        label="System failure"
+                        rte="cT"
+                    >
+                    </p-radioButton>
+                    <div class="short-description" rte="cU">
+                        Multiple users not able to access the system and perform
+                        normal work.
+                    </div>
+                </div>
+                <div class="radio-button-item" rte="cV">
+                    <p-radioButton
+                        [(ngModel)]="reportProblem.severity"
+                        name="problemSeverity"
+                        value="SystemMalfunction"
+                        label="System malfunction"
+                        rte="cW"
+                    >
+                    </p-radioButton>
+                    <div class="short-description" rte="cX">
+                        The system is still considered operational with some
+                        functionality disabled.
+                    </div>
+                </div>
+                <div class="radio-button-item" rte="cY">
+                    <p-radioButton
+                        [(ngModel)]="reportProblem.severity"
+                        name="problemSeverity"
+                        value="OperationImpaired"
+                        label="Operation Impaired"
+                        rte="cZ"
+                    >
+                    </p-radioButton>
+                    <div class="short-description" rte="d0">
+                        System operation is impaired, slow running or prints not
+                        being produced. Core functionality is operational.
+                    </div>
+                </div>
+                <div class="radio-button-item" rte="d1">
+                    <p-radioButton
+                        [(ngModel)]="reportProblem.severity"
+                        name="problemSeverity"
+                        value="DataIssue"
+                        label="Data Issue"
+                        rte="d2"
+                    >
+                    </p-radioButton>
+                    <div class="short-description" rte="d3">
+                        System operates normally but incorrect data items or an
+                        individual user not able to access the system etc.
+                    </div>
+                </div>
+                <div class="radio-button-item" rte="d4">
+                    <p-radioButton
+                        [(ngModel)]="reportProblem.severity"
+                        name="problemSeverity"
+                        value="CosmeticIssue"
+                        label="Cosmetic Issue"
+                        rte="d5"
+                    >
+                    </p-radioButton>
+                    <div class="short-description" rte="d6">
+                        Cosmetic error, e.g. spelling screen layout,
+                        non-critical drop down selected. User enhancement
+                        request.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-panel" rte="d7">
+            <button
+                pButton
+                type="button"
+                routerLink="/"
+                label="Cancel"
+                class="p-button-secondary"
+                rte="da"
+            ></button>
+            <button
+                pButton
+                type="submit"
+                [disabled]="form.invalid"
+                (click)="send()"
+                label="Submit"
+                rte="d9"
+            ></button>
+        </div>
+    </form>
+</div>

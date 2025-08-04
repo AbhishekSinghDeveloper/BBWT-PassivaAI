@@ -1,0 +1,54 @@
+<div class="card--hidden" rte="zY">
+    <h1 rte="zZ">Grid Filters</h1>
+
+    <span class="page-sub-header" rte="A0"
+        >This page demonstrates filtering for the grid component</span
+    >
+
+    <p-tabView rte="1jo">
+        <p-tabPanel header="Nested Filters" rte="1jp">
+            <grid
+                [tableSettings]="tableWithNestedFiltersSettings"
+                [gridSettings]="gridWithNestedFiltersSettings"
+                rte="1jq"
+            >
+                <ng-template
+                    gridColumnTemplate="filterView"
+                    columnName="isPaid"
+                    let-value
+                    let-filterCallback="filterCallback"
+                >
+                    <p-dropdown
+                        [ngModel]="value"
+                        [options]="isPaidOptions"
+                        [showClear]="true"
+                        placeholder="Is paid"
+                        (ngModelChange)="filterCallback($event)"
+                        rte="1jr"
+                    >
+                    </p-dropdown>
+                </ng-template>
+            </grid>
+        </p-tabPanel>
+        <p-tabPanel header="External Filters" rte="1js">
+            <filter #filter [settings]="filterSettings" rte="A1">
+                <ng-template filterCustomTemplate="isPaid" let-filterItem>
+                    <p-dropdown
+                        [(ngModel)]="filterItem.value"
+                        [options]="isPaidOptions"
+                        [showClear]="true"
+                        placeholder="Is paid"
+                        rte="1jt"
+                    >
+                    </p-dropdown>
+                </ng-template>
+            </filter>
+            <grid
+                [tableSettings]="tableSettings"
+                [gridSettings]="gridSettings"
+                [filter]="filter"
+                rte="1ju"
+            ></grid>
+        </p-tabPanel>
+    </p-tabView>
+</div>

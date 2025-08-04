@@ -1,0 +1,99 @@
+<div class="card main-container">
+    <h1>Surveys</h1>
+    <grid #surveyGrid [tableSettings]="tableSettingsFormioViewer"
+          [gridSettings]="formioSurveyGridSettings" (onRowExpand)="surveyExpand($event)">
+        <ng-template pTemplate="rowexpansion" let-row>
+            <tr>
+                <td colspan="7">
+                    <div class="p-3">
+                        <p-table #subSurveyTable [value]="surveysData[row.id]" dataKey="id">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="respondentFullName">Name
+                                        <p-sortIcon field="price"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="respondentUserName">Username
+                                        <p-sortIcon field="customer"></p-sortIcon>
+                                    </th>
+                                    <th>Progress</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-surveyed>
+                                <tr>
+                                    <td>{{ surveyed.respondentFullName }}</td>
+                                    <td>{{ surveyed.respondentUserName }}</td>
+                                    <td>{{ surveyProgress(surveyed.json, surveyed.formRevisionJson) }}%</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">This survey has no user assigned.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </grid>
+</div>
+
+
+<p-dialog
+    [(visible)]="dialogVisible"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    [header]="dialogHeader()"
+    (onHide)="onDialogHide()">
+    <form [formGroup]="surveyForm"
+          autocomplete="off"
+          class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="name" class="inputs-group-row-name asterisk-mark">Name:</label>
+            <div class="inputs-group-row-value">
+                <input formControlName="name" pInputText id="name"/>
+            </div>
+        </div>
+
+        <div class="inputs-group-row">
+            <label for="formRevision" class="inputs-group-row-name asterisk-mark">Form:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown
+                    formControlName="formRevisionId"
+                    [options]="forms"
+                    [showClear]="true"
+                    [disabled]="editMode"
+                    appendTo="body"
+                    id="formRevision"
+                    name="formRevision"
+                    placeholder="Select Form ...">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="users" class="inputs-group-row-name">Survey Users:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect
+                    formControlName="surveyedUsers"
+                    [options]="users"
+                    placeholder="Select users ..."
+                    appendTo="body"
+                    id="users"
+                    name="users">
+                </p-multiSelect>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <button pButton
+                [label]="dialogButtonName()"
+                [disabled]="surveyForm.invalid"
+                (click)="saveOrUpdateSurvey(surveyForm.value)">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+

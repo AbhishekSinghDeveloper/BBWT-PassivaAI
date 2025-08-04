@@ -1,0 +1,30 @@
+<p-overlayPanel #op appendTo="body" rte="1kB">
+    <ng-template pTemplate> {{ paramInfo.name }}: {{ paramInfo.description }} </ng-template>
+</p-overlayPanel>
+
+<div class="p-inputgroup" [formGroup]="f" rte="1kC">
+    <span class="p-inputgroup-addon" rte="1kD">
+        <span class="param-name" [ngClass]="{ 'asterisk-mark': paramInfo.required }" rte="1kE">{{ paramName }}</span>
+        <bb-tooltip *ngIf="paramInfo.description"
+                    message="Click to see description"
+                    (click)="op.toggle($event)" rte="1kF">
+        </bb-tooltip>
+    </span>
+    <input class="p-inputtext-sm"
+           pInputText
+           placeholder="value"
+           formControlName="val"
+           (blur)="onTouched()"
+           [ngClass]="{ 'ng-dirty ng-invalid': invalid }"  rte="1kG"/>
+    <button *ngIf="!paramInfo.required"
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="onRemove()" rte="1kH">
+    </button>
+</div>
+<div *ngIf="invalid" class="p-error" rte="1kI">
+    <small rte="1kJ">{{ paramInfo.name }} is required.</small>
+</div>

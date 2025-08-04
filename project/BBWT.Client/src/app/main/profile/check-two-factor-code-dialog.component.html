@@ -1,0 +1,29 @@
+<div rte="1d7">
+
+    <span class="page-sub-header" rte="1iy">Please use your mobile app to get the two-factor code and enter it below</span>
+
+    <form #form="ngForm"
+          class="inputs-group"
+          (ngSubmit)="verify2faCode()"
+          (keydown.enter)="form.valid" rte="7M">
+        <div class="inputs-group-row" rte="7N">
+            <span class="p-float-label inputs-group-row-value" rte="7O">
+                <input pInputText
+                       [(ngModel)]="twoFactorCode"
+                       id="2fa"
+                       name="twoFactorCode"
+                       autocomplete="off"
+                       required rte="7P" />
+                <label for="2fa" class="asterisk-mark" rte="7Q">Authenticator code</label>
+            </span>
+        </div>
+
+        <button pButton
+                type="submit"
+                label="Verify"
+                [disabled]="form.invalid"
+                class="full-width-button button-text-center" rte="7R">
+            <i class="material-icons" rte="7S">person</i>
+        </button>
+    </form>
+</div>

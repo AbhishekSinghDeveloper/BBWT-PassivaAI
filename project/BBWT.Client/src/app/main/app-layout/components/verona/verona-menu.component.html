@@ -1,0 +1,16 @@
+<div class="layout-menu-wrapper" (window:resize)="checkSize($event)" [ngClass]="{'layout-menu-wrapper-active': veronaMain.menuActive}" (click)="veronaMain.onMenuClick()" rte="17x">
+    <p-scrollPanel *ngIf="!isMenuBlocked; else twoFactorRequiredBlock"
+        #layoutMenuScroller [style]="{height: '100%'}" rte="17y">
+        <div class="layout-menu-container" rte="17z">
+            <ul class="layout-menu" rte="17A">
+                <ng-container *ngFor="let item of app.menuModel; let i = index;">
+                    <li verona-menu-item *ngIf="!item.hidden" [item]="item" [index]="i" [root]="true" rte="17C"></li>
+                </ng-container>
+            </ul>
+        </div>
+    </p-scrollPanel>
+
+    <ng-template  #twoFactorRequiredBlock>
+        <p class="two-factor-disabled-message" rte="1dx">You don't have 2-Factor authentication enabled to access this features</p>
+    </ng-template>
+</div>

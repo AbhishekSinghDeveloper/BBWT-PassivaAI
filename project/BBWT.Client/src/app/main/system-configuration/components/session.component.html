@@ -1,0 +1,25 @@
+<div *ngIf="sessionSettings" class="p-g" rte="Tl">
+    <form #form="ngForm" class="inputs-group p-g-12" (ngSubmit)="save()" rte="Tm">
+        <div class="inputs-group-row" rte="Tn">
+            <label for="idleTime" class="inputs-group-row-name" rte="To">Idle time (minutes):
+                <bb-tooltip message="When user's inactivity period exceedes the parameter's value, the client-side application will trigger user logging out by sending request to the server.
+                            There is also another timeout setting ExpireTime, defined in a section CookieAuthSettings of the server-side application settings and which is 30 minutes by default.
+                            By default the both options are turned on and therefore the minimum value determines the actual timeout."></bb-tooltip>
+            </label>
+           
+            <div class="inputs-group-row-value" rte="Tp">
+                <p-inputNumber [(ngModel)]="sessionSettings.idleTime"
+                               [showButtons]="true"
+                               [min]="1"
+                               [disabled]="!sessionSettings.idleTimeEnabled"
+                               id="idleTime"
+                               name="idleTime" rte="Tq">
+                </p-inputNumber>
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="Tr">
+            <button pButton type="submit" label="Save" [disabled]="!form.valid" rte="Ts"></button>
+        </div>
+    </form>
+</div>

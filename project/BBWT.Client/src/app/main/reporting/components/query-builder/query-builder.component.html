@@ -1,0 +1,18 @@
+<div class="query-builder-tools-container">
+    <div class="query-builder-tools-wrapper">
+        <p-fieldset legend="Tables" class="query-tables-fieldset">
+            <query-tables #queryTables></query-tables>
+        </p-fieldset>
+        <p-fieldset legend="Filters" class="query-filters-fieldset">
+            <query-filters #queryFilters></query-filters>
+        </p-fieldset>
+        <p-fieldset legend="Raw SQL" class="raw-sql-fieldset">
+            <ng-container *ngIf="!_rawSqlLoading; else rawSqlLoader">
+                <div [innerHTML]="_rawSql"></div>
+            </ng-container>
+            <ng-template #rawSqlLoader>
+                <div class="sql-spinner-container"><i class="pi pi-spin pi-spinner"></i></div>
+            </ng-template>
+        </p-fieldset>
+    </div>
+</div>

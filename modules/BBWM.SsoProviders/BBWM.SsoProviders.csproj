@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AspNet.Security.OAuth.LinkedIn" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\BBWM.Core.Membership\BBWM.Core.Membership.csproj" />
+        <ProjectReference Include="..\BBWM.SystemSettings\BBWM.SystemSettings.csproj" />
+    </ItemGroup>
+
+</Project>

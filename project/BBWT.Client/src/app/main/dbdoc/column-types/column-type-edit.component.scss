@@ -1,0 +1,32 @@
+:host {
+    .table-reference {
+        display: block;
+        margin-bottom: 3px;
+    }
+    .validation-view-metadata-editor {
+        display: block;
+        margin-top: 10px;
+
+        .validation-metadata-header, .view-metadata-header {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+
+            .delete-validation-button, .delete-view-button {
+                margin-left: 5px;
+            }
+        }
+    }
+    .validation-metadata-add-button {
+        margin-top: 10px;
+        margin-right: 5px;
+    }
+    .view-metadata-add-button {
+        margin-top: 10px;
+        margin-right: 5px;
+    }
+
+    .panel-bold-header-text {
+        font-weight: bold;
+    }
+}

@@ -1,0 +1,165 @@
+<div *ngIf="muFormDef" class="card main-container">
+    <h1>Multi User Form Stages</h1>
+    <h5 *ngIf="isReady">All stages are set. Multi-User form is ready for use. You can close your tab.</h5>
+    <grid #stagesGrid [tableSettings]="tableSettingsStagesViewer"
+          [gridSettings]="stagesGridSettings" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnSelect($event)"></grid>
+    <p class="mt-2 mx-2" *ngIf="!selectedStage">Select a form stage to set its permissions.</p>
+
+    <div *ngIf="selectedStage">
+        <h4 class="mt-2 ml-1">Permission list for the stage: <b>{{ selectedStage?.name }}</b></h4>
+        <grid #permissionsGrid [tableSettings]="tableSettingsPermissionsViewer"
+              [gridSettings]="permissionsGridSettings"></grid>
+    </div>
+</div>
+
+<p-dialog [(visible)]="updatingMUFStage" [style]="{'max-width': '450px', width: '100%'}"
+          header="Edit Multi-User Form Stage" [modal]="true" [closable]="true" [responsive]="true" (onHide)="cancelMUFStageUpdate()">
+    <form #form="ngForm"
+          class="inputs-group"
+          (ngSubmit)="updateMUFStage()"
+          (keydown.enter)="form.valid" novalidate>
+        <div class="inputs-group">
+            <div class="inputs-group-row">
+                <label
+                    for="formName"
+                    class="inputs-group-row-name"
+                >Name:</label
+                >
+                <div class="inputs-group-row-value">
+                    <input pInputText
+                           [(ngModel)]="newStageName"
+                           type="text"
+                           id="formName"
+                           name="formName"
+                           placeholder="Stage name"
+                           required/>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Self:</label>
+                <div class="inputs-group-row-value">
+                    <p-checkbox
+                        name="isSelfTab"
+                        [binary]="true"
+                        [disabled]="isExternalUser"
+                        [(ngModel)]="isSelfTab">
+                    </p-checkbox>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">External User:</label>
+                <div class="inputs-group-row-value">
+                    <p-checkbox
+                        name="isExternalUser"
+                        [binary]="true"
+                        [disabled]="isSelfTab || reviewer"
+                        [(ngModel)]="isExternalUser">
+                    </p-checkbox>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Target Groups:</label>
+                <div class="inputs-group-row-value">
+                    <p-multiSelect [(ngModel)]="groups"
+                                   name="groups"
+                                   [disabled]="isExternalUser || isSelfTab"
+                                   [filter]="true"
+                                   filterBy="label"
+                                   [ngModelOptions]="{standalone: true}"
+                                   optionLabel="name"
+                                   placeholder="Select groups"
+                                   [options]="allGroups"
+                                   [showClear]="true"
+                                   appendTo="body">
+                    </p-multiSelect>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Stage sequence Step:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="selectedStep"
+                                name="steps"
+                                [ngModelOptions]="{standalone: true}"
+                                placeholder="Select an index"
+                                [options]="stepsDD"
+                                appendTo="body">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Reviewer Stage?:</label>
+                <div class="inputs-group-row-value">
+                    <p-checkbox name="reviewer"
+                                [binary]="true"
+                                [disabled]="isExternalUser"
+                                [(ngModel)]="reviewer">
+                    </p-checkbox>
+                </div>
+            </div>
+            <div class="buttons-panel buttons-panel-top-margin">
+                <button
+                    pButton
+                    type="button"
+                    label="Cancel"
+                    class="p-button-secondary"
+                    (click)="cancelMUFStageUpdate()"
+                ></button>
+                <button pButton
+                        type="submit"
+                        label="Update"
+                        [disabled]="form.invalid"
+                        class="p-button-primary">
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+<p-dialog [(visible)]="addingPermissions" [style]="{'max-width': '450px', width: '100%'}"
+          header="Multi-User Form Stage Permissions" [modal]="true" [closable]="true" [responsive]="true" (onHide)="cancelPermissionCreation()">
+    <form #permissions="ngForm"
+          class="inputs-group"
+          (ngSubmit)="createPermission()"
+          (keydown.enter)="permissions.valid" novalidate>
+        <div class="inputs-group">
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Target TabKey:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="selectedTabKey"
+                                name="tabKeys"
+                                [ngModelOptions]="{standalone: true}"
+                                placeholder="Select a TabKey"
+                                [options]="tabKeysDD"
+                                appendTo="body">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Action:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="selectedAction"
+                                name="actions"
+                                [ngModelOptions]="{standalone: true}"
+                                placeholder="Select an action"
+                                [options]="actionsDD"
+                                appendTo="body">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="buttons-panel buttons-panel-top-margin">
+                <button
+                    pButton
+                    type="button"
+                    label="Cancel"
+                    class="p-button-secondary"
+                    (click)="cancelPermissionCreation()"></button>
+                <button pButton
+                        type="submit"
+                        label="Create"
+                        [disabled]="permissions.invalid"
+                        class="p-button-primary">
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

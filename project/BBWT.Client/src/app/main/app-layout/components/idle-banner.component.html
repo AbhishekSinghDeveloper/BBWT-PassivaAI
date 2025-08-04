@@ -1,0 +1,10 @@
+<p-sidebar [(visible)]="showBanner"
+           appendTo="body"
+           position="top"
+           [modal]="false"
+           [showCloseIcon]="false"
+           [closeOnEscape]="false"
+           [baseZIndex]="10000"
+           [style]="{ 'padding': '.8em', 'height': '40px' }" rte="Xd">
+    <span class="idle-banner-remaining-time" rte="Xe">You will be logged out after {{countDown}} seconds</span>
+</p-sidebar>

@@ -1,0 +1,38 @@
+:host ::ng-deep {
+    .buttons-panel {
+        padding: 1.25rem;
+    }
+
+    .copyable {
+        cursor: copy;
+    }
+
+    .custom-format-editor {
+        height: 300px;
+        padding: 10px;
+
+        .editor-container .ql-toolbar {
+            height: fit-content;
+        }
+
+        .editor-container {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+
+.tooltip-content .formatted-code {
+    background: #f9f9f9;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px 0;
+    display: flex;
+}
+
+.tooltip-content .highlighted-code {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+}

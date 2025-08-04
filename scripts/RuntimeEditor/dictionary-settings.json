@@ -1,0 +1,50 @@
+{
+    "AllowedChildNodes": [ "br" ],
+    "InnerHtmlNodes": [ "a", "b", "button", "div", "i",  "li", "p", "span", "u" ],
+    "AllowedNodeAttrs": [
+        {
+            "Node": "a",
+            "Attr": "href"
+        },
+        {
+            "Node": "bb-tooltip",
+            "Attr": "message"
+        },
+        {
+            "Node": "button",
+            "Attr": "label"
+        },
+        {
+            "Node": "input",
+            "Attr": "placeholder"
+        },
+        {
+            "Node": "textarea",
+            "Attr": "placeholder"
+        },
+        {
+            "Node": "p-button",
+            "Attr": "label"
+        },
+        {
+            "Node": "p-checkbox",
+            "Attr": "label"
+        },
+        {
+            "Node": "p-message",
+            "Attr": "text"
+        },
+        {
+            "Node": "p-multiselect",
+            "Attr": "defaultlabel"
+        },
+        {
+            "Node": "p-radiobutton",
+            "Attr": "label"
+        },
+        {
+            "Node": "p-tabpanel",
+            "Attr": "header"
+        }
+    ]
+}

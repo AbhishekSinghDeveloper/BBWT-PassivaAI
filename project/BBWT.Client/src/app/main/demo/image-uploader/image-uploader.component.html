@@ -1,0 +1,100 @@
+<div class="card--hidden" rte="zh">
+    <h1 rte="zi">Image Uploader</h1>
+
+    <div class="p-g" rte="zj">
+        <div class="p-g-12" rte="zk">
+            <bb-image-uploader
+                #imageUploader
+                (uploadHandler)="imageUploading($event)"
+                [maxSizePx]="maxSizePx"
+                rte="zl"
+            ></bb-image-uploader>
+        </div>
+
+        <div class="p-g-12" rte="zm">
+            <h3 rte="zn">NgxGallery</h3>
+            <div *ngIf="!showGallery" class="center" rte="zo">
+                <p-progressSpinner
+                    [style]="{ width: '150px', height: '150px' }"
+                    [strokeWidth]="3"
+                    rte="zp"
+                ></p-progressSpinner>
+            </div>
+            <div *ngIf="showGallery" rte="zq">
+                <ngx-gallery
+                    [options]="galleryOptions"
+                    [images]="galleryImages"
+                    rte="zr"
+                ></ngx-gallery>
+            </div>
+        </div>
+
+        <div class="p-g-12" rte="zs">
+            <p-dataView
+                *ngIf="showImagesViewer"
+                [value]="galleryImages"
+                [paginator]="true"
+                [rows]="5"
+                rte="zt"
+            >
+                <p-header rte="zu"> List of uploaded images </p-header>
+                <ng-template let-image pTemplate="listItem">
+                    <div class="p-g p-fluid car-item" rte="zw">
+                        <div class="p-g-12 p-md-3 center" rte="zx">
+                            <img
+                                *ngIf="image.isImage"
+                                src="{{ image.thumbnailUrl }}"
+                                width="70"
+                                height="60"
+                                rte="zy"
+                            />
+                        </div>
+                        <div class="p-g-12 p-md-9 car-details" rte="zz">
+                            <div class="p-g" rte="zA">
+                                <div class="p-g-2 p-sm-6" rte="zB">Name:</div>
+                                <div class="p-g-10 p-sm-6" rte="zC">
+                                    {{ image.fileName }}
+                                </div>
+
+                                <div class="p-g-2 p-sm-6" rte="zD">Size:</div>
+                                <div class="p-g-10 p-sm-6" rte="zE">
+                                    {{ image.size }} KB
+                                </div>
+
+                                <div class="p-g-2 p-sm-6" rte="zF">
+                                    Last modified (UTC):
+                                </div>
+                                <div class="p-g-10 p-sm-6" rte="zG">
+                                    {{ formatDate(image.lastUpdated) }}
+                                </div>
+
+                                <div class="p-g-2 p-sm-6" rte="zH"></div>
+                                <div class="p-g-10 p-sm-6" rte="zI">
+                                    <a
+                                        target="_blank"
+                                        href="{{ image.source }}"
+                                        rte="zJ"
+                                        >download</a
+                                    >
+                                </div>
+
+                                <div class="p-g-2 p-sm-6" rte="zK"></div>
+                                <div class="p-g-10 p-sm-6" rte="zL">
+                                    <span
+                                        (click)="deleteFile(image.key)"
+                                        style="
+                                            color: royalblue;
+                                            cursor: pointer;
+                                        "
+                                        rte="zM"
+                                        >delete</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataView>
+        </div>
+    </div>
+</div>

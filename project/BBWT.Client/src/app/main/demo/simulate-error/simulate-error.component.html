@@ -1,0 +1,58 @@
+<div class="card--hidden" rte="oB">
+    <h1 rte="oC">Simulate Error</h1>
+
+    <div class="p-g" rte="oD">
+        <div class="inputs-group p-g-12" rte="oE">
+            <div class="inputs-group-row" rte="oF">
+                <label class="inputs-group-row-name" rte="oG">
+                    Error type:
+                </label>
+                <div class="inputs-group-row-value" rte="oH">
+                    <p-dropdown
+                        [options]="errors"
+                        [(ngModel)]="selectedError"
+                        rte="oI"
+                    ></p-dropdown>
+                </div>
+            </div>
+            <ng-container *ngIf="badRequestIsSelected">
+                <div class="inputs-group-row" rte="oK">
+                    <label class="inputs-group-row-name" rte="oL"
+                        >First field:</label
+                    >
+                    <div class="inputs-group-row-value" rte="oM">
+                        <input
+                            pInputText
+                            [(ngModel)]="badRequestDto.firstField"
+                            rte="oN"
+                        />
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="oO">
+                    <label class="inputs-group-row-name" rte="oP"
+                        >Second field:</label
+                    >
+                    <div class="inputs-group-row-value" rte="oQ">
+                        <input
+                            pInputText
+                            [(ngModel)]="badRequestDto.secondField"
+                            rte="oR"
+                        />
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="p-g-12 button-panel" rte="oS">
+            <div class="left" rte="oT">
+                <button
+                    pButton
+                    [disabled]="!selectedError"
+                    label="Throw exception"
+                    (click)="simulate()"
+                    rte="oU"
+                ></button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="editor-container {{format}}">
+    <div #numbers class="line-numbers-container" *ngIf="format === 'code'">
+        <div class="line-number" *ngFor="let _ of Array(editor?.getLinesCount() ?? 0); let i = index">
+            {{i + 1}}
+        </div>
+    </div>
+    <quill-editor [(ngModel)]="value" [modules]="modules"
+                  (onContentChanged)="contentChanged($event)"
+                  (onEditorCreated)="editorCreated($event)"
+                  placeholder="">
+    </quill-editor>
+</div>

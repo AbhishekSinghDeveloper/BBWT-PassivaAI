@@ -1,0 +1,10 @@
+<div class="p-g" rte="Tt">
+    <div class="p-g-12" rte="Tu">
+        <p-progressBar *ngIf="pending" mode="indeterminate" rte="Tv"></p-progressBar>
+        <span class="test-result" [class.validation-error]="!s3Valid" rte="Tw">{{resultS3Testing}}</span>
+
+        <div class="buttons-panel buttons-panel-left-alignment buttons-panel-top-margin" rte="Tx">
+            <button pButton label="Test S3 Settings" [disabled]="pending" (click)="testS3Settings()" rte="Ty"></button>
+        </div>
+    </div>
+</div>

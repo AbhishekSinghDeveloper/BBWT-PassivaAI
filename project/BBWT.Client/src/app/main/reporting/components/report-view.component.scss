@@ -1,0 +1,47 @@
+:host ::ng-deep {
+    .p-accordion {
+        .p-accordion-header {
+            .p-accordion-header-link {
+                background: white !important;
+                padding: 1rem;
+            }
+
+            .header-title {
+                flex: 1;
+                font-size: 1.5rem;
+                color: black !important;
+                opacity: 1 !important
+            }
+        }
+
+        .accordion-tab-disabled .p-accordion-toggle-icon {
+            display: none;
+        }
+    }
+
+    .sections-view-row {
+        display: flex;
+        width: calc(#{100%} + 20px);
+        margin: 0 -10px;
+
+        .sections-view-item {
+            margin: 0 10px;
+            width: 100%;
+            flex-grow: 1;
+            overflow: visible;
+        }
+    }
+
+    .section-no-container {
+        padding-bottom: 2rem;
+        width: calc(#{100%} - 5px);
+    }
+
+    .section-no-container-top-indent {
+        padding-top: 1.5rem;
+    }
+
+    .section-with-container {
+        padding-bottom: 0.5rem;
+    }
+}

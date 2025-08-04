@@ -1,0 +1,375 @@
+<div class="dashboard-header pl-4 pr-4">
+    <div class="flex justify-content-between align-items-center">
+        <p-button icon="pi pi-arrow-left" styleClass="p-button-text mr-2" (onClick)="cancel()"></p-button>
+        <h2>Edit Dashboard</h2>
+    </div>
+    <p-button class="publish-button" icon="pi pi-check" label="Publish" (onClick)="save()"></p-button>
+</div>
+<p-tabView activeIndex="0" styleClass="pl-4 pr-4">
+
+    <p-tabPanel header="Tab0" class="p-0">
+        <ng-template pTemplate="header">
+            <i class="material-icons mr-2 fill">auto_awesome_mosaic</i>
+            <span>Dashboard builder</span>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <div class="dashboard-builder">
+
+                <!-- Empty dashboard -->
+                <div class="empty-dashboard" *ngIf="!dashboardWidgets?.length">
+                    <!--suppress AngularNgOptimizedImage -->
+                    <img class="dashboard-image" src="assets/images/reporting/dashboard.png" alt="">
+                    <div class="empty-message">
+                        <h2 class="mb-0">Start building your dashboard</h2>
+                        <label class="dashboard-label mb-2">
+                            No content to display yet; add a widget to get started.
+                        </label>
+                        <div class="widget-menu">
+                            <p-button (onClick)="showOverlyMenu($event, 0)" label="Widget">
+                                    <span class="pi pi-plus p-button-icon p-button-icon-left"
+                                          data-pc-section="icon"></span>
+                                <span class="pi pi-angle-down p-button-icon p-button-icon-right"
+                                      data-pc-section="icon"></span>
+                            </p-button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard widgets -->
+                <div class="dashboard-widget-grid {{getLayoutTypeName(layoutStyle).toLowerCase()}}"
+                     *ngIf="!!dashboardWidgets?.length">
+
+                    <p-panel class="layout-options-area" header="Layout options" toggler="header"
+                             [toggleable]="true" [collapsed]="true">
+
+                        <div class="layout-option layout-dropdown">
+                            <label class="layout-option-header">Layout style</label>
+                            <p-dropdown [(ngModel)]="layoutStyle"
+                                        [options]="layoutOptions"
+                                        (onChange)="onLayoutChange($event)"></p-dropdown>
+                        </div>
+
+                        <div class="layout-option layout-input-slider">
+                            <label class="layout-option-header">Padding</label>
+                            <p-inputNumber [(ngModel)]="widgetsPadding"
+                                           [showButtons]="true"
+                                           [min]="0" [max]="200"
+                                           (onBlur)="refreshDashboardPreview()">
+                            </p-inputNumber>
+                            <p-slider [(ngModel)]="widgetsPadding"
+                                      [min]="0" [max]="200"
+                                      (onSlideEnd)="refreshDashboardPreview()">
+                            </p-slider>
+                        </div>
+
+                        <div class="layout-option layout-input-slider" *ngIf="layoutStyle === LayoutType.Cards">
+                            <label class="layout-option-header">Margin</label>
+                            <p-inputNumber [(ngModel)]="widgetsMargin"
+                                           [showButtons]="true"
+                                           [min]="0" [max]="100"
+                                           (onBlur)="refreshDashboardPreview()">
+                            </p-inputNumber>
+                            <p-slider [(ngModel)]="widgetsMargin"
+                                      [min]="0" [max]="100"
+                                      (onSlideEnd)="refreshDashboardPreview()">
+                            </p-slider>
+                        </div>
+
+                        <div class="layout-option">
+                            <p-button label="Reset to defaults" icon="pi pi-undo"
+                                      styleClass="p-button-outlined bg-white"
+                                      (onClick)="resetLayoutToDefaults()"></p-button>
+                        </div>
+                    </p-panel>
+
+                    <div class="add-new-component-area" (click)="showOverlyMenu($event, 0)">
+                        <div class="widget-menu-placeholder" (click)="showOverlyMenu($event, 0)">
+                            <i class="material-icons mr-2 fill">add</i>
+                            <label>Widget</label>
+                        </div>
+                    </div>
+
+                    <!-- Top side dropping zone of first row -->
+                    <div *ngIf="droppable(0)" pDroppable
+                         [class]="separatorClass(0)"
+                         [style]="separatorStyle(0)"
+                         (onDrop)="moveWidget(0)"
+                         (click)="moveWidget(0)">
+                        <div class="drop-bar"></div>
+                    </div>
+                    <div *ngIf="!droppable(0)"
+                         [class]="separatorClass(0)"
+                         [style]="separatorStyle(0)">
+                    </div>
+
+                    <ng-container *ngFor="let row of dashboardGrid; let i = index">
+                        <div *ngIf="!!row?.length" class="dashboard-widget-row">
+
+                            <!-- Left side dropping zone of first column -->
+                            <div *ngIf="droppable(i, 0)" pDroppable
+                                 [class]="separatorClass(i, 0)"
+                                 [style]="separatorStyle(i, 0)"
+                                 (onDrop)="moveWidget(i, 0)"
+                                 (click)="moveWidget(i, 0)">
+                                <div class="drop-bar"></div>
+                            </div>
+                            <div *ngIf="!droppable(i, 0)"
+                                 [class]="separatorClass(i, 0)"
+                                 [style]="separatorStyle(i, 0)">
+                            </div>
+
+                            <ng-container *ngFor="let widget of row; let j = index">
+                                <div *ngIf="!!widget" #widgetContainer
+                                     [class]="widgetClass(widget)"
+                                     [style]="widgetStyle(widget)"
+                                     [pDraggableDisabled]="!draggable(widget)"
+                                     pDraggable dragEffect="move"
+                                     pDroppable pDroppableDisabled="true"
+                                     (dblclick)="draggable(widget) ? dropWidget() : dragWidget(widget)"
+                                     (onDragEnter)="shrinkWidget(widget)"
+                                     (onDrag)="drag($event)"
+                                     (onDragEnd)="dragEnd()">
+
+                                    <!-- Inner widget -->
+                                    <reporting-widget [widgetType]="widget?.widgetSource?.widgetType"
+                                                      [widgetSourceId]="widget?.widgetSourceId"
+                                                      [ignoreDisplayRule]="true"
+                                                      [variableReceiver]="false"
+                                                      [variableEmitter]="false"
+                                                      [exportable]="false">
+                                    </reporting-widget>
+
+                                    <!-- Widget function buttons -->
+                                    <div [class]="widgetButtonsClass(widgetContainer)" *ngIf="!draggable(widget)">
+                                        <p-button icon="pi pi-plus" styleClass="p-button-outlined"
+                                                  title="Add widget to the left"
+                                                  (onClick)="showOverlyMenu($event, i, j)"></p-button>
+
+                                        <div class="widget-edition-buttons">
+                                            <p-button label="Edit" icon="pi pi-pencil"
+                                                      styleClass="p-button-outlined"
+                                                      (onClick)="editWidget(getSource(widget.widgetSourceId))"></p-button>
+                                            <p-button label="Delete" icon="pi pi-trash"
+                                                      styleClass="p-button-outlined p-button-danger"
+                                                      (onClick)="deleteWidget(getSource(widget.widgetSourceId))"></p-button>
+                                            <p-button label="Move" icon="pi pi-arrows-alt"
+                                                      styleClass="p-button-outlined"
+                                                      (onClick)="dragWidget(widget)"></p-button>
+                                        </div>
+
+                                        <p-button icon="pi pi-plus" styleClass="p-button-outlined"
+                                                  title="Add widget to the right"
+                                                  (onClick)="showOverlyMenu($event, i, j + 1)"></p-button>
+                                    </div>
+
+                                    <!-- Widget movement buttons -->
+                                    <div class="widget-drag-arrows" *ngIf="draggable(widget)">
+                                        <i class="pi pi-chevron-up move-up"
+                                           *ngIf="widget.rowIndex !== 0 || row.length > 1"
+                                           (click)="moveWidget(-1, 0, true)"></i>
+                                        <i class="pi pi-chevron-down move-down"
+                                           *ngIf="widget.rowIndex !== dashboardGrid.length - 1 || row.length > 1"
+                                           (click)="moveWidget(1, 0, true)"></i>
+                                        <i class="pi pi-chevron-left move-left"
+                                           *ngIf="widget.columnIndex !== 0"
+                                           (click)="moveWidget(0, -1, true)"></i>
+                                        <i class="pi pi-chevron-right move-right"
+                                           *ngIf="widget.columnIndex !== row.length - 1"
+                                           (click)="moveWidget(0, 1, true)"></i>
+                                        <p-button label="Place" class="place-button" styleClass="p-button-outlined"
+                                                  icon="pi pi-arrows-alt" (onClick)="dropWidget()"></p-button>
+                                    </div>
+                                </div>
+
+                                <!-- Right side dropping zone of column -->
+                                <div *ngIf="droppable(i, j + 1)"
+                                     [class]="separatorClass(i, j + 1)"
+                                     [style]="separatorStyle(i, j + 1)"
+                                     pDroppable
+                                     (onDragEnter)="shrinkWidget(widget)"
+                                     (onDrop)="moveWidget(i, j + 1)"
+                                     (click)="moveWidget(i, j + 1)">
+                                    <div class="drop-bar {{j + 1 < row.length ? 'separator-bar' : ''}}"></div>
+                                </div>
+                                <div *ngIf="!droppable(i, j + 1)"
+                                     [class]="separatorClass(i, j + 1)"
+                                     [style]="separatorStyle(i, j + 1)">
+                                    <div class="{{j + 1 < row.length ? 'separator-bar' : ''}}"></div>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <!-- Bottom side dropping zone of row -->
+                        <div *ngIf="droppable(i + 1)"
+                             [class]="separatorClass(i + 1)"
+                             [style]="separatorStyle(i + 1)"
+                             pDroppable
+                             (onDrop)="moveWidget(i + 1)"
+                             (click)="moveWidget(i + 1)">
+                            <div class="drop-bar {{i + 1 < dashboardGrid.length ? 'separator-bar' : ''}}"></div>
+                        </div>
+                        <div *ngIf="!droppable(i + 1)"
+                             [class]="separatorClass(i + 1)"
+                             [style]="separatorStyle(i + 1)">
+                            <div class="{{i + 1 < dashboardGrid.length ? 'separator-bar' : ''}}"></div>
+                        </div>
+                    </ng-container>
+
+                    <div class="add-new-component-area" (click)="showOverlyMenu($event, dashboardGrid?.length)">
+                        <div class="widget-menu-placeholder" (click)="showOverlyMenu($event, dashboardGrid?.length)">
+                            <i class="material-icons mr-2 fill">add</i>
+                            <label>Widget</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-tabPanel>
+
+    <p-tabPanel header="Tab1" class="p-0">
+        <ng-template pTemplate="header">
+            <i class="material-icons mr-2 fill">tune</i>
+            <span>General</span>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <div class="reporting-form general-settings">
+                <div class="tab-content-top-padding tab-content-sides-padding reporting-form-body darker-panel">
+                    <div class="form-section">
+                        <span class="form-section-name">NAME</span>
+                        <div class="form-section-input-group">
+                            <label class="form-input-label">Dashboard name:</label>
+                            <div class="form-input-control-wrapper">
+                                <input pInputText name="dashboardName"
+                                       class="form-input-control"
+                                       [(ngModel)]="dashboardName"
+                                       [maxLength]="500"
+                                       required notEmpty/>
+                                <div class="p-error">
+                                    <small *ngIf="!dashboardName">Name is required.</small>
+                                </div>
+                                <div class="p-error">
+                                    <small *ngIf="dashboardName?.length === 500">
+                                        Maximum length of 500 characters reached.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section-input-group mt-4">
+                            <div class="form-input-control-wrapper">
+                                <p-checkbox label="Display name to end user"
+                                            [(ngModel)]="displayName" [binary]="true"
+                                            (onChange)="refreshDashboardPreview()">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <span class="form-section-name">OTHER</span>
+                        <div class="form-section-input-group">
+                            <label class="form-input-label">Dashboard description (optional):</label>
+                            <div class="form-input-control-wrapper">
+                                <textarea rows="8" [(ngModel)]="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section no-bottom-border">
+                        <div class="form-section-input-group">
+                            <label class="form-input-label">URL slug / Dashboard code:</label>
+                            <div class="form-input-control-wrapper">
+                                <div class="hint-icon-container">
+                                    <input pInputText name="dashboardCode"
+                                           class="form-input-control"
+                                           [(ngModel)]="dashboardCode"
+                                           [maxLength]="200"
+                                           (focus)="onDashboardCodeFocus()"/>
+                                    <i class="material-icons hint-icon align-self-center">help_outlined</i>
+                                </div>
+                                <div class="p-error">
+                                    <small *ngIf="dashboardCode?.length === 200">
+                                        Maximum length of 200 characters reached.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-tabPanel>
+
+    <p-tabPanel header="Tab2" class="p-0">
+        <ng-template pTemplate="header">
+            <i class="material-icons mr-2 fill">play_arrow</i>
+            <span>Preview</span>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <div class="dashboard-preview">
+                <reporting-dashboard [dashboardView]="dashboardPreview"></reporting-dashboard>
+            </div>
+        </ng-template>
+    </p-tabPanel>
+</p-tabView>
+
+<p-dialog [(visible)]="loadWidgetDialogVisible" [modal]="true" [resizable]="false"
+          styleClass="widget-addition-dialog" header="Use existing widget">
+    <ng-template pTemplate="content">
+        <div class="card widget-selection-header">
+            <label>Choose widget</label>
+            <p-dropdown [(ngModel)]="widgetSource" [options]="widgetSourceOptions ?? []"
+                        dataKey="id" appendTo="body"></p-dropdown>
+        </div>
+        <div class="card widget-selection-preview">
+            <reporting-widget [widgetType]="widgetSource.widgetType"
+                              [widgetSourceId]="widgetSource.id"
+                              [ignoreDisplayRule]="true">
+            </reporting-widget>
+        </div>
+    </ng-template>
+    <p-footer>
+        <p-button label="Accept" [disabled]="!widgetSource?.id" (onClick)="addWidget(widgetSource)"></p-button>
+        <p-button label="Cancel" (onClick)="clean()"></p-button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="editWidgetDialogVisible"
+          position="top"
+          [modal]="true"
+          [maximizable]="true"
+          [resizable]="true"
+          styleClass="widget-edition-dialog"
+          [header]="editWidgetDialogHeader">
+    <ng-template pTemplate="content">
+        <reporting-widget-builder [widgetType]="widgetSource.widgetType"
+                                  [widgetSourceId]="widgetSource.id">
+        </reporting-widget-builder>
+    </ng-template>
+
+    <p-footer *ngIf="editWidgetDialogVisible">
+        <button pButton
+                label="Cancel"
+                icon="pi pi-times"
+                class="p-button-secondary"
+                [loading]="widgetBuilderLoading"
+                (click)="widgetBuilderCancel()">
+        </button>
+        <button *ngIf="queryBuilderTabActive"
+                pButton
+                label="Save query"
+                icon="pi pi-check"
+                [loading]="widgetBuilderLoading"
+                [disabled]="queryBuilderDisabled || !queryBuilderDirty"
+                (click)="widgetBuilderSaveQuery()">
+        </button>
+        <button pButton
+                label="Save"
+                [icon]="queryBuilderDirty ? 'pi pi-exclamation-triangle' : 'pi pi-check'"
+                [pTooltip]="queryBuilderDirty ? widgetSaveButtonTooltip : ''"
+                [loading]="widgetBuilderLoading"
+                [disabled]="!widgetBuilderValid || widgetBuilderLoading"
+                (click)="widgetBuilderSave()">
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-menu [model]="widgetSourceMenuItems" [popup]="true" appendTo="body"></p-menu>

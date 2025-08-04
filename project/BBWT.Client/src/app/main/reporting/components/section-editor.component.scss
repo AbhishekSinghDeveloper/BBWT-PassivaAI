@@ -1,0 +1,65 @@
+:host ::ng-deep {
+    .inputs-group {
+        max-width: 100%;
+
+        .inputs-group-row {
+            .inputs-group-row-value {
+                p-checkbox[inputid=binary] {
+                    max-width: 350px;
+                    width: 350px;
+                }
+            }
+        }
+    }
+
+    .wrapper {
+        margin-right: -20px;
+    }
+
+    .child {
+        box-sizing: border-box;
+        padding-right: 20px;
+        float: left;
+    }
+
+    .p-fieldset-content {
+        padding: 0;
+    }
+
+    .report-general-container {
+        position: relative;
+
+        .saving-timer {
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            right: 10px;
+            top: 10px;
+            color: #444;
+            font-size: .75rem;
+            animation:  opacityAnimation 1s infinite linear;
+            visibility: hidden;
+
+            &.active {
+                visibility: visible;
+            }
+
+            .pi-spin {
+                font-size: 1.25rem;
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
+@keyframes opacityAnimation {
+    0% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}

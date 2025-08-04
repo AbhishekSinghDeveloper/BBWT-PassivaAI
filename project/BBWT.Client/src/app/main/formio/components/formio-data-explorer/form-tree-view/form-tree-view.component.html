@@ -1,0 +1,6 @@
+<p-tree [value]="files" class="data-tree md:w-30rem">
+    <ng-template let-node pTemplate="default">
+        <span class="ui-treenode-icon"></span>
+        <span>{{ node.label }} , {{ node.type }}</span>
+    </ng-template>
+</p-tree>

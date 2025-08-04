@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File name extension must be .runsettings -->
+<RunSettings>
+    <DataCollectionRunSettings>
+        <DataCollectors>
+            <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Configuration>
+                    <CodeCoverage>
+                        <!-- Match assembly file paths: -->
+
+                        <ModulePaths>
+                            <Exclude>
+                                <ModulePath>.*\.tests\..*</ModulePath>
+                                <ModulePath>.*xunit.*</ModulePath>
+                                <ModulePath>.*cronos.*</ModulePath>
+                                <ModulePath>.*dapper.*</ModulePath>
+                                <ModulePath>.*humanizer.*</ModulePath>
+                                <ModulePath>.*mysqlconnector.*</ModulePath>
+                                <ModulePath>.*sqlkata.*</ModulePath>
+                                <ModulePath>.*aspnetcore.*</ModulePath>
+                                <ModulePath>.*bouncycastle.*</ModulePath>
+                                <ModulePath>.*\.modulelinkage\..*</ModulePath>
+                                <ModulePath>.*\.demo\..*</ModulePath>
+                            </Exclude>
+                        </ModulePaths>
+
+                        <Functions>
+                            <Exclude>
+                                <Function>.*ModuleLinkage\..*</Function>
+                                <Function>.*MappingProfile\..*</Function>
+                            </Exclude>
+                        </Functions>
+
+                    </CodeCoverage>
+                </Configuration>
+            </DataCollector>
+        </DataCollectors>
+    </DataCollectionRunSettings>
+</RunSettings>

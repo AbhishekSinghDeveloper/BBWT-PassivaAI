@@ -1,0 +1,132 @@
+:host ::ng-deep {
+    p-table {
+        thead.p-datatable-thead {
+            > tr {
+                > th {
+                    &.expandable-column-header {
+                        width: 3em;
+                    }
+                    &.selection-column-header {
+                        width: 3em;
+                    }
+                    &.reordering-column-header {
+                        width: 3em;
+                    }
+                    &.actions-column-header {
+                        padding: 0.75rem 1rem;
+                    }
+                }
+
+                &.headers-row {
+                    > th {
+                        .column-header-text-container {
+                            display: flex;
+
+                            .column-header-text {
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        tbody.p-datatable-tbody {
+            tr:not(.p-highlight):focus {
+                background-color: rgba(0, 0, 0, 0.26);
+              }
+
+            tr {
+                min-height: 3rem;
+                &.inline-editing-state-row > td {
+                    p-cellEditor {
+                        .grid-cell-input {
+                            > * {
+                                width: 100%;
+                                display: block;
+
+                                .p-inputnumber {
+                                    width: 100%;
+
+                                    .p-inputnumber-input {
+                                        width: 100% !important;
+                                    }
+                                }
+
+                                .p-calendar {
+                                    width: 100%;
+
+                                    > .p-inputtext {
+                                        width: 100%;
+                                    }
+
+                                    > .p-datepicker {
+                                        width: 100%;
+                                        min-width: 350px;
+                                    }
+                                }
+
+                                .p-multiselect {
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+                td {
+                    min-height: 3rem;
+
+                    &.actions-column-cell {
+                        button {
+                            margin: 3px 6px 3px 0;
+                            white-space: pre;
+                        }
+                    }
+
+                    .output-text {
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
+
+        .grid-bottom-buttons-panel {
+            text-align: right;
+
+            button {
+                margin-left: 5px;
+            }
+        }
+
+        .p-paginator {
+            &-left-content {
+                & > p-button {
+                    margin-left: 5px;
+                }
+
+                .visible-buttons-multiselect {
+                    border: 1px solid rgba(0, 0, 0, 0.1215686275);
+                    margin-right: 5px;
+                    .p-multiselect-label-container {
+                        display: none;
+                    }
+                }
+
+                .p-splitbutton {
+                    .p-splitbutton-defaultbutton {
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            @media screen and (max-width: 599px) {
+                .p-button .p-button-label {
+                    font-size: 12px;
+                }
+                .grid-records-count {
+                    font-size: 9px;
+                }
+            }
+        }
+    }
+}

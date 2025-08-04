@@ -1,0 +1,64 @@
+<ng-container *ngIf="widgetVisible && !!chartView">
+    <div *ngIf="output === 'web'" class="widget-chart-container">
+
+        <div class="widget-chart-topbar">
+            <h2 *ngIf="!!widgetTitle?.length">
+                {{widgetTitle}}
+            </h2>
+            <p-button *ngIf="exportable"
+                      styleClass="p-button-lg p-button-outlined p-button-text p-button-icon-only"
+                      class="pdf-exporting-button" icon="pi pi-file-pdf" title="Export to PDF" (onClick)="generatePdf()">
+            </p-button>
+        </div>
+
+        <div class="chart-container">
+            <p-chart *ngIf="!!chartSettings && !!chartData"
+                     [type]="chartSettings.type"
+                     [data]="chartData"
+                     [options]="chartSettings.options"
+                     [width]="chartSettings.width"
+                     [height]="chartSettings.height"
+                     [plugins]="chartSettings.plugins"></p-chart>
+        </div>
+    </div>
+
+    <div #pdfViewContainer *ngIf="output === 'PDF' || renderPdfViewHidden"
+         [class]="'widget-chart-pdf-view-container' + (renderPdfViewHidden ? ' pdf-view-hidden': '')">
+
+        <div class="widget-chart-topbar">
+            <h2 *ngIf="!!widgetTitle?.length">
+                {{widgetTitle}}
+            </h2>
+        </div>
+
+        <div class="chart-container">
+            <p-chart *ngIf="!!chartSettings && !!chartData"
+                     [type]="chartSettings.type"
+                     [data]="chartData"
+                     [options]="chartSettings.options"
+                     [width]="chartSettings.width"
+                     [height]="chartSettings.height"
+                     [plugins]="chartSettings.plugins"></p-chart>
+        </div>
+    </div>
+
+    <div *ngIf="!!chartDatasets?.length && chartDatasets.length > 10" class="mt-2">
+        <label>
+            Currently chart shows a reduced number of data sets.
+            <a (click)="showDatasetManager()"> Manage datasets</a>
+        </label>
+    </div>
+</ng-container>
+
+<p-dialog [(visible)]="datasetManagerVisible" [modal]="true" [resizable]="true"
+          (onHide)="hideDatasetManager()" header="Datasets" styleClass="dataset-manager">
+    <p-multiSelect [(ngModel)]="selectedDatasets"
+                   [options]="chartDatasets"
+                   dataKey="label"
+                   appendTo="body">
+    </p-multiSelect>
+    <p-footer>
+        <p-button label="Accept" (onClick)="changeDatasetsVisibility()"></p-button>
+        <p-button label="Cancel" (onClick)="hideDatasetManager()"></p-button>
+    </p-footer>
+</p-dialog>

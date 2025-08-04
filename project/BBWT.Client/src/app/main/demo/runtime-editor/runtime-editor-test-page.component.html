@@ -1,0 +1,33 @@
+<div class="ui-g-12" rte="o5">
+    <strong rte="o6">BB Web Template is:</strong><bb-tooltip message="this is a header in bold" rte="o7"></bb-tooltip>
+    <ul rte="o8">
+        <li rte="o9">A high-level business-oriented web toolkit</li>
+        <li rte="oa">A platform to accelerate web development projects</li>
+        <li rte="ob">A long-term platform, building on the most popular libraries</li>
+        <li rte="oc">Owned by BB but source-code licenced to customers</li>
+        <li rte="od">Security tested and robust</li>
+        <li rte="oe">Deployable on Linux or Windows</li>
+        <li rte="of">Compatible with load-balanced deployment</li>
+        <li rte="og">Free of ongoing fees</li>
+    </ul>
+    <p-tabView rte="oh">
+        <p-tabPanel header="Work Details - Component 1" rte="oi">
+            <p rte="oj">
+                Component 1 Panel
+            </p>
+            <button pButton type="button" label="Show the Quote" (click)="showParagraph = true" rte="ok"></button><bb-tooltip message="quote tt23" rte="ol"></bb-tooltip>
+            <p rte="om"></p>
+            <p *ngIf="showParagraph" rte="on">
+                "Everyday life is like programming, I guess. If you love something you can put beauty into it."<br/>Donald Knuth<br/>and blah
+              </p>
+            <p rte="oo"></p>
+            <runtime-editor-test-child rte="op"></runtime-editor-test-child>
+        </p-tabPanel>
+        <p-tabPanel header="Work Details - Component 2" rte="oq">
+            <p rte="or">
+                Component 2 Panel
+            </p>
+            <runtime-editor-test-child rte="os"></runtime-editor-test-child>
+        </p-tabPanel>
+    </p-tabView>
+</div>

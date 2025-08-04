@@ -1,0 +1,93 @@
+<p-dialog [modal]="true"
+          [draggable]="false"
+          appendTo="body"
+          [style]="dialogWidth"
+          [(visible)]="visible"
+          (onHide)="cancel.emit()" rte="1jS">
+    <ng-template pTemplate="header">
+        <h1 rte="1jT"><ng-content select="[header]"></ng-content></h1>
+    </ng-template>
+
+    <form [formGroup]="ruleForm"
+          autocomplete="off"
+          class="inputs-group"
+          (ngSubmit)="validateAndSave()" rte="1jU">
+        <div class="inputs-group-row" rte="1jV">
+            <div class="inputs-group-row-name" rte="1jW">
+                <span class="eb-tooltip-label" rte="1jX">Name: </span>
+            </div>
+
+            <div class="inputs-group-row-value" rte="1jY">
+                <span class="p-input-icon-right" [style.width]="'100%'" rte="1wc">
+                    <i *ngIf="validatingNameAsync" class="pi pi-spin pi-spinner" rte="1wd"></i>
+                    <input pInputText
+                            formControlName="name"
+                            [ngClass]="{ 'ng-invalid ng-dirty': invalid(name) }"  rte="1jZ"/>
+                </span>
+                <div class="p-error" *ngIf="invalid(name)" rte="1k0">
+                    <small *ngIf="name.errors.required" rte="1k1">Name is required.</small>
+                    <small *ngIf="name.errors.pattern" rte="1k2">Invalid name.</small>
+                    <small *ngIf="name.errors.duplicate" rte="1k3">Rule name already exists on AWS Event Bridge.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1k4">
+            <div class="inputs-group-row-name" rte="1k5">
+                <span class="eb-tooltip-label" rte="1k6">Target: </span>
+                <bbwt-aws-event-bridge-job-description-tooltip [jobDescription]="jobDescription" rte="1k7"></bbwt-aws-event-bridge-job-description-tooltip>
+            </div>
+
+            <div class="inputs-group-row-value" rte="1k8">
+                <p-dropdown formControlName="targetJobId"
+                            [options]="availableTargets"
+                            optionValue="jobId"
+                            optionLabel="jobId"
+                            [ngClass]="{ 'ng-invalid ng-dirty': invalid(target) }"
+                            (onChange)="onTargetChange()" rte="1k9">
+                </p-dropdown>
+                <div class="p-error" *ngIf="invalid(target)" rte="1ka">
+                    <small *ngIf="name.errors.required" rte="1kb">Target job is required.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1kc">
+            <div class="inputs-group-row-name" rte="1kd">
+                <span class="eb-tooltip-label" rte="1ke">Cron: </span>
+                <bbwt-aws-event-bridge-cron-help-tooltip rte="1kf"></bbwt-aws-event-bridge-cron-help-tooltip>
+            </div>
+            <div class="inputs-group-row-value" rte="1kg">
+                <input formControlName="cron"
+                       pInputText
+                       [ngClass]="{ 'ng-invalid ng-dirty': invalid(cron) }"  rte="1kh"/>
+                <div class="p-error" *ngIf="invalid(cron)" rte="1ki">
+                    <small *ngIf="cron.errors.required" rte="1kj">Cron expression is required.</small>
+                    <small *ngIf="cron.errors.cron" rte="1kk">
+                        Cron expression is invalid or produces no value.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1kl">
+            <label class="inputs-group-row-name" rte="1km">Is enabled: </label>
+            <div class="inputs-group-row-value" rte="1kn">
+                <p-checkbox formControlName="isEnabled" [binary]="true" rte="1ko"></p-checkbox>
+            </div>
+        </div>
+
+        <bbwt-aws-event-bridge-job-parameters #jobParametersControl
+                                              formControlName="parameters" rte="1kp">
+        </bbwt-aws-event-bridge-job-parameters>
+    </form>
+
+    <p-footer rte="1kq">
+        <button pButton type="button" label="Cancel" (click)="visible = false" rte="1kr">
+            <i class="material-icons" rte="1ks">clear</i>
+        </button>
+        <button pButton type="button" label="Save" [disabled]="ruleForm.invalid || validatingNameAsync" (click)="validateAndSave()" rte="1kt">
+            <i class="material-icons" rte="1ku">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

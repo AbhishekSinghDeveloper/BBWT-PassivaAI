@@ -1,0 +1,88 @@
+/* Add your customizations of layout here */
+
+@import "../../../../sass/screenMixins";
+
+/* Global banner */
+.global-info-banner {
+    background-color: $bodyBgColor;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+/* Account pages */
+.account-container {
+    background-color: $topbarLeftBgColor;
+}
+
+
+.layout-wrapper {
+    .topbar {
+        /* Reworking to unlock ability for adding more items */
+        .topbar-main {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+
+            .left-side {
+                display: flex;
+                align-items: center;
+
+                .logo {
+                    margin-left: 10px;
+                    width: 175px;
+                    vertical-align: unset;
+                }
+
+                .app-name {
+                    vertical-align: unset;
+
+                    @include for-tablet-down {
+                        font-size: 20px;
+                    }
+                    @media (max-width: 800px) {
+                        display: none;
+                    }
+                }
+            }
+
+            .right-side {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+
+                #user-display {
+                    margin-top: 0;
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+
+                    .username {
+                        margin-top: 0;
+                        text-overflow: ellipsis;
+                        white-space: pre;
+                        overflow: hidden;
+                        max-width: 250px;
+                        margin-right: 10px;
+
+                        @media (max-width: 900px) {
+                            max-width: 150px;
+                        }
+                    }
+                    img {
+                        position: relative;
+                        right: unset;
+                        top: unset;
+                        padding: 0;
+                    }
+
+                    @media (max-width: 640px) {
+                        img {
+                            position: relative;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

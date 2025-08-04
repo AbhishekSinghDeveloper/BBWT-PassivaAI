@@ -1,0 +1,23 @@
+<div class="card--hidden" rte="Yc">
+    <h1 rte="Yd">Employees</h1>
+
+    <p rte="Ye">
+        There are currently
+        {{ grid.getTableProperty("totalRecords") }} records.<br />
+        You can
+        <data-generation
+            recordsLimit="1000000"
+            startGenerationMethodName="GenerateEmployees"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="Yf"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <grid
+        #grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        rte="1kY"
+    ></grid>
+</div>

@@ -1,0 +1,143 @@
+:host ::ng-deep {
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -5px 10px;
+        width: calc(#{100%} + 10px);
+
+        @media screen and (max-width: 700px) {
+            width: 100%;
+        }
+
+        .filter-item-container,
+        .filter-buttons-panel {
+            display: inline-block;
+            margin: 0 5px 10px;
+            width: calc(#{20%} - 10px);
+
+            @media screen and (max-width: 1400px) {
+                width: calc(#{25%} - 10px);
+            }
+
+            @media screen and (max-width: 1100px) {
+                width: calc(#{33.3333%} - 10px);
+            }
+
+            @media screen and (max-width: 900px) {
+                width: calc(#{50%} - 10px);
+            }
+
+            @media screen and (max-width: 700px) {
+                margin-left: 0;
+                margin-right: 0;
+                width: 100%;
+            }
+
+            p-checkbox {
+                display: flex;
+                align-items: center;
+                height: 100%;
+            }
+        }
+        .filter-item-container {
+            display: flex;
+
+            .filter-input-container {
+                width: 100%;
+
+                > .p-float-label {
+                    height: 100%;
+
+                    > *:not(label) {
+                        width: 100%;
+
+                        > .p-calendar,
+                        > .p-slider,
+                        > .p-inputtext,
+                        > .p-inputnumber {
+                            width: 100%;
+                            height: 100%;
+                        }
+
+                        > .p-calendar {
+                            height: 100%;
+                            
+                            > .p-inputtext {
+                                width: 100%;
+                                height: 100%;
+                            }
+
+                            > .p-datepicker {
+                                width: 100%;
+                                min-width: 350px;
+                            }
+                        }
+
+                        > .p-inputnumber {
+                            .p-inputnumber-buttons-stacked .p-inputnumber-button-group {
+                                border-radius: 0 !important;
+                            }
+                            > .p-inputnumber-input {
+                                width: 100%;
+                                border-right: unset;
+                            }
+                        }
+                    }
+                }
+
+                > *:not(label) {
+                    width: 100%;
+
+                    > .p-dropdown,
+                    > .p-multiselect {
+                        width: 100%;
+                    }
+                }
+            }
+            .filter-match-mode-selector {
+                display: none;
+            }
+
+            &.filter-and-match-mode {
+                .filter-input-container {
+                    width: calc(#{100%} - 35px);
+
+                    .p-inputtext {
+                        border-radius: 6px 0 0 6px;
+                    }
+                }
+                .filter-match-mode-selector {
+                    display: block;
+                    width: 35px;
+
+                    p-dropdown {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        
+                        .p-dropdown {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 0 6px 6px 0;
+                            padding: 0;
+                            border-left: unset;
+
+                            .p-dropdown-label {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .filter-buttons-panel {
+            text-align: right;
+            align-self: flex-end;
+            margin-left: auto;
+
+            button {
+                margin-left: 5px;
+            }
+        }
+    }
+}

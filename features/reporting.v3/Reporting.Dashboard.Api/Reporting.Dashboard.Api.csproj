@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>BBF.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>BBF.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\BBWM.Core.Membership\BBWM.Core.Membership.csproj" />
+    <ProjectReference Include="..\..\..\modules\BBWM.Core\BBWM.Core.csproj" />
+    <ProjectReference Include="..\Reporting.Dashboard\Reporting.Dashboard.csproj" />
+  </ItemGroup>
+
+</Project>

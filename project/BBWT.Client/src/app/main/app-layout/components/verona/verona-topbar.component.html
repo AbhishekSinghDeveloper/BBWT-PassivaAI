@@ -1,0 +1,127 @@
+<div class="topbar" rte="16q">
+    <div class="topbar-main" rte="16r">
+        <div class="left-side" rte="16s">
+            <a href="#" id="menu-button" (click)="veronaMain.onMenuButtonClick($event)" rte="16t">
+                <span class="pi pi-bars" rte="16u"></span>
+            </a>
+
+            <a routerLink="/" rte="16v">
+                <img alt="main logo" [src]="app.logoImageUrl" class="logo" rte="16w">
+            </a>
+
+            <div class="app-name" rte="16x">
+                <a routerLink="/" rte="16y">{{app.projectName}}</a>
+            </div>
+        </div>
+
+        <div class="right-side" rte="16z">
+            <app-offline-indicator *ngIf="app.offlineIndicatorVisible" rte="16A"></app-offline-indicator>
+
+            <a href="#" id="user-display" (click)="veronaMain.onTopbarMenuButtonClick($event);" rte="16B">
+                <span class="username" rte="16C">{{app.currentUserName}}</span>
+                <img alt="main logo" [src]="app.avatarUrl" onerror="this.src='assets/images/noavatar.png';" rte="16E">
+            </a>
+
+            <ul id="topbar-menu" class="fadeInDown animated" [ngClass]="{'topbar-menu-visible': veronaMain.topbarMenuActive}" rte="16F">
+                <li #profile
+                    [ngClass]="{'menuitem-active': veronaMain.activeTopbarItem === profile}"
+                    rte="16G">
+                    <a [routerLink]="['profile']" (click)="veronaMain.onTopbarItemClick($event, profile)" rte="16H">
+                        <i class="topbar-icon pi pi-fw pi-user" rte="16I"></i>
+                        <span class="topbar-item-name" rte="16J">PROFILE</span>
+                    </a>
+                </li>
+                <li #rutimeEditorTopbarItem
+                    *ngIf="app.runtimeEditorService.editorAllowedForUser"
+                    [ngClass]="{'menuitem-active': veronaMain.activeTopbarItem === rutimeEditorTopbarItem}"
+                    rte="16K">
+                    <a href="#" (click)="onRuntimeEditorTopbarItemClick($event, rutimeEditorTopbarItem)" rte="16L">
+                        <i class="topbar-icon pi pi-fw pi-pencil" rte="16M"></i>
+                        <span class="topbar-item-name" rte="16N">RUNTIME EDITOR</span>
+                        <span *ngIf="app.runtimeEditorUi.isEditorLoading" class="topbar-badge animated rubberBand" rte="16O">
+                            load...
+                        </span>
+                        <span *ngIf="app.runtimeEditorUi.isEditorOn" class="topbar-badge animated rubberBand" rte="16P">
+                            {{app.runtimeEditorUi.newChangesCount}}/{{app.runtimeEditorUi.changesCount}}
+                        </span>
+                    </a>
+                    <ul rte="16Q" *ngIf="app.runtimeEditorUi.hasNewChanges">
+                        <li role="menuitem" rte="16R">
+                            <a href="#" (click)="app.runtimeEditorSave(); veronaMain.onTopbarSubItemClick($event)" rte="16S">
+                                <i class="material-icons" rte="16T">send</i>
+                                <span rte="16U">Submit to PM</span>
+                            </a>
+                        </li>
+                        <li role="menuitem" rte="16V">
+                            <a href="#" (click)="app.runtimeEditorClose(); veronaMain.onTopbarSubItemClick($event)" rte="16W">
+                                <i class="material-icons" rte="16X">close</i>
+                                <span rte="16Y">Close Editor</span>
+                            </a>
+                        </li>
+                        <li role="menuitem" rte="16Z">
+                            <a href="#" (click)="app.runtimeEditorCancel(); veronaMain.onTopbarSubItemClick($event)" rte="170">
+                                <i class="material-icons" rte="171">cancel</i>
+                                <span rte="172">Cancel New Changes</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li #feedbackTopbarItem
+                    *ngIf="app.feedbackAvailable"
+                    [ngClass]="{'active-top-menu': veronaMain.activeTopbarItem === feedbackTopbarItem}"
+                    rte="173">
+                    <a href="#" (click)="app.showFeedback(); veronaMain.onTopbarItemClick($event, feedbackTopbarItem)" rte="174">
+                        <feedbacks-launcher project-code="BC-BBWT3"
+                                            server-code="test"
+                                            attr.first-name="{{app.feedbackUserFirstName}}"
+                                            attr.last-name="{{app.feedbackUserLastName}}"
+                                            attr.email="{{app.feedbackUserEmail}}"
+                                            style="display: none;"
+                                            rte="175">
+                        </feedbacks-launcher>
+                        <i class="topbar-icon pi pi-fw pi-comment" rte="176"></i>
+                        <span *ngIf="app.feedbackService.counter" class="topbar-badge animated rubberBand" rte="178">{{app.feedbackService.counter}}</span>
+                        <span class="topbar-item-name" rte="177">FEEDBACK</span>
+                    </a>
+                </li>
+                <li #showDevToolsTopbarItem
+                    *ngIf="app.devToolsAvailable"
+                    [ngClass]="{'active-top-menu': veronaMain.activeTopbarItem === showDevToolsTopbarItem}"
+                    rte="179">
+                    <a href="#" (click)="app.showDevToolsDialog(); veronaMain.onTopbarItemClick($event, showDevToolsTopbarItem)" rte="17a">
+                        <i class="topbar-icon material-icons" rte="17b">build</i>
+                        <span class="topbar-item-name" rte="17c">DEVELOPMENT TOOLS</span>
+                    </a>
+                </li>
+                <li #loadingTimeTopbarItem
+                    *ngIf="app.loadingTimeAvailable"
+                    [ngClass]="{'active-top-menu': veronaMain.activeTopbarItem === loadingTimeTopbarItem}"
+                    rte="17d">
+                    <a routerLink="/app/loading-time" (click)="veronaMain.onTopbarItemClick($event, loadingTimeTopbarItem)" rte="17e">
+                        <i class="topbar-icon material-icons" rte="17f">update</i>
+                        <span class="topbar-item-name" rte="17g">LOADING TIME</span>
+                        <span *ngIf="app.loadTime" class="topbar-badge animated rubberBand" rte="17h">{{app.loadTime}}</span>
+                    </a>
+                </li>
+                <li #logout rte="17i">
+                    <a href="#" (click)="app.logout(); veronaMain.onTopbarSubItemClick($event)" rte="17j">
+                        <i class="topbar-icon pi pi-fw pi-sign-out" rte="17k"></i>
+                        <span class="topbar-item-name" rte="17l">LOGOUT</span>
+                    </a>
+                </li>
+                <li #stopImpersonation
+                    [hidden]="!app.isUserImpersonate"
+                    [ngClass]="{'menuitem-active': veronaMain.activeTopbarItem === stopImpersonation}"
+                    rte="17m">
+                    <a href="#" (click)="app.stopImpersonation(); veronaMain.onTopbarItemClick($event, stopImpersonation)" rte="17n">
+                        <i class="topbar-icon pi pi-fw pi-power-off" rte="17o"></i>
+                        <span class="topbar-item-name" rte="17p">END IMPERSONATION</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <verona-menu rte="17q"></verona-menu>
+
+</div>

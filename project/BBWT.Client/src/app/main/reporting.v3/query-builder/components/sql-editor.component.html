@@ -1,0 +1,39 @@
+<div class="sql-editor">
+    <div class="editor-section {{disabled ? 'editor-disabled' : ''}}">
+        <query-table-selector [tableSetId]="sqlQueryBuild?.tableSetId"
+                              (onTableClick)="insertTableNodeValue($event)"
+                              (onColumnClick)="insertColumnNodeValue($event)"
+                              (onFolderChange)="refreshTableSetTables($event)"></query-table-selector>
+        <code-editor [(ngModel)]="sqlCode" format="code" language="sql"
+                     *ngIf="keyboard && tokens" [keyboard]="keyboard" [tokens]="tokens"
+                     (onEditorCreated)="configureExternalHandlers($event)"></code-editor>
+    </div>
+</div>
+
+<div #variables class="overly-listbox">
+    <p-listbox [options]="variablesListBox.options ?? []"
+               [ngModel]="variablesListBox.selection"
+               (onChange)="insertOverlyListSelection(variablesListBox, 'click', $event)">
+    </p-listbox>
+</div>
+
+<div #tables class="overly-listbox">
+    <p-listbox [options]="tablesListBox.options ?? []"
+               [ngModel]="tablesListBox.selection"
+               (onChange)="insertOverlyListSelection(tablesListBox, 'click', $event)">
+    </p-listbox>
+</div>
+
+<div #columns class="overly-listbox">
+    <p-listbox [options]="columnsListBox.options ?? []"
+               [ngModel]="columnsListBox.selection"
+               (onChange)="insertOverlyListSelection(columnsListBox,'click', $event)">
+    </p-listbox>
+</div>
+
+<div #contextVariables class="overly-listbox">
+    <p-listbox [options]="contextVariablesListBox.options ?? []"
+               [ngModel]="contextVariablesListBox.selection"
+               (onChange)="insertOverlyListSelection(contextVariablesListBox,'click', $event)">
+    </p-listbox>
+</div>

@@ -1,0 +1,41 @@
+<div class="card--hidden" rte="Kh">
+    <h1 rte="Ki">Disabled Controls</h1>
+
+    <p rte="Kj">
+        To disable a control use the property "[disabled]" and set it to "true".
+    </p>
+
+    <div class="p-g" rte="Kk">
+        <div class="fixed-label" rte="Kl">
+            <label for="textField" rte="Km">Label</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="Kn">
+            <span class="p-float-label" rte="Ko">
+                <input pInputText id="textField" [disabled]="true" rte="Kp" />
+                <label rte="Kq">Edit Text</label>
+            </span>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Kr">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;fixed-label&quot;&gt;
+                &lt;label for=&quot;textField&quot;&gt;Label&lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input pInputText id=&quot;textField&quot; [disabled]=&quot;true&quot; /&gt;
+                    &lt;label&gt;Edit Text&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <p rte="Ks">
+        More disabled control examples you can find
+        <a [routerLink]="['/app/demo/disabled']" rte="Kt">here</a>
+    </p>
+</div>

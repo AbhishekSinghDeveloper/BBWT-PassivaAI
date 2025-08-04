@@ -1,0 +1,151 @@
+<bb-tooltip message="this is in spanish" rte="mB"></bb-tooltip><p rte="mC">!Hola!</p>
+<div rte="mD">
+    <p rte="mE">Work Details</p>
+
+    <p-accordion rte="mF">
+        <p-accordionTab header="Godfather I" [selected]="true" rte="mG">
+            <p rte="mH">
+                The story begins as Don Vito Corleone, the head of a New York Mafia family, overseeshis
+                daughter's wedding. </p>
+            <div class="inputs-group" rte="mI">
+                <div class="inputs-group-row" rte="mJ">
+                    <label for="name" class="inputs-group-row-name" rte="mK">Report code</label>
+                    <div class="inputs-group-row-value" rte="mL">
+                        <span class="md-inputfield" rte="mM">
+                            <input pInputText id="reportCode"  rte="mN"/>
+                            <label rte="mO">Report code</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="mP">
+                    <label for="reportDescription" class="inputs-group-row-name" rte="mQ">Report Description</label>
+                    <div class="inputs-group-row-value" rte="mR">
+                        <textarea pInputText id="reportDescription" placeholder="123" rte="mS"></textarea></div>
+                </div>
+
+                <div class="inputs-group-row margin-top-20" rte="mT">
+                    <p-checkbox name="group" label="Show working data" [binary]="true" rte="mU"></p-checkbox>
+                </div>
+                <div rte="mV">
+                    <div class="inputs-group-row" rte="mW">
+                        <label for="workName" class="inputs-group-row-name" rte="mX">Work Name</label>
+                        <div class="inputs-group-row-value" rte="mY">
+                            <span class="md-inputfield" rte="mZ">
+                                <input pInputText id="workName" rte="n0">
+                                <label rte="n1">Work Name</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="n2">
+                        <label for="reportDescription" class="inputs-group-row-name" rte="n3">Work Description</label>
+                        <div class="inputs-group-row-value" rte="n4">
+                            <textarea pInputText
+                                      id="workDescription"
+                                      placeholder="Work Description - updated" rte="n5">
+                                                </textarea>
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="n6">
+                        <label for="dropdownIssues" class="inputs-group-row-name" rte="n7">Issues numbers</label>
+                        <div class="inputs-group-row-value" rte="n8">
+                            <p-dropdown id="dropdownIssues" rte="n9"></p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="inputs-group-row margin-top-20" rte="na">
+                        <p-radioButton name="worktype" label="Remote" value="0" rte="nb"></p-radioButton>
+                    </div>
+                    <div class="inputs-group-row" rte="nc">
+                        <p-radioButton name="worktype" label="Office" value="1" rte="nd"></p-radioButton>
+                    </div>
+                    <div rte="ne">
+                        <div class="inputs-sub-group-name" rte="nf">Remote Work Details</div>
+                        <div class="inputs-group-row" rte="ng">
+                            <label for="personalSkype" class="inputs-group-row-name" rte="nh">Personal Skype</label>
+                            <div class="inputs-group-row-value" rte="ni">
+                                <span class="md-inputfield" rte="nj">
+                                    <input pInputText id="personalSkype" rte="nk">
+                                    <label rte="nl">Personal Skype</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="inputs-group-row" rte="nm">
+                            <label for="companySkype" class="inputs-group-row-name" rte="nn">Company Skype</label>
+                            <div class="inputs-group-row-value" rte="no">
+                                <span class="md-inputfield" rte="np">
+                                    <input pInputText id="companySkype" rte="nq">
+                                    <label rte="nr">Company Skype</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="inputs-group-row" rte="ns">
+                            <label for="personalEmail" class="inputs-group-row-name" rte="nt">Personal E-Mail</label>
+                            <div class="inputs-group-row-value" rte="nu">
+                                <span class="md-inputfield" rte="nv">
+                                    <input pInputText id="personalEmail" rte="nw">
+                                    <label rte="nx">Personal E-Mail</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="inputs-group-row" rte="ny">
+                            <p-checkbox name="isUK" label="UK / Non-UK" [binary]="true" rte="nz"></p-checkbox>
+                        </div>
+                    </div>
+                    <div rte="nA">
+                        <div class="inputs-sub-group-name" rte="nB">Work from Office</div>
+                        <div class="inputs-group-row" rte="nC">
+                            <label for="officeAddressLine1" class="inputs-group-row-name" rte="nD">Address Line 1</label>
+                            <div class="inputs-group-row-value" rte="nE">
+                                <span class="md-inputfield" rte="nF">
+                                    <input pInputText id="officeAddressLine1" rte="nG">
+                                    <label rte="nH">Address Line 1</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="inputs-group-row" rte="nI">
+                            <label for="officeAddressLine2" class="inputs-group-row-name" rte="nJ">Address Line 2</label>
+                            <div class="inputs-group-row-value" rte="nK">
+                                <span class="md-inputfield" rte="nL">
+                                    <input pInputText id="officeAddressLine2" rte="nM">
+                                    <label rte="nN">Address Line 2</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="inputs-group-row" rte="nO">
+                            <label for="officeTown" class="inputs-group-row-name" rte="nP">City</label>
+                            <div class="inputs-group-row-value" rte="nQ">
+                                <span class="md-inputfield" rte="nR">
+                                    <input pInputText id="officeTown" placeholder="Add city"  rte="nS"/>
+                                    <label rte="nT">Town</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="inputs-group-row" rte="nU">
+                            <label for="officePostCode" class="inputs-group-row-name" rte="nV">Postcode</label>
+                            <div class="inputs-group-row-value" rte="nW">
+                                <span class="md-inputfield" rte="nX">
+                                    <input pInputText id="officePostCode" rte="nY">
+                                    <label rte="nZ">Postcode</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Godfather II" rte="o0">
+            <p rte="o1">
+                Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather parallels the young Vito
+                Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction
+                of the dark side of
+                the American dream. In the early 1900s, the child Vito flees his Sicilian village for
+                America after the local
+                Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife
+                and growing brood
+                in Little Italy, killing the local Black Hand Fanucci after he demands his customary cut of
+                the tyro's business.
+                With Fanucci gone, Vito's communal stature grows.
+            </p>
+        </p-accordionTab>
+    </p-accordion>
+</div>

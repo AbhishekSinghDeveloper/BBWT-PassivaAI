@@ -1,0 +1,20 @@
+@media screen and (max-width: 860px) {
+    .has-feedback .form-control {
+        padding-right: 4px !important;
+        min-width: 45px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .datagrid-table .col-md-1 {
+        width: unset;
+    }
+}
+
+// p-dropdown p-overlay .p-overlay-content{
+//    position: fixed;
+//}
+
+.main-container .container {
+    overflow: visible;
+}

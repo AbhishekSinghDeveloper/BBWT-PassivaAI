@@ -1,0 +1,486 @@
+<div *ngIf="_initialized" class="card--hidden">
+    <h1>Report Builder</h1>
+    <ng-container *ngIf="_treeValidateError === _treeValidateErrorEnum.None; else folderIssue">
+        <ng-container *ngIf="_pageMode === _pageModeEnum.Creation; else editingPageMode">
+            <p-steps [model]="_steps" [(activeIndex)]="_activeTabIndex"></p-steps>
+            <div *ngIf="_activeTabIndex === 0" class="step-content">
+                <ng-container *ngTemplateOutlet="generalStepContent"></ng-container>
+            </div>
+            <div *ngIf="_activeTabIndex === 1" class="step-content">
+                <ng-container *ngTemplateOutlet="sectionsStepContent"></ng-container>
+            </div>
+            <div *ngIf="_activeTabIndex === 2" class="step-content">
+                <ng-container *ngTemplateOutlet="reviewStepContent"></ng-container>
+            </div>
+        </ng-container>
+        <ng-template #editingPageMode>
+            <p-tabView (onChange)="_onReportActiveTabChanged($event.index)" class="edit-mode-tab-view" activeIndex="1">
+                <p-tabPanel header="General">
+                    <ng-container *ngTemplateOutlet="generalStepContent" [selected]="true"></ng-container>
+                </p-tabPanel>
+                <p-tabPanel header="Sections">
+                    <ng-container *ngTemplateOutlet="sectionsStepContent"></ng-container>
+                </p-tabPanel>
+                <p-tabPanel header="Review">
+                    <ng-container *ngIf="_reviewTabActivated">
+                        <ng-container *ngTemplateOutlet="reviewStepContent"></ng-container>
+                    </ng-container>
+                </p-tabPanel>
+            </p-tabView>
+
+            <div class="buttons-panel buttons-panel-top-margin">
+                <div class="buttons-panel-left-side">
+                    <button pButton
+                            type="button"
+                            label="Cancel"
+                            class="p-button-secondary p-button-outlined"
+                            [loading]="_draftCancelling"
+                            [disabled]="draftUpdating"
+                            (click)="_cancel()"></button>
+                </div>
+                <div class="buttons-panel-right-side">
+                    <button pButton
+                            type="button"
+                            label="Publish"
+                            [disabled]="draftUpdating"
+                            [loading]="_draftPublishing"
+                            (click)="_saveAndPublish()"></button>
+                </div>
+            </div>
+        </ng-template>
+    </ng-container>
+    <ng-template #folderIssue>
+        <p-message *ngIf="_treeValidateError === _treeValidateErrorEnum.NoDbFoldersFound" severity="error"
+                   text="No folder of DB Documenting Tool defined for reporting feature. You need either to click the
+                   'Use All Tables folder' button below or to go to the DB Documenting Tool page
+                   (Technical Admin menu &gt; DB Documenting Tool &gt; Database Explorer)
+                   and add (or update existent) folder with Owner parameter set to 'Reports'." rte="1dN">
+        </p-message>
+        <div class="buttons-panel buttons-panel-top-margin" rte="1dX">
+            <p-button label="Use All Tables folder" (onClick)="_useDefaultDbFolder()" rte="1dY"></p-button>
+        </div>
+    </ng-template>
+</div>
+
+<p-dialog [(visible)]="_displayCreateSectionDialog"
+          header="Create New Section"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '1000px', width: '100%'}"
+          (onHide)="_onCreateSectionDialogHide()">
+    <form #form="ngForm" class="inputs-group new-section-form">
+        <div class="inputs-group-row">
+            <label for="title" class="inputs-group-row-name asterisk-mark">Title:</label>
+            <div class="inputs-group-row-value">
+                <input #name="ngModel"
+                       [(ngModel)]="_newSection.title"
+                       pInputText
+                       id="title"
+                       name="title"
+                       notEmpty
+                       autofocus
+                       maxlength="500" />
+                <span *ngIf="name.hasError('notEmpty')" class="validation-error">The title is required.</span>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="showTitle" class="inputs-group-row-name">Show title:</label>
+            <div class="inputs-group-row-value">
+                <p-checkbox [(ngModel)]="_newSection.showTitle"
+                            [binary]="true"
+                            id="showTitle"
+                            name="showTitle">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="dataView" class="inputs-group-row-name">Data view:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_newSection.dataViewType"
+                            [options]="dataViewOptions"
+                            placeholder="Select data view type"
+                            id="dataView"
+                            name="dataView">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="caption" class="inputs-group-row-name">Caption:</label>
+            <div class="inputs-group-row-value">
+                <p-editor [(ngModel)]="_newSection.description"
+                          ngDefaultControl
+                          id="caption"
+                          name="caption"
+                          [style]="{'height': '220px'}">
+                    <ng-template pTemplate="header">
+                        <span class="ql-formats">
+                            <select class="ql-font">
+                                <option selected>Sans Serif</option>
+                                <option value="serif">Serif</option>
+                                <option value="monospace">Monospace</option>
+                            </select>
+                            <select class="ql-size">
+                                <option value="small">Small</option>
+                                <option selected>Normal</option>
+                                <option value="large">Large</option>
+                                <option value="huge">Huge</option>
+                            </select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-bold" aria-label="Bold" type="button"></button>
+                            <button class="ql-italic" aria-label="Italic" type="button"></button>
+                            <button class="ql-underline" aria-label="Underline" type="button"></button>
+                            <button class="ql-strike" aria-label="Strike" type="button"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select class="ql-color"></select>
+                            <select class="ql-background"></select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-script" value="sub" aria-label="Sub" type="button"></button>
+                            <button class="ql-script" value="super" aria-label="Super" type="button"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-header" value="1" aria-label="Header 1" type="button"></button>
+                            <button class="ql-header" value="2" aria-label="Header 2" type="button"></button>
+                            <button class="ql-blockquote" aria-label="Blockquote" type="button"></button>
+                            <button class="ql-code-block" aria-label="Code Block" type="button"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-align" aria-label="Align Left" type="button"></button>
+                            <button class="ql-align" value="center" aria-label="Align Center" type="button"></button>
+                            <button class="ql-align" value="right" aria-label="Align Right" type="button"></button>
+                            <button class="ql-align" value="justify" aria-label="Align Justify" type="button"></button>
+                            <button class="ql-direction" aria-label="Direction" type="button"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-list" value="ordered" aria-label="Ordered List" type="button"></button>
+                            <button class="ql-list" value="bullet" aria-label="Unordered List" type="button"></button>
+                            <button class="ql-indent" value="-1" aria-label="Indent Left" type="button"></button>
+                            <button class="ql-indent" value="+1" aria-label="Indent Right" type="button"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-link" aria-label="Insert Link" type="button"></button>
+                            <button class="ql-image" aria-label="Insert Image" type="button"></button>
+                            <button class="ql-video" aria-label="Insert Video" type="button"></button>
+                            <button class="ql-formula" aria-label="Insert Formula" type="button"></button>
+                            <button class="ql-code-block" aria-label="Insert Code Block" type="button"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-clean" aria-label="Remove Styles" type="button"></button>
+                        </span>
+                    </ng-template>
+                </p-editor>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="expandBehaviour" class="inputs-group-row-name">Container type:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_newSection.expandBehaviour"
+                            [options]="_expandBehaviourOptions"
+                            appendTo="body"
+                            id="expandBehaviour"
+                            name="expandBehaviour">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="autoCollapse" class="inputs-group-row-name">Auto-collapse when another section expanded:</label>
+            <div class="inputs-group-row-value">
+                <p-checkbox [(ngModel)]="_newSection.autoCollapse"
+                            [binary]="true"
+                            id="autoCollapse"
+                            name="autoCollapse"
+                            [disabled]="_newSection.expandBehaviour === 'static' || _newSection.expandBehaviour === 'noContainer'">
+                </p-checkbox>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="_displayCreateSectionDialog = false">
+            <i class="material-icons">clear</i>
+        </button>
+        <button pButton
+                type="submit"
+                label="Create"
+                [loading]="_sectionCreationPending"
+                loadingIcon="pi pi-spin pi-spinner"
+                [disabled]="form.invalid || _sectionCreationPending"
+                (click)="_createSection()">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="_sectionPositionDialogVisible"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Layout Builder"
+          [modal]="true"
+          [draggable]="false"
+          (onHide)="_onCreateSectionDialogHide()">
+    <div *ngIf="_editingSectionPosition && report.sections.length > 1" class="report-layout-scheme">
+        <ng-container *ngFor="let sectionsRow of _sectionsSchemeMatrix; let rowIndex = index">
+            <div class="report-layout-scheme-sections-row">
+                <div class="report-layout-scheme-place"
+                     [class.report-layout-scheme-place-disabled]="_isPlaceDisabledForMovedSectionSection(rowIndex + 1)"
+                     (click)="_onSectionPositionSetRow(rowIndex + 1); $event.stopPropagation();">
+                </div>
+            </div>
+            <div class="report-layout-scheme-sections-row">
+                <ng-container *ngFor="let sectionItem of sectionsRow; let columnIndex = index">
+                    <div class="report-layout-scheme-place"
+                         [class.report-layout-scheme-place-disabled]="_isPlaceDisabledForMovedSectionSection(rowIndex + 1, columnIndex + 1)"
+                         (click)="_onSectionPositionAddToRow(rowIndex + 1, columnIndex + 1); $event.stopPropagation();">
+                    </div>
+                    <div class="report-layout-scheme-section"
+                         [class.report-layout-scheme-section-current]="rowIndex + 1 === _editingSectionPosition.rowIndex && columnIndex + 1 === _editingSectionPosition.columnIndex"
+                         [pTooltip]="sectionItem.title + ' (' + sectionItem.rowIndex + ', ' + sectionItem.columnIndex + ')'"
+                         (click)="_sectionPositionsStartEditing(sectionItem); $event.stopPropagation();">
+                        {{sectionItem.title}} ({{sectionItem.rowIndex}}, {{sectionItem.columnIndex}})
+                    </div>
+                </ng-container>
+                <div class="report-layout-scheme-place"
+                     [class.report-layout-scheme-place-disabled]="_isPlaceDisabledForMovedSectionSection(rowIndex + 1, sectionsRow.length + 1)"
+                     (click)="_onSectionPositionAddToRow(rowIndex + 1, sectionsRow.length + 1); $event.stopPropagation();">
+                </div>
+            </div>
+        </ng-container>
+        <div class="report-layout-scheme-sections-row">
+            <div class="report-layout-scheme-place"
+                 [class.report-layout-scheme-place-disabled]="_isPlaceDisabledForMovedSectionSection(_sectionsSchemeMatrix.length + 1)"
+                 (click)="_onSectionPositionSetRow(_sectionsSchemeMatrix.length + 1); $event.stopPropagation();">
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <button pButton type="button" label="Close" class="p-button-secondary" (click)="_sectionPositionDialogVisible = false">
+            <i class="material-icons">clear</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+
+<ng-template #generalStepContent>
+    <form *ngIf="report" #form="ngForm" class="inputs-group report-general-container" (ngSubmit)="_saveReportGeneral()">
+        <div class="inputs-group-row">
+            <label for="name" class="inputs-group-row-name asterisk-mark">Title:</label>
+            <div class="inputs-group-row-value">
+                <input #name="ngModel"
+                       [(ngModel)]="report.name"
+                       pInputText
+                       id="name"
+                       name="name"
+                       notEmpty
+                       maxlength="500" />
+                <span *ngIf="name.hasError('notEmpty')" class="validation-error">The title is required.</span>
+            </div>
+        </div>
+
+        <div class="inputs-group-row">
+            <label for="showTitle" class="inputs-group-row-name">Show title:</label>
+            <div class="inputs-group-row-value">
+                <p-checkbox [(ngModel)]="report.showTitle"
+                            [binary]="true"
+                            id="showTitle"
+                            name="showTitle">
+                </p-checkbox>
+            </div>
+        </div>
+
+        <div class="inputs-group-row">
+            <div class="inputs-group-row-name">
+                <label for="urlSlug" class="asterisk-mark">Unique Report address:</label>
+                <bb-tooltip message="The last part of the full URL referencing to this record"></bb-tooltip>
+            </div>
+            <div class="inputs-group-row-value">
+                <input #urlSlug="ngModel"
+                       [(ngModel)]="report.urlSlug"
+                       pInputText
+                       id="urlSlug"
+                       name="urlSlug"
+                       required
+                       maxlength="250"
+                       [pattern]="_uriRegex"
+                       reportAliasExistsAsync
+                       [reportExistsAsyncOldValue]="_reportOldAliasValue" />
+                <span *ngIf="urlSlug.hasError('reportExists')" class="validation-error">Report with such URL slug is already exists</span>
+            </div>
+        </div>
+
+        <div class="inputs-group-row">
+            <div class="inputs-group-row-name">Access:</div>
+            <div class="inputs-group-row-value">
+                <p-radioButton [(ngModel)]="report.access"
+                               label="Authenticated users"
+                               name="accessRadioGroup"
+                               [value]="_reportAccessAuthenticated"
+                               class="inputs-group-row-value-item">
+                </p-radioButton>
+                <p-radioButton [(ngModel)]="report.access"
+                               label="Specific roles"
+                               name="accessRadioGroup"
+                               [value]="null"
+                               class="inputs-group-row-value-item">
+                </p-radioButton>
+            </div>
+        </div>
+
+        <ng-container *ngIf="!report.access">
+            <div *ngIf="_rolesOptions" class="inputs-group-row">
+                <label for="roles" class="inputs-group-row-name">Roles:</label>
+                <div class="inputs-group-row-value">
+                    <p-multiSelect [(ngModel)]="report.roles"
+                                   [options]="_rolesOptions"
+                                   defaultLabel="Select roles"
+                                   dataKey="id"
+                                   id="roles"
+                                   name="roles">
+                    </p-multiSelect>
+                </div>
+            </div>
+
+            <div *ngIf="_permissionsOptions" class="inputs-group-row">
+                <label for="permissions" class="inputs-group-row-name">Additional permissions:</label>
+                <div class="inputs-group-row-value">
+                    <p-multiSelect [(ngModel)]="report.permissions"
+                                   [options]="_permissionsOptions"
+                                   defaultLabel="Select permissions"
+                                   dataKey="id"
+                                   id="permissions"
+                                   name="permissions">
+                    </p-multiSelect>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="report.publishedReport">
+            <div class="inputs-group-row no-label-padding">
+                <label class="inputs-group-row-name">Published on:</label>
+                <div class="inputs-group-row-value">{{_formatDateTime(report.publishedReport?.updatedOn)}}</div>
+            </div>
+
+            <div class="inputs-group-row no-label-padding">
+                <label class="inputs-group-row-name">Published by:</label>
+                <div class="inputs-group-row-value">{{report.publishedReport?.updatedBy}}</div>
+            </div>
+        </ng-container>
+
+        <div *ngIf="report.id" class="inputs-group-row no-label-padding">
+            <label class="inputs-group-row-name">Draft edited on:</label>
+            <div class="inputs-group-row-value">{{_formatDateTime(report.updatedOn)}}</div>
+        </div>
+
+        <div *ngIf="reportLastUpdatedDraftInfo?.draftId && report.id !== reportLastUpdatedDraftInfo.draftId && reportLastUpdatedDraftInfo.updatedOn > report.updatedOn"
+             class="latest-draft-warning">
+            There is another version of this report's draft<br />
+            currently edited by {{reportLastUpdatedDraftInfo.owner}}<br />
+            and updated {{formatDate(reportLastUpdatedDraftInfo.updatedOn)}}<br />
+            Click <span class="replace-with-recent-button" (click)="_replaceDraftWithRecent()">here</span> to replace your draft with the recent one.
+        </div>
+
+        <div *ngIf="_pageMode === _pageModeEnum.Creation" class="buttons-panel buttons-panel-top-margin">
+            <div class="buttons-panel-left-side">
+                <button pButton type="button" label="Cancel" class="p-button-secondary p-button-outlined" (click)="_cancel()"></button>
+            </div>
+            <div class="buttons-panel-right-side">
+                <button pButton type="submit" label="Next" [disabled]="!form.valid"></button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #sectionsStepContent>
+    <ng-container *ngIf="folders?.length">
+        <div class="buttons-panel buttons-panel-bottom-margin">
+            <div class="buttons-panel-right-side">
+                <button *ngIf="report.sections.length > 1"
+                        pButton
+                        icon="pi pi-sort-alt"
+                        type="button"
+                        label="Layout builder"
+                        class="p-button-outlined"
+                        (click)="_sectionPositionsStartEditing(report.sections[0]); _sectionPositionDialogVisible = true;">
+                </button>
+                <button pButton
+                        icon="pi pi-plus"
+                        type="button"
+                        label="New Section"
+                        class="p-button-outlined"
+                        (click)="_startNewSectionCreation()">
+                </button>
+            </div>
+        </div>
+        <div *ngIf="report.sections.length === 0">
+            There are currently no sections in this report. Click on "+ New Section" to add a section.
+        </div>
+        <div *ngFor="let section of report.sections; let i = index" class="section-container">
+            <p-accordion [multiple]="true" (onOpen)="_onSectionExpandChange(section)" (onClose)="_onSectionExpandChange(section)">
+                <p-accordionTab [(selected)]="_sectionExpandState[section.id]" class="section-accordion-tab">
+                    <ng-template pTemplate="header">
+                        <div class="section-accordion-header-left-side">
+                            <div class="header-title">
+                                {{ section.title }}
+                            </div>
+                        </div>
+                        <div class="section-accordion-header-right-side">
+                            <button pButton
+                                    type="button"
+                                    icon="pi pi-trash"
+                                    class="p-button-danger p-button-outlined delete-section-button"
+                                    (click)="_startSectionDeleting(section.id); $event.stopPropagation();">
+                            </button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                        <section-editor [section]="section"
+                                        [controllerLoading]="_draftPublishing || _draftCancelling"
+                                        (columnsDeleted)="_onSectionQueryTableColumnsDeleted($event)">
+                        </section-editor>
+                    </ng-template>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+
+        <div *ngIf="_pageMode === _pageModeEnum.Creation" class="buttons-panel buttons-panel-top-margin">
+            <div class="buttons-panel-left-side">
+                <button pButton type="button" label="Cancel" class="p-button-secondary p-button-outlined" (click)="_cancel()"></button>
+            </div>
+            <div class="buttons-panel-right-side">
+                <button pButton type="button" label="Back" class="p-button-secondary" (click)="_setStepInCreatingMode(_activeTabIndex - 1)"></button>
+                <button pButton type="button" label="Next" (click)="_setStepInCreatingMode(_activeTabIndex + 1)"></button>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>
+
+<ng-template #reviewStepContent>
+    <report-view [reportView]="report"></report-view>
+    <div *ngIf="_pageMode === _pageModeEnum.Creation" class="buttons-panel buttons-panel-top-margin">
+        <div class="buttons-panel-left-side">
+            <button pButton
+                    type="button"
+                    label="Cancel"
+                    class="p-button-secondary p-button-outlined"
+                    [loading]="_draftCancelling"
+                    [disabled]="draftUpdating"
+                    (click)="_cancel()"></button>
+        </div>
+        <div class="buttons-panel-right-side">
+            <button pButton
+                    type="button"
+                    label="Back"
+                    class="p-button-secondary"
+                    [disabled]="draftUpdating"
+                    (click)="_setStepInCreatingMode(_activeTabIndex - 1)"></button>
+            <button pButton
+                    type="button"
+                    label="Create"
+                    [disabled]="draftUpdating"
+                    [loading]="_draftPublishing"
+                    (click)="_publish()">                    
+            </button>
+        </div>
+    </div>
+</ng-template>

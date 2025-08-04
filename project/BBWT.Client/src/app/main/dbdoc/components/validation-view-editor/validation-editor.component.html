@@ -1,0 +1,208 @@
+<p-panel *ngFor="let rule of columnValidationMetadata.rules; let i = index" class="rule-item" rte="1tA">
+    <p-header class="rule-header" rte="1tB">
+        <span [ngSwitch]="rule.$type" class="panel-bold-header-text" rte="1tC">
+            <ng-container *ngSwitchCase="'required'">Required</ng-container>
+            <ng-container *ngSwitchCase="'input_format'">Input format</ng-container>
+            <ng-container *ngSwitchCase="'max_length'">Max length</ng-container>
+            <ng-container *ngSwitchCase="'number_range'">Number range</ng-container>
+            <ng-container *ngSwitchCase="'date_range'">Date range</ng-container>
+        </span>
+        <div class="rule-header-buttons" rte="1tD">
+            <p-button icon="pi pi-pencil" class="p-button-icon-only" (click)="startRuleEditing(rule, i)" rte="1tE"></p-button>
+            <p-button icon="pi pi-trash" class="p-button-icon-only" (click)="startRuleDeleting(i)" rte="1tF"></p-button>
+        </div>
+    </p-header>
+    <div class="inputs-group no-labels-padding" rte="1tG">
+        <div class="inputs-group-row" rte="1tH">
+            <label class="inputs-group-row-name" rte="1tI">Error message:</label>
+            <div class="inputs-group-row-value" rte="1tJ">{{rule['errorMessage']}}</div>
+        </div>
+        <div *ngIf="rule.$type === 'max_length'" class="inputs-group-row" rte="1tK">
+            <label class="inputs-group-row-name" rte="1tL">Max length:</label>
+            <div class="inputs-group-row-value" rte="1tM">{{rule['maxLength']}}</div>
+        </div>
+        <ng-container *ngIf="rule.$type === 'input_format'">
+            <div class="inputs-group-row" rte="1tN">
+                <label class="inputs-group-row-name" rte="1tO">Format type:</label>
+                <div class="inputs-group-row-value" rte="1tP">{{rule['type']}}</div>
+            </div>
+            <div class="inputs-group-row" rte="1tQ">
+                <label class="inputs-group-row-name" rte="1tR">Regex:</label>
+                <div class="inputs-group-row-value" rte="1tS">{{rule['format']}}</div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="rule.$type === 'number_range'">
+            <div class="inputs-group-row" rte="1tT">
+                <label class="inputs-group-row-name" rte="1tU">Min:</label>
+                <div class="inputs-group-row-value" rte="1tV">{{rule['min']}}</div>
+            </div>
+            <div class="inputs-group-row" rte="1tW">
+                <label class="inputs-group-row-name" rte="1tX">Max:</label>
+                <div class="inputs-group-row-value" rte="1tY">{{rule['max']}}</div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="rule.$type === 'date_range'">
+            <div class="inputs-group-row" rte="1tZ">
+                <label class="inputs-group-row-name" rte="1u0">Min:</label>
+                <div class="inputs-group-row-value" rte="1u1">{{rule['min'] | date:"dd/MM/yyyy"}}</div>
+            </div>
+            <div class="inputs-group-row" rte="1u2">
+                <label class="inputs-group-row-name" rte="1u3">Max:</label>
+                <div class="inputs-group-row-value" rte="1u4">{{rule['max'] | date:"dd/MM/yyyy"}}</div>
+            </div>
+        </ng-container>
+    </div>
+</p-panel>
+<div class="buttons-panel" rte="1u5">
+    <p-button *ngIf="ruleTypeOptions?.length" type="button" label="Add validation rule" (click)="startRuleEditing()" rte="1u6"></p-button>
+</div>
+
+<p-dialog #editingRuleDialog
+          header="Edit Rule"
+          [(visible)]="editRuleDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          appendTo="body"
+          (onHide)="cancelRuleEditing()"
+          rte="1u7">
+    <form *ngIf="editingRule" #form="ngForm" class="inputs-group" (ngSubmit)="saveEditingRule()" rte="1u8">
+        
+        <ng-container *ngIf="editingRuleIndex === null || editingRuleIndex === undefined; else ruleTypeLabel">
+            <div class="inputs-group-row" rte="1u9">
+                <label class="inputs-group-row-name asterisk-mark" rte="1ua">Rule type:</label>
+                <div class="inputs-group-row-value" rte="1ub">
+                    <p-dropdown [(ngModel)]="editingRule.$type"
+                                [options]="ruleTypeOptions"
+                                appendTo="body"
+                                required
+                                name="ruleType"
+                                placeholder="Select rule type" rte="1uc">
+                    </p-dropdown>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #ruleTypeLabel>
+            <div class="inputs-group-row no-label-padding" rte="1ud">
+                <label class="inputs-group-row-name" rte="1ue">Rule type:</label>
+                <div [ngSwitch]="editingRule.$type" class="inputs-group-row-value" rte="1uf">
+                    <ng-container *ngSwitchCase="'required'">Required</ng-container>
+                    <ng-container *ngSwitchCase="'input_format'">Input format</ng-container>
+                    <ng-container *ngSwitchCase="'max_length'">Max length</ng-container>
+                    <ng-container *ngSwitchCase="'number_range'">Number range</ng-container>
+                    <ng-container *ngSwitchCase="'date_range'">Date range</ng-container>
+                </div>
+            </div>
+        </ng-template>
+        <ng-container [ngSwitch]="editingRule.$type">
+            <ng-container *ngSwitchCase="'max_length'">
+                <div class="inputs-group-row" rte="1ug">
+                    <label class="inputs-group-row-name asterisk-mark" rte="1uh">Max length:</label>
+                    <div class="inputs-group-row-value" rte="1ui">
+                        <p-inputNumber [(ngModel)]="editingRule.maxLength"
+                                       [showButtons]="true"
+                                       [min]="1"
+                                       required
+                                       name="maxLength" rte="1uj">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'input_format'">
+                <div class="inputs-group-row" rte="1uk">
+                    <label class="inputs-group-row-name asterisk-mark" rte="1ul">Format type:</label>
+                    <div class="inputs-group-row-value" rte="1um">
+                        <p-dropdown [(ngModel)]="editingRule.type"
+                                    [options]="formatTypeOptions"
+                                    appendTo="body"
+                                    required
+                                    name="formatType"
+                                    placeholder="Select format type" rte="1un">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div *ngIf="editingRule.type === 'regex'" class="inputs-group-row" rte="1uo">
+                    <label class="inputs-group-row-name asterisk-mark" rte="1up">Regex:</label>
+                    <div class="inputs-group-row-value" rte="1uq">
+                        <input [(ngModel)]="editingRule.format" pInputText notEmpty name="regex"  rte="1ur"/>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'number_range'">
+                <div class="inputs-group-row" rte="1us">
+                    <label class="inputs-group-row-name" rte="1ut">Min:</label>
+                    <div class="inputs-group-row-value" rte="1uu">
+                        <p-inputNumber #minNumber="ngModel"
+                                       [(ngModel)]="editingRule.min"
+                                       [showButtons]="true"
+                                       [lessThan]="maxNumber"
+                                       name="minNumber" rte="1uv">
+                        </p-inputNumber>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="1uw">
+                    <label class="inputs-group-row-name" rte="1ux">Max:</label>
+                    <div class="inputs-group-row-value" rte="1uy">
+                        <p-inputNumber #maxNumber="ngModel"
+                                       [(ngModel)]="editingRule.max"
+                                       [showButtons]="true"
+                                       [greaterThan]="minNumber"
+                                       name="maxNumber" rte="1uz">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'date_range'">
+                <div class="inputs-group-row" rte="1uA">
+                    <label class="inputs-group-row-name" rte="1uB">Min:</label>
+                    <div class="inputs-group-row-value" rte="1uC">
+                        <p-calendar #minDate="ngModel"
+                                    [(ngModel)]="editingRule.min"
+                                    [showIcon]="true"
+                                    [showButtonBar]="true"
+                                    [readonlyInput]="true"
+                                    [yearNavigator]="true"
+                                    [yearRange]="calendarYearRange"
+                                    [monthNavigator]="true"
+                                    [lessThan]="maxDate"
+                                    name="minDate"
+                                    appendTo="body" rte="1uD">
+                        </p-calendar>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="1uE">
+                    <label class="inputs-group-row-name" rte="1uF">Max:</label>
+                    <div class="inputs-group-row-value" rte="1uG">
+                        <p-calendar #maxDate="ngModel"
+                                    [(ngModel)]="editingRule.max"
+                                    [showIcon]="true"
+                                    [showButtonBar]="true"
+                                    [readonlyInput]="true"
+                                    [yearNavigator]="true"
+                                    [yearRange]="calendarYearRange"
+                                    [monthNavigator]="true"
+                                    [greaterThan]="minDate"
+                                    name="maxDate"
+                                    appendTo="body" rte="1uH">
+                        </p-calendar>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+        <div class="inputs-group-row" rte="1uI">
+            <label class="inputs-group-row-name asterisk-mark" rte="1uJ">Error message:</label>
+            <div class="inputs-group-row-value" rte="1uK">
+                <input [(ngModel)]="editingRule.errorMessage" pInputText notEmpty name="errorMessage"  rte="1uL"/>
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="1uM">
+            <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="cancelRuleEditing()" rte="1uN">
+                <i class="material-icons" rte="1uO">clear</i>
+            </button>
+            <button pButton type="submit" label="Save" [disabled]="!!form?.invalid" rte="1uP">
+                <i class="material-icons" rte="1uQ">check</i>
+            </button>
+        </div>
+    </form>
+</p-dialog>

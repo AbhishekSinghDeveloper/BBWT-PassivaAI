@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>BBF.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>BBF.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reporting.Core\Reporting.Core.csproj" />
+    <ProjectReference Include="..\Reporting.Dashboard.Api\Reporting.Dashboard.Api.csproj" />
+    <ProjectReference Include="..\Reporting.Dashboard\Reporting.Dashboard.csproj" />
+    <ProjectReference Include="..\Reporting.PdfExport\Reporting.PdfExport.csproj" />
+    <ProjectReference Include="..\Reporting.QueryBuilder.Api\Reporting.QueryBuilder.Api.csproj" />
+    <ProjectReference Include="..\Reporting.QueryBuilder\Reporting.QueryBuilder.csproj" />
+    <ProjectReference Include="..\Reporting.TableSet.Api\Reporting.TableSet.Api.csproj" />
+    <ProjectReference Include="..\Reporting.TableSet\Reporting.TableSet.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.Chart.Api\Reporting.Widget.Chart.Api.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.Chart\Reporting.Widget.Chart.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.ControlSet.Api\Reporting.Widget.ControlSet.Api.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.ControlSet\Reporting.Widget.ControlSet.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.Grid.Api\Reporting.Widget.Grid.Api.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.Grid\Reporting.Widget.Grid.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.Html.Api\Reporting.Widget.Html.Api.csproj" />
+    <ProjectReference Include="..\Reporting.Widget.Html\Reporting.Widget.Html.csproj" />
+  </ItemGroup>
+
+</Project>

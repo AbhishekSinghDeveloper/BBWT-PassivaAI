@@ -1,0 +1,181 @@
+:host ::ng-deep {
+    p-treeTable {
+        .treetable-td {
+            border-style: none !important;
+            padding: 0.2rem !important;
+        }
+
+        .filter-column-container {
+            width: 45%;
+            padding-right: 0.4rem;
+        }
+
+        .filter-operator-container {
+            width: 20%;
+            padding-right: 0.4rem;
+        }
+
+        .filter-value-container {
+            width: 35%;
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+
+            p-inputNumber, p-calendar, p-dropdown {
+                width: 100%;
+            }
+        }
+
+        .filter-buttons {
+            padding-left: 0.4rem;
+            // TODO: get rid of doing this hack way
+            .p-inputgroup {
+                height: 2.75rem;
+            }
+        }
+
+        .filter-options {
+            max-height: 200px;
+        }
+
+        .sql-filter-container {
+            display: inline-flex;
+            width: 100%;
+        }
+
+        .sql-filter-options {
+            max-height: 200px;
+        }
+
+        .filters-table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &.filter-set-row {
+                .condition-buttons {
+                    display: flex;
+                }
+
+                .control-buttons {
+                    display: flex;
+
+                    & > * {
+                        margin-left: 5px;
+                    }
+                }
+
+                @media screen and (max-width: 600px) {
+                    flex-wrap: wrap;
+
+                    .condition-buttons {
+                        width: 100%;
+                    }
+
+                    .control-buttons {
+                        margin-top: 10px;
+                        width: 100%;
+                        justify-content: flex-end;
+                    }
+                }
+            }
+
+            &.filter-row {
+                background-color: rgb(224,224,225);
+                border-radius: 4px;
+                padding: 0.4rem;
+            }
+
+            &.master-detail-filter-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .master-detail-filter-data {
+                    display: flex;
+                    align-items: center;
+                    padding-right: 1rem;
+                    width: 100%;
+
+                    .master-detail-filter-column-name {
+                        max-width: 250px;
+                        font-weight: bold;
+
+                        &.master-detail-filter-source-column-name {
+                            margin-left: 11px;
+                            color: #af5d35;
+                        }
+
+                        &.master-detail-filter-target-column-name, &.master-detail-filter-target-section-name {
+                            color: #3F51B5;
+                        }
+                    }
+
+                    .master-detail-filter-label {
+                        max-width: 250px;
+                        text-align: left;
+                    }
+                }
+            }
+
+            .filter-row {
+                & > div {
+                    word-wrap: break-word;
+                    word-break: break-all;
+
+                    bb-input-number-range {
+                        max-width: 200px;
+                        width: 100%;
+                    }
+                }
+
+                @media screen and (max-width: 1500px) {
+                    flex-wrap: wrap;
+
+                    & > div {
+                        width: 100%;
+                        margin-bottom: 0.75rem;
+
+                        &.parameter-drop-container {
+                            text-align: right;
+                        }
+
+                        .parameter-field-name {
+                            display: inline-block;
+                        }
+                    }
+                }
+
+                @media screen and (max-width: 500px) {
+                    & > div {
+                        .parameter-field-name {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .query-expr-ui-control {
+        color: #3F51B5;
+        font-weight: 500;
+    }
+
+    .query-expr-table-column {
+        color: #af5d35;
+        font-weight: 500;
+    }
+
+    p-dropdown {
+        .query-expr-ui-control .p-dropdown-label {
+            color: #3F51B5;
+            font-weight: 500;
+        }
+
+        .query-expr-table-column .p-dropdown-label {
+            color: #af5d35;
+            font-weight: 500;
+        }
+    }
+}

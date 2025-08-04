@@ -1,0 +1,95 @@
+<div *ngIf="settings" class="p-g" rte="PE">
+    <form #form="ngForm" class="inputs-group p-g-12" (ngSubmit)="save()" rte="PF">
+        <div class="inputs-group-row" rte="PG">
+            <label class="inputs-group-row-name" rte="PH">Options:</label>
+            <div class="inputs-group-row-value" rte="PI">
+                <p-radioButton [(ngModel)]="settings.option"
+                               label="Basic"
+                               name="maintenanceOptionsGrp"
+                               [value]=0
+                               class="inputs-group-row-value-item" rte="PJ">
+                </p-radioButton>
+                <p-radioButton [(ngModel)]="settings.option"
+                               label="External"
+                               name="maintenanceOptionsGrp"
+                               [value]=1
+                               class="inputs-group-row-value-item" rte="PK">
+                </p-radioButton>
+            </div>
+        </div>
+
+        <ng-container *ngIf="settings.option === 0; else external">
+            <div class="inputs-group-row" rte="PM">
+                <label for="maintenanceStart" class="inputs-group-row-name" rte="PN">Start:</label>
+                <div class="inputs-group-row-value" rte="PO">
+                    <p-calendar [(ngModel)]="settings.start"
+                                #start="ngModel"
+                                id="maintenanceStart"
+                                name="maintenanceStart"
+                                [showTime]="true"
+                                required
+                                [lessThan]="end"
+                                rte="PP">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="PQ">
+                <label for="maintenanceEnd" class="inputs-group-row-name" rte="PR">End:</label>
+                <div class="inputs-group-row-value" rte="PS">
+                    <p-calendar [(ngModel)]="settings.end"
+                                #end="ngModel"
+                                [showTime]="true"
+                                id="maintenanceEnd"
+                                name="maintenanceEnd"
+                                required
+                                [greaterThan]="start"
+                                rte="PT">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="PU">
+                <label for="maintenanceMessage" class="inputs-group-row-name" rte="PV">Message:</label>
+                <div class="inputs-group-row-value" rte="PW">
+                    <input [(ngModel)]="settings.message"
+                           pInputText
+                           id="maintenanceMessage"
+                           name="maintenanceMessage"
+                           class="full-width-input"
+                           maxlength="255"
+                           notEmpty
+                           rte="PX"/>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #external>
+            <div class="inputs-group-row" rte="PZ">
+                <label for="maintenanceExternalApiUrl" class="inputs-group-row-name" rte="Q0">External API URL:</label>
+                <div class="inputs-group-row-value" rte="Q1">
+                    <input [(ngModel)]="settings.externalApiUrl"
+                           pInputText
+                           id="maintenanceExternalApiUrl"
+                           name="maintenanceExternalApiUrl"
+                           class="full-width-input"
+                           maxlength="2000"
+                           notEmpty
+                           rte="Q2"/>
+                </div>
+            </div>
+        </ng-template>
+
+        <div class="inputs-group-row" rte="Q3">
+            <label for="maintenanceIsActive" class="inputs-group-row-name" rte="Q4">Enabled:</label>
+            <div class="inputs-group-row-value" rte="Q5">
+                <p-checkbox [(ngModel)]="settings.isActive"
+                            [binary]="true"
+                            id="maintenanceIsActive"
+                            name="maintenanceIsActive" rte="Q6">
+                </p-checkbox>
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="Q7">
+            <button pButton type="submit" label="Save" [disabled]="!form.valid" rte="Q8"></button>
+        </div>
+    </form>
+</div>

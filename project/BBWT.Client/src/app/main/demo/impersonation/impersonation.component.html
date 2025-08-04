@@ -1,0 +1,59 @@
+<div class="card--hidden" rte="Ah">
+    <h1 rte="Ai">Impersonation</h1>
+
+    <span class="page-sub-header" rte="Aj"
+        >This page demonstrates a user impersonation mechanism. User
+        impersonation allows you to temporarily sign in as a different user in
+        your system. Users with full impersonation permissions can impersonate
+        all other users in their system and take any action.</span
+    >
+
+    <p-message
+        *ngIf="!isSystemAdmin() && !isImpersonating && !gettingImpersonateState"
+        severity="warn"
+        text="You need to have SystemAdmin role to activate this demo page. Try login under a demo account 'systemadmin@bbconsult.co.uk'"
+        rte="Ak"
+    ></p-message>
+    <ng-container *ngIf="isSystemAdmin() || isImpersonating">
+        <p *ngIf="demoManager.email" rte="Am">
+            This button is enabled only for user '{{
+                demoManager.email
+            }}':&nbsp;
+            <button
+                [disabled]="!isDemoManager"
+                pButton
+                label="Manager"
+                rte="An"
+            ></button>
+        </p>
+        <p *ngIf="demoUser.email" rte="Ao">
+            This button is enabled only for user '{{ demoUser.email }}':&nbsp;
+            <button
+                [disabled]="!isDemoUser"
+                pButton
+                label="Demo user"
+                rte="Ap"
+            ></button>
+        </p>
+
+        <p *ngIf="!isImpersonating" rte="Aq">
+            Try
+            <a [routerLink]="[]" (click)="impersonateAsDemoManager()" rte="Ar"
+                >impersonating a manager</a
+            >, or
+            <a [routerLink]="[]" (click)="impersonateAsDemoUser()" rte="As"
+                >impersonating a demo user</a
+            >.
+        </p>
+
+        <ng-container *ngIf="isImpersonating">
+            <p rte="Au">This user is currently impersonating!</p>
+            <p rte="Av">
+                When you are done you can
+                <a [routerLink]="[]" (click)="stopImpersonation()" rte="Aw"
+                    >stop impersonating</a
+                >.
+            </p>
+        </ng-container>
+    </ng-container>
+</div>

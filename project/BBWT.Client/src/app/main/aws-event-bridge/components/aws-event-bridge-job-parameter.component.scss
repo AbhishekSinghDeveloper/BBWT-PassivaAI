@@ -1,0 +1,21 @@
+.p-inputgroup {
+    margin-bottom: 2px;
+}
+
+.p-inputgroup-addon {
+    background-color: var(--primary-color);
+    color: var(--primary-color-text);
+    min-width: 40%;
+}
+
+small {
+    padding-left: 2px;
+}
+
+:host ::ng-deep bb-tooltip .tooltip-icon {
+    color: var(--primary-color-text) !important;
+}
+
+.param-name {
+    padding-right: 2px;
+}

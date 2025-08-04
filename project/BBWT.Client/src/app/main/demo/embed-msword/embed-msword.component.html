@@ -1,0 +1,29 @@
+<div class="card--hidden" rte="ms">
+    <h1 rte="mt">Embed MSWord Document</h1>
+
+    <div class="inputs-group" rte="mu">
+        <div class="inputs-group-row" rte="mv">
+            <label class="inputs-group-row-name" rte="mw"
+                >MS Word Documents:</label
+            >
+            <div class="inputs-group-row-value" rte="mx">
+                <p-dropdown
+                    [options]="docs"
+                    placeholder="Select document"
+                    [(ngModel)]="selectedDocument"
+                    (onChange)="onChange()"
+                    rte="my"
+                >
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div rte="mz">
+            <iframe
+                [src]="url"
+                style="width: 1000px; height: 500px"
+                rte="mA"
+            ></iframe>
+        </div>
+    </div>
+</div>

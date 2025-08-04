@@ -1,0 +1,22 @@
+<div class="layout-wrapper"
+     [ngClass]="{'layout-menu-horizontal': menuMode === 'horizontal',
+                 'layout-menu-popup': menuMode === 'popup',
+                 'layout-menu-overlay': menuMode === 'overlay',
+                 'layout-menu-static': menuMode === 'static',
+                 'layout-menu-static-inactive': (menuMode === 'static' && menuActive === false),
+                 'p-input-filled': inputStyle === 'filled',
+                 'p-ripple-disabled': !ripple}"
+     (click)="onLayoutClick()" rte="17r">
+
+    <verona-topbar rte-hidden rte="17s"></verona-topbar>
+
+    <div class="layout-main" rte="17t">
+        <div class="layout-content" rte="17u">
+            <maintenance-banner rte="1wJ"></maintenance-banner>
+
+            <router-outlet></router-outlet>
+        </div>
+
+        <verona-footer rte-hidden rte="17w"></verona-footer>
+    </div>
+</div>

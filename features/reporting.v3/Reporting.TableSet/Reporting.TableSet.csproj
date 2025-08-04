@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>BBF.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace>BBF.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="DbModels\**" />
+        <EmbeddedResource Remove="DbModels\**" />
+        <None Remove="DbModels\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\modules\BBWM.DbDoc\BBWM.DbDoc.csproj" />
+        <ProjectReference Include="..\..\..\modules\BBWM.Formio\BBWM.FormIO.csproj" />
+        <ProjectReference Include="..\Reporting.Core\Reporting.Core.csproj" />
+    </ItemGroup>
+
+</Project>

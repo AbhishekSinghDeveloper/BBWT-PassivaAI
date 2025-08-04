@@ -1,0 +1,117 @@
+﻿:host::ng-deep {
+    .widget-grid-container, .widget-grid-pdf-view-container {
+        .widget-grid-topbar {
+            display: grid;
+            grid-auto-flow: column;
+
+            h2 {
+                margin: 7px 0;
+            }
+
+            .pdf-exporting-button {
+                justify-self: end;
+                opacity: 0.3;
+            }
+
+            .pdf-exporting-button:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    .widget-grid-pdf-view-container {
+        min-width: 1000px;
+        width: min-content;
+        height: fit-content;
+
+        table {
+            width: 100%;
+            border-spacing: 0;
+        }
+
+        tr {
+            display: table-row;
+        }
+
+        td, th, h1, h2, h3, h4, h5, h6, label, p, li, span {
+            font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
+        }
+
+        th, td {
+            display: table-cell;
+            position: relative;
+            text-align: left;
+            font-size: 13px;
+            padding: 0.75rem 0.5rem;
+            border: solid 1px #E2E2E2;
+        }
+
+        th {
+            font-weight: 400;
+            height: 46.7px;
+            white-space: pre;
+            color: #192231;
+            background-color: #E2E2E2;
+        }
+
+        th:first-child {
+            border-top-left-radius: 6px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 6px;
+        }
+
+        td {
+            height: 55px;
+            min-height: 3rem;
+            background: #F5F5F5;
+        }
+
+        tr:last-child > td:first-child {
+            border-bottom-left-radius: 6px;
+        }
+
+        tr:last-child > td:last-child {
+            border-bottom-right-radius: 6px;
+        }
+
+        tr.aggregations > td {
+            font-weight: 600;
+            background-color: #FFFFFF;
+        }
+
+        .column-header-text {
+            display: inline-block;
+            width: 100%;
+        }
+    }
+
+    .pdf-view-hidden {
+        z-index: -1;
+        position: absolute;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .widget-grid-pdf-view-page-footer {
+        margin-right: 20px;
+        text-align: right;
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .p-splitbutton {
+        button:first-child {
+            flex: 1 1 auto;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: 0 none;
+        }
+
+        button {
+            margin: 0;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+<p-treeTable [value]="versionChangesTree"
+             [columns]="versionChangesColumns"
+             [scrollable]="true"
+             dataKey="change.path"
+             tableStyleClass="version-changes-tree">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let column of columns">
+                {{ column.header }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-change="rowData" let-columns="columns">
+        <tr [ttRow]="rowNode">
+            <td *ngFor="let column of columns; let i = index"
+                ttEditableColumn [ttEditableColumnDisabled]="!column.editable(change)">
+                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0"/>
+                <p-treeTableCheckbox [value]="rowNode" *ngIf="i === 0"/>
+                <p-treeTableCellEditor #editor>
+                    <ng-template pTemplate="input">
+                        <div class="default-value-editor">
+                            <formio [form]="change.form"
+                                    [hideLoading]="true"
+                                    [submission]="change.formData"
+                                    (change)="updateData(change, $event)">
+                            </formio>
+                            <p-button label="Set null"
+                                      (onClick)="clearData(change, editor)">
+                            </p-button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        <span [style]="columnStyle(column, change, i, rowNode.level)">
+                            {{ column.displayHandler(change) }}
+                        </span>
+                    </ng-template>
+                </p-treeTableCellEditor>
+            </td>
+        </tr>
+    </ng-template>
+</p-treeTable>

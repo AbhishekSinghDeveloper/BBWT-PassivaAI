@@ -1,0 +1,17 @@
+<h1 rte="6N">Email Confirmation</h1>
+
+<ng-container [ngSwitch]="status">
+    <p *ngSwitchCase="confirmEmailStatus.Loading" rte="6P">
+        Loading...
+    </p>
+    <ng-container *ngSwitchCase="confirmEmailStatus.OperationCompleted">
+        <p rte="6R">Your email has been confirmed.</p>
+        <p rte="6S">Please <a routerLink="/account/login" rte="6T">click here to log in</a>.</p>
+        <p rte="6U">If clicking the link above doesn't work, please copy and paste the URL in to your browser address bar.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="confirmEmailStatus.Error">
+        <p rte="6W">Operation is unavailable: {{errorMessage}}</p>
+        <p rte="6X">Please contact your system administrator.</p>
+        <p rte="6Y"><a routerLink="/account/login" rte="6Z">Back to the Login page</a></p>
+    </ng-container>
+</ng-container>

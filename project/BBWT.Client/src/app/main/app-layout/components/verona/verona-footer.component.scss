@@ -1,0 +1,25 @@
+@import "screenMixins";
+
+:host ::ng-deep {
+    .tablet-footer-container {
+        @include for-tablet-down {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+        }
+    }
+
+    .copyright {
+        display: flex;
+        align-items: center;
+        height: 100%;
+
+        .info-icon {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    }
+}

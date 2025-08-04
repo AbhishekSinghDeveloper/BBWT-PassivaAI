@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Destructurama.Attributed" Version="3.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\BBWM.Core.Membership\BBWM.Core.Membership.csproj" />
+        <ProjectReference Include="..\BBWM.Core\BBWM.Core.csproj" />
+        <ProjectReference Include="..\BBWM.Menu\BBWM.Menu.csproj" />
+    </ItemGroup>
+</Project>

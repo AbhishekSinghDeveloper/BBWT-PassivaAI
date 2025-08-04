@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\BBWM.AWS\BBWM.AWS.csproj" />
+        <ProjectReference Include="..\BBWM.Core\BBWM.Core.csproj" />
+        <ProjectReference Include="..\BBWM.Menu\BBWM.Menu.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.EventBridge" Version="3.7.102.4" />
+        <PackageReference Include="Cronos" Version="0.7.1" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,223 @@
+<div class="p-g" rte="1bN">
+    <form #form="ngForm" class="inputs-group p-g-12" (ngSubmit)="save()" rte="1wh">
+        <!-- ReCaptcha Settings section -->
+        <div class="inputs-sub-group-name" rte="1bP">reCAPTCHA Settings</div>
+        <div class="inputs-group-row" rte="1bO">
+            <div class="inputs-group-row-name" rte="1xt">Validate on login:</div>
+            <div class="inputs-group-row-value" rte="1bQ">
+                <p-checkbox [(ngModel)]="reCaptchaSettings.validateOnLoginEnabled"
+                            id="reCaptchaValidateOnLoginEnabled"
+                            name="reCaptchaValidateOnLoginEnabled"
+                            [binary]="true"
+                            rte="1bR">
+                </p-checkbox>
+            </div>
+        </div>
+
+        <!-- Two Factor Settings section -->
+        <div class="inputs-sub-group-name" rte="1wi">2-Factor Authentication (2FA)</div>
+        <div class="inputs-group-row" rte="1dk">
+            <div class="inputs-group-row-name" rte="1wj">Mandatory:</div>
+            <div class="inputs-group-row-value" rte="1dm">
+                <p-radioButton [(ngModel)]="twoFactorSettings.mandatoryMode"
+                               [value]="TwoFactorModeEnum.Optional"
+                               name="twoFactorSettingsMandatoryModeOptional"
+                               label="Disabled"
+                               class="inputs-group-row-value-item"
+                               rte="1dn">
+                </p-radioButton>
+                <p-radioButton [(ngModel)]="twoFactorSettings.mandatoryMode"
+                               [value]="TwoFactorModeEnum.Mandatory"
+                               name="twoFactorSettingsMandatoryModeMandatory"
+                               label="Enabled for all users"
+                               class="inputs-group-row-value-item"
+                               rte="1dp">
+                </p-radioButton>
+                <p-radioButton [(ngModel)]="twoFactorSettings.mandatoryMode"
+                               [value]="TwoFactorModeEnum.MandatoryForSpecificRoles"
+                               name="twoFactorSettingsMandatoryModeSpecificRoles"
+                               label="Enabled for designated roles (specified on Roles page)"
+                               class="inputs-group-row-value-item"
+                               rte="1dr">
+                </p-radioButton>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="1ds">
+            <label for="twoFactorAuthDuration" class="inputs-group-row-name" rte="1dt">
+                2-factor authentication duration (minutes):
+            </label>
+            <div class="inputs-group-row-value" rte="1du">
+                <p-inputNumber [(ngModel)]="twoFactorSettings.authDurationMinutes"
+                               [showButtons]="true"
+                               [min]="1"
+                               required
+                               id="twoFactorAuthDuration"
+                               name="twoFactorAuthDuration"
+                               rte="1dv">
+                </p-inputNumber>
+            </div>
+        </div>
+
+        <!-- SSO Settings section -->
+        <ng-container *ngIf="googleSsoSettings || facebookSsoSettings || linkedInSsoSettings">
+            <div class="inputs-sub-group-name" rte="1wk">SSO settings</div>
+            <!--Google-->
+            <ng-container *ngIf="googleSsoSettings">
+                <div class="inputs-sub-group-name" rte="1wl">Google Single Sign On</div>
+
+                <div class="inputs-group-row" rte="1wm">
+                    <div class="inputs-group-row-name" rte="RP">Enabled:</div>
+                    <div class="inputs-group-row-value" rte="RQ">
+                        <p-checkbox [(ngModel)]="googleSsoSettings.enabled"
+                                    id="googleSSOEnabled"
+                                    name="googleSSOEnabled"
+                                    [binary]="true"
+                                    (onChange)="onGoogleSsoEnabledChanged()"
+                                    rte="RR">
+                        </p-checkbox>
+                    </div>
+                </div>
+                <ng-container *ngIf="googleSsoSettings.enabled">
+                    <div class="inputs-group-row" rte="RT">
+                        <label for="googleSSOClientId" class="inputs-group-row-name" rte="RU">Client ID:</label>
+                        <div class="inputs-group-row-value" rte="RV">
+                            <input [(ngModel)]="googleSsoSettings.clientId"
+                                   pInputText
+                                   id="googleSSOClientId"
+                                   name="googleSSOClientId"
+                                   required
+                                   rte="RW" />
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="RX">
+                        <label for="googleSSOClientSecret" class="inputs-group-row-name" rte="RY">Client secret:</label>
+                        <div class="inputs-group-row-value" rte="RZ">
+                            <input [(ngModel)]="googleSsoSettings.clientSecret"
+                                   pInputText
+                                   id="googleSSOClientSecret"
+                                   name="googleSSOClientSecret"
+                                   required
+                                   rte="S0" />
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!--Facebook-->
+            <ng-container *ngIf="facebookSsoSettings">
+                <div class="inputs-sub-group-name" rte="1wn">Facebook Single Sign On</div>
+
+                <div class="inputs-group-row" rte="S3">
+                    <div class="inputs-group-row-name" rte="S4">Enabled:</div>
+                    <div class="inputs-group-row-value" rte="S5">
+                        <p-checkbox [(ngModel)]="facebookSsoSettings.enabled"
+                                    [binary]="true"
+                                    id="facebookSSOEnabled"
+                                    name="facebookSSOEnabled"
+                                    (onChange)="onFacebookSsoEnabledChanged()"
+                                    rte="S6">
+                        </p-checkbox>
+                    </div>
+                </div>
+                <ng-container *ngIf="facebookSsoSettings.enabled">
+                    <div class="inputs-group-row" rte="S8">
+                        <label for="facebookSSOClientId" class="inputs-group-row-name" rte="S9">App ID:</label>
+                        <div class="inputs-group-row-value" rte="Sa">
+                            <input [(ngModel)]="facebookSsoSettings.appId"
+                                   pInputText
+                                   id="facebookSSOClientId"
+                                   name="facebookSSOClientId"
+                                   required
+                                   rte="Sb" />
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="Sc">
+                        <label for="facebookSSOClientSecret" class="inputs-group-row-name" rte="Sd" >App secret:</label>
+                        <div class="inputs-group-row-value" rte="Se">
+                            <input [(ngModel)]="facebookSsoSettings.appSecret"
+                                   pInputText
+                                   id="facebookSSOClientSecret"
+                                   name="facebookSSOClientSecret"
+                                   required
+                                   rte="Sf" />
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!--LinkedIn-->
+            <ng-container>
+                <div class="inputs-sub-group-name" rte="1kM">LinkedIn Single Sign On</div>
+
+                <div class="inputs-group-row" rte="Si">
+                    <div class="inputs-group-row-name" rte="Sj">Enabled:</div>
+                    <div class="inputs-group-row-value" rte="Sk">
+                        <p-checkbox [(ngModel)]="linkedInSsoSettings.enabled"
+                                    [binary]="true"
+                                    id="linkedInSSOEnabled"
+                                    name="linkedInSSOEnabled"
+                                    (onChange)="onLinkedInSsoEnabledChanged()"
+                                    rte="Sl">
+                        </p-checkbox>
+                    </div>
+                </div>
+                <ng-container *ngIf="linkedInSsoSettings.enabled">
+                    <div class="inputs-group-row" rte="Sn">
+                        <label for="linkedInSSOClientId" class="inputs-group-row-name" rte="So">Client ID:</label>
+                        <div class="inputs-group-row-value" rte="Sp">
+                            <input [(ngModel)]="linkedInSsoSettings.clientId"
+                                   pInputText
+                                   id="linkedInSSOClientId"
+                                   name="linkedInSSOClientId"
+                                   required
+                                   rte="Sq" />
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="Sr">
+                        <label for="linkedInSSOClientSecret" class="inputs-group-row-name" rte="Ss">Client secret:</label>
+                        <div class="inputs-group-row-value" rte="St">
+                            <input [(ngModel)]="linkedInSsoSettings.clientSecret"
+                                   pInputText
+                                   id="linkedInSSOClientSecret"
+                                   name="linkedInSSOClientSecret"
+                                   required
+                                   rte="Su" />
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+        <div class="inputs-sub-group-name" rte="1kN">Failed Login Attempts Policy</div>
+        <div class="inputs-group-row inputs-group-row--block" rte="T6">
+            Users are locked out of their accounts after
+            <input pInputText
+                   [(ngModel)]="failedLoginAttemptsPolicySettings.maxInvalidPasswordAttempts"
+                   name="maxInvalidPasswordAttempts"
+                   class="inline-text-input"
+                   [disabled]="true"
+                   rte="T8" />
+            consecutive failed attempts to enter their password within
+            <input pInputText
+                   [(ngModel)]="failedLoginAttemptsPolicySettings.passwordAttemptWindow"
+                   name="passwordAttemptWindow"
+                   class="inline-text-input"
+                   [disabled]="true"
+                   rte="T9" />
+            minutes.
+            <br />
+            Users will be locked out for
+            <input pInputText
+                   [(ngModel)]="failedLoginAttemptsPolicySettings.intervalInSeconds"
+                   name="intervalInSeconds"
+                   class="inline-text-input"
+                   [disabled]="true"
+                   rte="Tc" />
+            seconds.
+        </div>
+
+        <div class="buttons-panel" rte="Sv">
+            <button pButton type="submit" label="Save" [disabled]="!form.valid" rte="Sw"></button>
+        </div>
+    </form>
+</div>

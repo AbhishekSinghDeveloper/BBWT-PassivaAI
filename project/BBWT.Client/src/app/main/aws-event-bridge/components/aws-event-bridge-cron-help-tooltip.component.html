@@ -1,0 +1,16 @@
+<p-overlayPanel #op appendTo="body" rte="1jw">
+    <ng-template pTemplate>
+        <grid [tableSettings]="tableSettings" [gridSettings]="gridSettings" rte="1jx"></grid>
+        <br />
+        <p rte="1jy">
+            For more information see:
+            <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduled-events.html"
+               target="_blank"
+               rel="noopener noreferrer" rte="1jz">
+                https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduled-events.html
+            </a>
+        </p>
+    </ng-template>
+</p-overlayPanel>
+
+<bb-tooltip message="Click for hint" (click)="op.toggle($event)" rte="1jA"></bb-tooltip>

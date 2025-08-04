@@ -1,0 +1,8 @@
+<div class="card--hidden" rte="h2">
+    <h1 rte="h3">{{ page.heading }}</h1>
+    <div
+        *ngIf="page && page.contents"
+        [innerHtml]="page.contents | keepHtml"
+        rte="h4"
+    ></div>
+</div>

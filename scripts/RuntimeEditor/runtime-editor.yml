@@ -1,0 +1,78 @@
+stages:
+  - build
+  - test
+  - report
+  - migrate
+  - deploy
+  - smoke-test
+
+variables:
+  RTE_SCRIPT_BASE_PATH: 'project/BBWT.Client/src/app'
+  RTE_LINKS_COMMIT_NAME: '#nt Runtime Editor - markup links updated'
+  RTE_WEBSITE_EDITS_COMMIT_NAME: '#nt Runtime Editor - website edit(s)'
+  RTE_EDITS_APPLIED_COMMIT_NAME: 'Runtime Editor - edit(s) applied'
+
+     
+ 
+runtime-editor-embed-links:
+  stage: build
+  only:    
+    variables:
+    - $RTE_LINKS == "true"
+  before_script:
+  - 'git remote set-url origin https://bbwt3.gitlab.bot:${CI_PUSH_TOKEN}@gitlab.bbconsult.co.uk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}.git'
+  - 'git config --global user.email bbwt3.gitlab.bot@bbconsult.co.uk'
+  - 'git config --global user.name "BBWT3 GitLab Bot"'
+  script:
+    - 'dotnet restore scripts/RuntimeEditor/RuntimeEditor.csproj'
+    - 'dotnet publish --no-restore -c Release -o publish scripts/RuntimeEditor/RuntimeEditor.csproj'
+    - 'dotnet ${CI_PROJECT_DIR}/publish/RuntimeEditor.dll "${RTE_SCRIPT_BASE_PATH}" --embed_links "${RTE_LINKS_SOURCE_PATHS}"'
+    - 'git checkout -B ${CI_COMMIT_REF_NAME}'
+    #staging all files changed by the script:
+    - 'git add --all'
+    #commit only if changes
+    - 'git diff --quiet && git diff --staged --quiet || git commit -m "${RTE_LINKS_COMMIT_NAME}"'
+    - 'git push origin ${CI_COMMIT_REF_NAME}'
+                                            
+
+
+runtime-editor-embed-edits:
+  stage: build
+  only:
+    variables: 
+     - $CI_COMMIT_MESSAGE == '#nt Runtime Editor - website edit(s)'
+  before_script:
+  - 'git remote set-url origin https://bbwt3.gitlab.bot:${CI_PUSH_TOKEN}@gitlab.bbconsult.co.uk/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}.git'
+  - 'git config --global user.email bbwt3.gitlab.bot@bbconsult.co.uk'
+  - 'git config --global user.name "BBWT3 GitLab Bot"'
+  script:
+    - > 
+      dotnet restore scripts/RuntimeEditor/RuntimeEditor.csproj;
+      dotnet publish --no-restore -c Release -o publish scripts/RuntimeEditor/RuntimeEditor.csproj;
+      dotnet ${CI_PROJECT_DIR}/publish/RuntimeEditor.dll "${RTE_SCRIPT_BASE_PATH}" --embed_edits;
+             
+    - 'git checkout -B ${CI_COMMIT_REF_NAME}'
+    #staging all files changed by RuntimeEditor.dll:
+    - 'git add --all'
+    #commit only if changes  
+    - 'PREFIX="${RTE_EDITS_COMMIT_PREFIX}"'
+    - 'if [ "${RTE_EDITS_COMMIT_PREFIX}" == "" ]; then PREFIX="#nt"; fi;'
+    - 'git diff --quiet && git diff --staged --quiet || git commit -m "${PREFIX} ${RTE_EDITS_APPLIED_COMMIT_NAME}"'
+    # TODO: fetch author use from rte script response written to a separate file. Also we need to ask PTS team to fix their handler to log commits to a pts task for a user with unknown email
+    #- 'git diff --quiet && git diff --staged --quiet || git commit -m "${PREFIX} ${RTE_EDITS_APPLIED_COMMIT_NAME}"  --author="Website User <website.user@website.com>"'
+    #-o merge_request.merge_when_pipeline_succeeds  - can be added to "push" to merge changes automatically
+    
+    - >
+      REQUESTED=0;
+      if [ "${RTE_EDITS_MERGE_TO_BRANCH}" != "" ]; then
+        if [ "${RTE_EDITS_MERGE_TO_BRANCH}" != "${CI_COMMIT_BRANCH}" ]; then 
+          echo "Requesting a merge to ${RTE_EDITS_MERGE_TO_BRANCH}";
+          git push origin ${CI_COMMIT_REF_NAME} -o merge_request.create -o merge_request.target="${RTE_EDITS_MERGE_TO_BRANCH}";
+          REQUESTED=1;
+        fi;
+      fi;
+      
+      if [ $REQUESTED == 0 ]; then
+        echo "Pushing changes to current branch ${CI_COMMIT_REF_NAME}";
+        git push origin ${CI_COMMIT_REF_NAME};
+      fi;

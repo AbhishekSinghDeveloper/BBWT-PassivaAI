@@ -1,0 +1,227 @@
+<div class="card--hidden" rte="UO">
+    <h1 rte="UP">Database Explorer</h1>
+
+    <div class="page-content" rte="UQ">
+        <!-- Table tree -->
+        <div class="tree-container" rte="UR">
+            <div class="tree-buttons-panel" rte="1sk">
+                <div class="buttons-panel buttons-panel-left-alignment" rte="V5">
+                    <button type="button"
+                            pButton
+                            icon="pi pi-plus"
+                            title="New folder"
+                            label="Folder"
+                            [disabled]="loading"
+                            (click)="startFolderCreation()" rte="V6">
+                    </button>
+
+                    <p-splitButton #copyTableMetadataSplitButton
+                                   label="Copy to..."
+                                   title="Copy table to folder"
+                                   icon="pi pi-copy"
+                                   appendTo="body"
+                                   [model]="copyToFoldersSelectItems"
+                                   [disabled]="loading ||
+                                       selectedNode?.data.itemType !== nodeDataTypeTable ||
+                                       !selectedNode?.data.isSourceFolder ||
+                                       !copyToNodes.length"
+                                   (onClick)="copyTableMetadataSplitButton.onDropdownButtonClick($event)" rte="1w0">
+                    </p-splitButton>
+
+                    <button type="button"
+                            pButton
+                            icon="pi pi-sync"
+                            label=""
+                            title="Sync folder from database"
+                            [loading]="requestingRefreshFolder"
+                            [disabled]="loading
+                                || requestingRefreshFolder
+                                || selectedNode?.data.itemType !== nodeDataTypeFolder
+                                || !selectedNode?.data.isSourceFolder"
+                            (click)="onSyncFolderFromDbClick()">
+                    </button>
+
+                    <button type="button"
+                            pButton
+                            icon="pi pi-file-export"
+                            title="Export anonymization XML"
+                            [disabled]="loading || selectedNode?.data.itemType !== nodeDataTypeFolder"
+                            (click)="exportAnonymizationXml()"
+                            rte="1sn">
+                    </button>
+
+                    <button type="button"
+                            pButton
+                            icon="pi pi-trash"
+                            label=""
+                            title="Delete {{selectedNode?.data.itemType}}"
+                            class="p-button-danger"
+                            [disabled]="loading ||
+                                !(selectedNode?.data.itemType === nodeDataTypeFolder && !selectedNode?.data.protected ||
+                                  selectedNode?.data.itemType === nodeDataTypeTable && !selectedNode?.data.isSourceFolder)"
+                            (click)="onDeleteTreeNodeClick()"
+                            rte="1sm">
+                    </button>
+                </div>
+            </div>
+            <p-tree #mainTree
+                    [value]="folderNodes"
+                    [(selection)]="selectedNode"
+                    [loading]="loading"
+                    selectionMode="single"
+                    [virtualScroll]="true"
+                    [virtualNodeHeight]="35"
+                    scrollHeight="600px"
+                    [draggableNodes]="true"
+                    [droppableNodes]="true"
+                    draggableScope="copyTo"
+                    droppableScope="main"
+                    [validateDrop]="true"
+                    (onNodeExpand)="onNodeExpand($event)"
+                    rte="1si">
+            </p-tree>
+            <p-tree [value]="copyToNodes"
+                    [droppableNodes]="true"
+                    draggableScope="main"
+                    droppableScope="copyTo"
+                    scrollHeight="400px"
+                    [class.visible]="copyToNodes?.length && mainTree?.dragNode"
+                    class="copy-to-tree"
+                    (onNodeDrop)="onNodeDrop($event)"
+                    [validateDrop]="true"
+                    rte="1sj">
+            </p-tree>
+        </div>
+
+        <!-- Info for item -->
+        <div class="view-panel" rte="Vd">
+            <div class="right-panel" rte="Ve">
+                <folder-editor *ngIf="selectedNode?.data.itemType === nodeDataTypeFolder"
+                               [folder]="selectedNode.data.itemData"
+                               [folderOwnerTypes]="folderOwnerTypes"
+                               (changed)="onFolderChanged($event)"
+                               rte="1so">
+                </folder-editor>
+                <table-metadata-editor *ngIf="selectedNode?.data.itemType === nodeDataTypeTable"
+                                       [tableMetadata]="selectedNode.data.itemData"
+                                       [showTableData]="tableDataViewSettings.showTableData"
+                                       [readOnlyTableData]="tableDataViewSettings.readOnlyTableData"
+                                       rte="1sp">
+                </table-metadata-editor>
+                <column-metadata-editor *ngIf="selectedNode?.data.itemType === nodeDataTypeColumn"
+                                        [columnMetadata]="selectedNode.data.itemData"
+                                        rte="1sq">
+                </column-metadata-editor>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="createFolderDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Add Folder" rte="Vj">
+    <form *ngIf="newFolder" #form="ngForm" class="inputs-group" rte="Vl">
+        <div class="inputs-group-row" rte="Vm">
+            <label for="name" class="inputs-group-row-name" rte="Vn"
+                >Name:</label
+            >
+            <div class="inputs-group-row-value" rte="Vo">
+                <input
+                    [(ngModel)]="newFolder.name"
+                    pInputText
+                    id="name"
+                    name="name"
+                    required
+                    trim
+                    maxlength="100"
+                    rte="Vp"
+                />
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="Vq">
+            <label for="description" class="inputs-group-row-name" rte="Vr"
+                >Description:</label
+            >
+            <div class="inputs-group-row-value" rte="Vs">
+                <textarea
+                    [(ngModel)]="newFolder.description"
+                    pInputTextarea
+                    [rows]="3"
+                    id="description"
+                    name="description"
+                    maxlength="100"
+                    rte="Vt"
+                >
+                </textarea>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="Vq">
+            <label for="description" class="inputs-group-row-name" rte="Vr"
+                >Load from database:</label
+            >
+            <div class="inputs-group-row-value" rte="Vs">
+                <p-checkbox
+                    [(ngModel)]="loadFolderFromDatabase"
+                    [binary]="true"
+                    id="loadFolderFromDatabase"
+                    name="loadFolderFromDatabase"
+                >
+                </p-checkbox>
+            </div>
+        </div>
+        <ng-container *ngIf="loadFolderFromDatabase">
+            <div class="inputs-group-row" rte="Vm">
+                <label for="name" class="inputs-group-row-name" rte="Vn"
+                    >Connection string:</label
+                >
+                <div class="inputs-group-row-value" rte="Vo">
+                    <textarea
+                        [(ngModel)]="connectDbConnectionString"
+                        pInputTextarea
+                        id="connectDbConnectionString"
+                        name="connectDbConnectionString"
+                        [rows]="3"
+                        required
+                        trim
+                        maxlength="1000"
+                        rte="Vp"
+                    >
+                    </textarea>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="Vm">
+                <label for="name" class="inputs-group-row-name" rte="Vn"
+                    >Database type:</label
+                >
+                <div class="inputs-group-row-value" rte="Vo">
+                    <p-dropdown [(ngModel)]="connectDbDatabaseType"
+                                [options]="databaseSourceTypeOptions"
+                                appendTo="body"
+                                id="connectDbDatabaseType"
+                                name="connectDbDatabaseType">
+                    </p-dropdown>
+                </div>
+            </div>
+        </ng-container>
+    </form>
+
+    <p-footer rte="Vu">
+        <button pButton
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="createFolderDialogVisible = false"
+                rte="Vv">
+            <i class="material-icons" rte="Vw">close</i>
+        </button>
+        <button pButton
+                [disabled]="!!form?.invalid || requestingCreateFolder"
+                [loading]="requestingCreateFolder"
+                label="Create"
+                (click)="createFolder()"
+                rte="Vx">
+            <i class="material-icons" rte="Vy">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

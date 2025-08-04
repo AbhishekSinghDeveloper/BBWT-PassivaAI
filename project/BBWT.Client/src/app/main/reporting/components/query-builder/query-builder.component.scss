@@ -1,0 +1,96 @@
+:host ::ng-deep {
+    .p-tree-loading-overlay, .p-treetable-loading-overlay {
+        background-color: transparent;
+    }
+
+    .query-builder-tools-container {
+        width: 100%;
+        overflow-x: auto;
+
+        .query-builder-tools-wrapper {
+            width: 100%;
+            min-width: 1320px;
+            height: calc(#{100vh} - 350px);
+            min-height: 450px;
+            max-height: 600px;
+
+            fieldset {
+                height: 100%;
+
+                .p-toggleable-content {
+                    height: 100%;
+
+                    .p-fieldset-content {
+                        height: 100%;
+                    }
+                }
+            }
+
+            .query-tables-fieldset {
+                float: left;
+                width: 33.3333%;
+                height: 70%;
+                padding-right: 0.6rem;
+
+                query-tables {
+                    width: 100%;
+                }
+            }
+
+            .query-filters-fieldset {
+                float: right;
+                width: 66.6666%;
+                height: 100%;
+
+                query-filters {
+                    width: 100%;
+                }
+            }
+
+            .raw-sql-fieldset {
+                float: left;
+                width: 33.3333%;
+                height: 30%;
+                padding-right: 0.6rem;
+                word-break: break-word;
+
+                .p-fieldset-content {
+                    overflow: auto;
+                    white-space: pre-wrap;
+                }
+
+                .sql-spinner-container {
+                    text-align: center;
+
+                    .pi-spinner {
+                        background-color: transparent;
+                    }
+                }
+            }
+
+            @media screen and (max-width: 900px) {
+                height: auto;
+                min-height: unset;
+                max-height: unset;
+
+                .query-tables-fieldset {
+                    float: none;
+                    width: 100%;
+                    height: auto;
+                }
+
+                .query-filters-fieldset {
+                    float: none;
+                    width: 100%;
+                    height: auto;
+                }
+
+                .raw-sql-fieldset {
+                    float: none;
+                    width: 100%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}

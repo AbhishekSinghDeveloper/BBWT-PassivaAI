@@ -1,0 +1,42 @@
+<div class="biu" [style.max-width.px]="imageContainerWidth" dropZone (filesChangeEmiter)="onFileSelect($event)" rte="4x">
+    <div class="biu-buttonbar p-corner-top" rte="4y">
+        <div class="biu-file-controls" rte="4z">
+            <span class="biu-choose" icon="pi pi-plus" pButton [label]="chooseLabel" [ngClass]="{'p-state-focus': focus, 'p-state-disabled':disabled}" rte="4A">
+                <input #fileinput [accept]="accept" type="file" (change)="onFileSelect($event)" [disabled]="disabled" (focus)="onFocus()" (blur)="onBlur()" rte="4B">
+            </span>
+            <button pButton type="button" label="Clear" class="p-button-secondary" (click)="clear()" rte="4C"></button>
+        </div>
+        <div class="biu-image-controls" rte="4D">
+            <!-- <div *ngIf="showSizing" class="biu-controls-sizing">
+              Percent: {{sizePercent}}
+              <p-slider [(ngModel)]="sizePercent" [min]="1" [max]="100" [disabled]="!img.src" (onChange)="sizePercentOnChange($event)"></p-slider>
+              <label for="imageHeight">Image Height</label>
+              <input pInputText type="number" id="imageHeight" name="imageHeight" [(ngModel)]="imageHeight">
+              /
+              <input pInputText type="number" id="imageWidth" name="imageWidth" [(ngModel)]="imageWidth">
+              <label for="imageWidth">Image Width</label>
+            </div> -->
+            <!-- <div *ngIf="showSizing" class="biu-controls-sizing">
+              <label>JPEG compression rate: {{sizePercent}}</label>
+              <p-slider [(ngModel)]="sizePercent" [min]="1" [max]="100" [disabled]="!img.src"></p-slider>
+            </div> -->
+            <div *ngIf="showRotateButtons" rte="4E">
+                <button pButton type="button" (click)="rotateLeft()" label="Rotate Anticlockwise" rte="4F"></button>
+                <button pButton type="button" (click)="rotateRight()" label="Rotate Clockwise" rte="4G"></button>
+                <button pButton type="button" (click)="mirrorHorizontal()" label="Mirror Horizontal" rte="4H"></button>
+                <button pButton type="button" (click)="mirrorVertical()" label="Mirror Vertical" rte="4I"></button>
+            </div>
+        </div>
+    </div>
+    <!--<div class="biu-content p-widget-content p-corner-buttom" [style.height.px]="maxHeight">
+        <img #img style="display: none;" />
+        <canvas #canvas [style.transform]="canvasTransformStyle"></canvas>
+    </div>-->
+    <div class="biu-content p-widget-content p-corner-buttom" [style.height.px]="imageContainerHeight" rte="4J">
+        <img #img style="display: none;"  rte="4K"/>
+        <canvas #canvas [style.transform]="canvasTransformStyle" rte="4L"></canvas>
+    </div>
+    <div class="biu-buttonbar p-corner-bottom" rte="4M">
+        <button pButton type="button" label="Upload" (click)="upload($event)" [disabled]="!canUpload()" rte="4N"></button>
+    </div>
+</div>

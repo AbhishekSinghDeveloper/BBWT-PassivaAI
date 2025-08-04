@@ -1,0 +1,98 @@
+<ng-container *ngIf="!item.hidden">
+    <a
+        *ngIf="shouldShowHrefItem()"
+        pRipple
+        [attr.href]="item.href"
+        [attr.tabindex]="0"
+        (mouseenter)="onMouseEnter()"
+        (click)="itemClick($event)"
+        (keydown.enter)="itemClick($event)"
+        rte="14j"
+    >
+        <span rte="14k"
+            ><i class="material-icons" rte="14l">{{
+                item.icon ? item.icon : ""
+            }}</i
+            >{{ item.label }}</span
+        >
+    </a>
+    <a
+        *ngIf="shouldShowRouterItem()"
+        pRipple
+        [attr.tabindex]="0"
+        (mouseenter)="onMouseEnter()"
+        [routerLink]="item.routerLink"
+        routerLinkActive="active-menuitem-routerlink"
+        [routerLinkActiveOptions]="{ exact: true }"
+        rte="14m"
+    >
+        <span rte="14n"
+            ><i class="material-icons" rte="14o">{{
+                item.icon ? item.icon : ""
+            }}</i
+            >{{ item.label }}</span
+        >
+    </a>
+    <a
+        *ngIf="shouldShowCustomHandledItem()"
+        pRipple
+        href="#"
+        [attr.tabindex]="0"
+        (mouseenter)="onMouseEnter()"
+        (click)="itemClick($event)"
+        (keydown.enter)="itemClick($event)"
+        rte="14p"
+    >
+        <span rte="14q"
+            ><i class="material-icons" rte="14r">{{
+                item.icon ? item.icon : ""
+            }}</i
+            >{{ item.label }}</span
+        >
+    </a>
+    <a
+        *ngIf="shouldShowLabelItem()"
+        pRipple
+        href="#"
+        [attr.tabindex]="0"
+        (mouseenter)="onMouseEnter()"
+        (click)="itemClick($event)"
+        (keydown.enter)="itemClick($event)"
+        rte="14s"
+    >
+        <span rte="14t"
+            ><i class="material-icons" rte="14u">{{
+                item.icon ? item.icon : ""
+            }}</i
+            >{{ item.label }}</span
+        >
+        <i
+            *ngIf="item.children?.length"
+            class="pi pi-fw pi-angle-down submenu-icon"
+            rte="14v"
+        ></i>
+    </a>
+    <ul
+        *ngIf="item.children && active"
+        [@children]="
+            (ultimaMain.isSlim || ultimaMain.isHorizontal) && root
+                ? active
+                    ? 'visible'
+                    : 'hidden'
+                : active
+                ? 'visibleAnimated'
+                : 'hiddenAnimated'
+        "
+        rte="14w"
+    >
+        <ng-template ngFor let-child let-i="index" [ngForOf]="item.children">
+            <li
+                ultima-menu-item
+                [item]="child"
+                [index]="i"
+                [parentKey]="key"
+                rte="14y"
+            ></li>
+        </ng-template>
+    </ul>
+</ng-container>

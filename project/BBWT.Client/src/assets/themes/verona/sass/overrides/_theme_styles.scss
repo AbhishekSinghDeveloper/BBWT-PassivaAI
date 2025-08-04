@@ -1,0 +1,96 @@
+/* Add your customizations of the theme here */
+
+@import "../../../../sass/screenMixins";
+
+/* Validation errors color */
+.validation-error {
+    color: $errorColor;
+}
+
+
+p-tabMenu {
+    /* Space between tabs and content */
+    & + router-outlet {
+        display: block;
+        padding-top: 20px;
+    }
+}
+
+
+p-tabView .p-tabview {
+    .p-tabview-nav {
+        /* Fix for selected point underline */
+        li {
+            margin-top: 2px;
+        }
+    }
+
+
+    .p-tabview-panels {
+        /* Increasing the distance to avoid float labels layering. */
+        padding-top: 20px;
+    }
+}
+
+
+p-table {
+    /* Increasing cells distance between each other for mobile screen */
+    @include for-tablet-down {
+        tbody {
+            tr:not(:last-of-type) {
+                td:last-of-type {
+                    padding-bottom: 10px;
+                }
+            }
+        }
+    }
+
+
+    /* Fix content cutting for small screens */
+    @include for-phone-only {
+        .p-datatable-auto-layout > .p-datatable-wrapper > table {
+            table-layout: unset;
+        }
+    }
+
+
+    /* Increase right padding to avoid sortable icon and header label layering */
+    thead > tr > th.p-sortable-column {
+        padding-right: 20px !important;
+    }
+
+
+    tbody {
+        /* Avoid colours merge */
+        .p-selectable-row.p-highlight a {
+            color: #ffffff;
+        }
+    }
+}
+
+bb-input-number-range {
+    > .p-float-label:first-of-type > label {
+        left: $inputNumberRangeFloatingLabelLeft;
+    }
+}
+
+
+/* Padding for labels depending on inputs padding */
+.inputs-group {
+    .inputs-group-row {
+        .inputs-group-row-name {
+            padding-top: nth($inputPadding, 1) - calculateRem(nth($inputBorder, 1));
+        }
+        .inputs-group-row-value {
+            > p-checkbox:first-of-type, > p-radioButton:first-of-type {
+                padding-top: nth($inputPadding, 1) - calculateRem(nth($inputBorder, 1));
+            }
+        }
+    }
+}
+
+
+/* Filter's vertical distances between inputs */
+filter .filter-form .filter-item-container {
+    margin-bottom: 20px !important;
+}

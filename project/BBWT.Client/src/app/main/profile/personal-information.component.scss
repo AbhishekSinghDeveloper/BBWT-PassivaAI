@@ -1,0 +1,21 @@
+::ng-deep {
+    .logo-preview-image-container {
+        display: inline-block;
+        margin-left: 10px;
+        vertical-align: bottom;
+
+        .logo-preview-image {
+            vertical-align: bottom;
+            margin-right: 10px;
+            max-width: 300px;
+        }
+    }
+
+    .uploading-file-requirements {
+        opacity: .7;
+    }
+
+    .signature {
+        width: 100%;
+    }
+}

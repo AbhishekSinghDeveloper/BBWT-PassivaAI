@@ -1,0 +1,465 @@
+<p-table #table
+         (selection)="selection"
+         [loading]="pending"
+         (click)="onClick.emit($event)" 
+         (contextMenuSelectionChange)="contextMenuSelectionChange.emit($event)"
+         (firstChange)="firstChange.emit($event)"
+         (onColResize)="onColResize.emit($event)"
+         (onColReorder)="onColReorder.emit($event)"
+         (onContextMenuSelect)="onContextMenuSelect.emit($event)"
+         (onEditCancel)="onEditCancel.emit($event)"
+         (onEditComplete)="onEditComplete.emit($event)"
+         (onEditInit)="onEditInit.emit($event)"
+         (onFilter)="onFilter.emit($event)"
+         (onHeaderCheckboxToggle)="onHeaderCheckboxToggle.emit($event)"
+         (onLazyLoad)="_onLazyLoad($event)"
+         (onPage)="onPage.emit($event)"
+         (onRowCollapse)="onRowCollapse.emit($event)"
+         (onRowExpand)="onRowExpand.emit($event)"
+         (onRowReorder)="onRowReorder.emit($event)"
+         (onRowSelect)="onRowSelect.emit($event)"
+         (onRowUnselect)="onRowUnselect.emit($event)"
+         (onSort)="onSort.emit($event)"
+         (onStateRestore)="onStateRestore.emit($event)"
+         (onStateSave)="onStateSave.emit($event)"
+         (rowsChange)="rowsChange.emit($event)"
+         (selectionChange)="selection = table.selection; selectionChange.emit($event)"
+         (sortFunction)="sortFunction.emit($event)" rte="1gS">
+    <ng-template pTemplate="header" let-columns>
+        <tr class="headers-row" rte="1gT">
+            <th *ngIf="gridSettings.rowExpansionEnabled" class="expandable-column-header"></th>
+            <th *ngIf="table.selectionMode && gridSettings.selectColumn" class="selection-column-header" rte="1gU">
+                <p-tableHeaderCheckbox *ngIf="table.selectionMode === 'multiple' && gridSettings.selectAllVisible !== false" rte="1gV"></p-tableHeaderCheckbox>
+            </th>
+            <th *ngIf="gridSettings.reorderableRows" [pResizableColumnDisabled]="true" class="reordering-column-header" rte="1gW"></th>
+            <ng-container *ngFor="let column of columns">
+                <th *ngIf="_isColumnVisible(column)"
+                    [pSortableColumn]="gridSettings.sortEnabled && column.sortable !== false ? column.field : null"
+                    pReorderableColumn
+                    pResizableColumn
+                    [pResizableColumnDisabled]="column.resizable === false || !table.resizableColumns"
+                    [pTooltip]="column.tooltip"
+                    [class.sort-enabled]="gridSettings.sortEnabled && column.sortable !== false"
+                    [ngStyle]="_getColumnStyles(column)" rte="1gX">
+                    <div class="column-header-text-container" rte="1gY">
+                        <span class="column-header-text" rte="1gZ">{{column.header}}</span>
+                        <p-sortIcon *ngIf="gridSettings.sortEnabled && column.sortable !== false" [field]="column.field" rte="1h0"></p-sortIcon>
+                    </div>
+                </th>
+            </ng-container>
+            <th *ngIf="_showActionsColumn()"
+                class="actions-column-header"
+                [style.width]="_gridSettings.actionsColumnWidth ? _gridSettings.actionsColumnWidth : '9rem'" rte="1h1">
+                Actions
+            </th>
+        </tr>
+        <tr *ngIf="_gridSettings.filtersRow && _queryManager" class="filters-row" rte="1h2">
+            <th *ngIf="gridSettings.rowExpansionEnabled" class="expandable-column-filter"></th>
+            <th *ngIf="table.selectionMode && gridSettings.selectColumn" class="selection-column-filter" rte="1h3"></th>
+            <th *ngIf="gridSettings.reorderableRows" class="reordering-column-filter" rte="1h4"></th>
+            <ng-container *ngFor="let column of columns">
+                <th *ngIf="_isColumnVisible(column)" [pResizableColumnDisabled]="column.resizable === false || !table.resizableColumns" rte="1h5">
+                    <ng-container *ngIf="column.filterCellEnabled !== false">
+                        <ng-container *ngIf="!_queryManager.customFilterExists(column.field); else customFilter" [ngSwitch]="column.filterSettings?.inputType">
+                            <p-columnFilter *ngSwitchDefault
+                                            [field]="column.field"
+                                            type="text"
+                                            [matchMode]="column.filterSettings?.matchMode ? column.filterSettings.matchMode : _queryManager.filterMatchModeEnum.CONTAINS"
+                                            [matchModeOptions]="column.filterSettings?.matchModeOptions"
+                                            [showMenu]="column.filterSettings?.matchModeSelectorVisible !== false" rte="1h6">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <input [ngModel]="value" pInputText (ngModelChange)="filter($event)"  rte="1h7"/>
+                                </ng-template>
+                            </p-columnFilter>
+                            <p-columnFilter *ngSwitchCase="_queryManager.filterInputTypeEnum.Checkbox"
+                                            [field]="column.field"
+                                            type="boolean"
+                                            [matchMode]="_queryManager.filterMatchModeEnum.EQUALS"
+                                            [showMenu]="false" rte="1h8">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <p-checkbox [ngModel]="value"
+                                                [binary]="true"
+                                                (ngModelChange)="$event ? (column.filterSettings?.ignoreIfConvertibleToTrue ? filter(null) : filter($event)) : (column.filterSettings?.ignoreIfConvertibleToFalse ? filter(null) : filter($event))" rte="1h9">
+                                    </p-checkbox>
+                                </ng-template>
+                            </p-columnFilter>
+                            <p-columnFilter *ngSwitchCase="_queryManager.filterInputTypeEnum.Number"
+                                            [field]="column.field"
+                                            type="numeric"
+                                            [matchMode]="column.filterSettings?.matchMode"
+                                            [matchModeOptions]="column.filterSettings?.matchModeOptions"
+                                            [showMenu]="column.filterSettings?.matchModeSelectorVisible !== false" rte="1ha">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <ng-container *ngIf="table.filters[column.field]?.matchMode !== 'between'; else numericBetweenInputs">
+                                        <p-inputNumber [ngModel]="value"
+                                                       [showButtons]="true"
+                                                       [maxFractionDigits]="column.filterSettings?.numericInputMaxFractionDigits"
+                                                       mode="decimal"
+                                                       locale="en-US"
+                                                       (ngModelChange)="filter($event)"
+                                                       rte="1hb">
+                                        </p-inputNumber>
+                                    </ng-container>
+                                    <ng-template #numericBetweenInputs>
+                                        <bb-input-number-range [ngModel]="value"
+                                                               [maxFractionDigits]="column.filterSettings?.numericInputMaxFractionDigits"
+                                                               (ngModelChange)="filter($event)" rte="1hc">
+                                        </bb-input-number-range>
+                                    </ng-template>
+                                </ng-template>
+                            </p-columnFilter>
+                            <p-columnFilter *ngSwitchCase="_queryManager.filterInputTypeEnum.Calendar"
+                                            [field]="column.field"
+                                            type="date"
+                                            [matchMode]="column.filterSettings?.matchMode"
+                                            [matchModeOptions]="column.filterSettings?.matchModeOptions ? column.filterSettings?.matchModeOptions : _queryManager.dateDefaultMatchModeOptions"
+                                            [showMenu]="column.filterSettings?.matchModeSelectorVisible !== false" rte="1hd">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <p-calendar [ngModel]="value"
+                                                dataType="date"
+                                                [showButtonBar]="true"
+                                                appendTo="body"
+                                                [selectionMode]="table.filters[column.field]?.matchMode === 'between' ? 'range' : 'single'"
+                                                [readonlyInput]="true"
+                                                [yearNavigator]="true"
+                                                [yearRange]="column.filterSettings?.calendarYearRange ? column.filterSettings.calendarYearRange : _defaultCalendarYearRange"
+                                                [monthNavigator]="true"
+                                                (ngModelChange)="filter($event)" rte="1he">
+                                    </p-calendar>
+                                </ng-template>
+                            </p-columnFilter>
+                            <p-columnFilter *ngSwitchCase="_queryManager.filterInputTypeEnum.Dropdown"
+                                            [field]="column.field"
+                                            [matchMode]="column.filterSettings?.matchMode !== null ? column.filterSettings.matchMode : _queryManager.filterMatchModeEnum.EQUALS"
+                                            [showMenu]="false" rte="1hf">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <p-dropdown [ngModel]="value"
+                                                [options]="column.filterSettings?.dropdownOptions"
+                                                [showClear]="true"
+                                                [placeholder]="column.header"
+                                                (ngModelChange)="filter($event)" rte="1hg">
+                                    </p-dropdown>
+                                </ng-template>
+                            </p-columnFilter>
+                            <p-columnFilter *ngSwitchCase="_queryManager.filterInputTypeEnum.Multiselect"
+                                            [field]="column.field"
+                                            [matchMode]="column.filterSettings?.matchMode !== null ? column.filterSettings.matchMode : _queryManager.filterMatchModeEnum.IN"
+                                            [showMenu]="false" rte="1hh">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <p-multiSelect [ngModel]="value"
+                                                   [options]="column.filterSettings?.dropdownOptions"
+                                                   (ngModelChange)="filter($event)" rte="1hi">
+                                    </p-multiSelect>
+                                </ng-template>
+                            </p-columnFilter>
+                        </ng-container>
+                        <ng-template #customFilter>
+                            <p-columnFilter [field]="column.field"
+                                            [type]="column.filterSettings?.filterType ? column.filterSettings?.filterType : 'text'"
+                                            [matchMode]="column.filterSettings?.matchMode"
+                                            [matchModeOptions]="column.filterSettings?.matchModeOptions"
+                                            [showMenu]="column.filterSettings?.matchModeSelectorVisible !== false" rte="1hj">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <ng-container *ngTemplateOutlet="_queryManager.getFilterTemplate(column.field); context: {$implicit: value, filterCallback: filter}"></ng-container>
+                                </ng-template>
+                            </p-columnFilter>
+                        </ng-template>
+                    </ng-container>
+                </th>
+            </ng-container>
+            <th *ngIf="_showActionsColumn()" class="actions-column-filter" rte="1hk"></th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-editing="editing" let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr 
+            [pEditableRow]="rowData"
+            [pReorderableRow]="rowIndex"
+            [pSelectableRow]="rowData"
+            [pRowToggler]="rowData"
+            rte="1hl">
+            <td *ngIf="gridSettings.rowExpansionEnabled">
+                <i [ngClass]="expanded ? 'pi pi-folder-open' : 'pi pi-folder'" style="font-size: 1.5rem; "></i>
+            </td>
+            <td *ngIf="table.selectionMode && gridSettings.selectColumn" [ngSwitch]="table.selectionMode" height="55" class="selection-column-cell" rte="1hm">
+                <p-tableRadioButton *ngSwitchCase="'single'" [value]="rowData" rte="1hn"></p-tableRadioButton>
+                <p-tableCheckbox *ngSwitchCase="'multiple'" [value]="rowData" rte="1ho"></p-tableCheckbox>
+            </td>
+            <td *ngIf="gridSettings.reorderableRows" rte="1hp">
+                <span class="pi pi-bars" pReorderableRowHandle rte="1hq"></span>
+            </td>
+            <ng-container *ngFor="let column of columns">
+                <td *ngIf="_isColumnVisible(column)" height="55" rte="1hr">
+                    <span *ngIf="table.responsive" class="p-column-title" rte="1hs">{{column.header}}</span>
+                    <ng-container *ngIf="gridSettings.updateMode === _dataEditor?.updateModeEnum.Inline && column.field !== table.dataKey && column.editable !== false && (!_dataEditor.updatingState || column.editableOnUpdate !== false) && (!_dataEditor.creationState || column.editableOnCreate !== false); else outputCell">
+                        <p-cellEditor rte="1ht">
+                            <ng-template pTemplate="input">
+                                <div *ngIf="_dataEditor.formGroup" [formGroup]="_dataEditor.formGroup" [ngSwitch]="column.cellEditingInputType" class="grid-cell-input" rte="1hu">
+                                    <ng-container *ngSwitchCase="_dataEditor.cellEditingInputTypeEnum.Calendar">
+                                        <p-calendar [formControlName]="column.field"
+                                                    [dateFormat]="column.calendarDateFormat ? column.calendarDateFormat : _dataEditor.defaultCalendarDateFormat"
+                                                    [showIcon]="true"
+                                                    [showButtonBar]="true"
+                                                    [showTime]="column.calendarShowTime"
+                                                    [hourFormat]="column.calendarHourFormat ? column.calendarHourFormat : '12'"
+                                                    [readonlyInput]="true"
+                                                    [yearNavigator]="true"
+                                                    [yearRange]="column.calendarYearRange ? column.calendarYearRange : _defaultCalendarYearRange"
+                                                    [monthNavigator]="true"
+                                                    appendTo="body"
+                                                    [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)"
+                                                    [placeholder]="column.inputPlaceholder ? column.inputPlaceholder : ''"
+                                                    [style]="{width: '100%'}" rte="1hv">
+                                        </p-calendar>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="_dataEditor.cellEditingInputTypeEnum.Checkbox">
+                                        <p-checkbox [formControlName]="column.field"
+                                                    [binary]="true" rte="1hw"
+                                                    [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)">
+                                        </p-checkbox>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="_dataEditor.cellEditingInputTypeEnum.Number">
+                                        <p-inputNumber [formControlName]="column.field"
+                                                       [showButtons]="true"
+                                                       [step]="column.numericInputStep ? column.numericInputStep : 1"
+                                                       [max]="column.numericInputMax"
+                                                       [min]="column.numericInputMin"
+                                                       [maxFractionDigits]="column.numericInputMaxFractionDigits"
+                                                       mode="decimal"
+                                                       locale="en-US"
+                                                       [inputStyle]="{width: '83px'}"
+                                                       [placeholder]="column.placeholder ? column.placeholder : ''"
+                                                       [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)" rte="1hx">
+                                        </p-inputNumber>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="_dataEditor.cellEditingInputTypeEnum.Dropdown">
+                                        <p-dropdown [formControlName]="column.field"
+                                                    [options]="this._dataEditor.getDropDownOptions(column)"
+                                                    [dataKey]="column.dropdownOptionsDataKey"
+                                                    [filter]="column.dropdownFilterEnabled"
+                                                    [filterBy]="column.dropdownFilterBy"
+                                                    appendTo="body"
+                                                    [placeholder]="column.placeholder ? column.placeholder : ''"
+                                                    [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)" rte="1hy">
+                                        </p-dropdown>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="_dataEditor.cellEditingInputTypeEnum.Multiselect">
+                                        <p-multiSelect [formControlName]="column.field"
+                                                       [options]="this._dataEditor.getDropDownOptions(column)"
+                                                       [dataKey]="column.dropdownOptionsDataKey"
+                                                       [defaultLabel]="column.placeholder ? column.placeholder : ''"
+                                                       [filter]="column.dropdownFilterEnabled"
+                                                       [filterBy]="column.dropdownFilterBy"
+                                                       appendTo="body"
+                                                       [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)" rte="1hz">
+                                        </p-multiSelect>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="_dataEditor.cellEditingInputTypeEnum.Textarea">
+                                        <textarea pInputTextarea
+                                                  [formControlName]="column.field"
+                                                  [placeholder]="column.placeholder ? column.placeholder : ''"
+                                                  [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)" rte="1hA">
+                                        </textarea>
+                                    </ng-container>
+                                    <ng-container *ngSwitchDefault>
+                                        <input pInputText
+                                               [formControlName]="column.field"
+                                               [placeholder]="column.placeholder ? column.placeholder : ''"
+                                               [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)" rte="1hB"/>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="_dataEditor.formGroup.controls[column.field].dirty && _dataEditor.formGroup.controls[column.field].errors">
+                                        <span *ngFor="let error of _dataEditor.getErrorMessagesForControl(column, _dataEditor.formGroup.controls[column.field])" class="validation-error" rte="1hC">
+                                            {{error}}
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                <div class="grid-cell-output" rte="1hD">
+                                    <ng-container *ngTemplateOutlet="outputCell"></ng-container>
+                                </div>
+                            </ng-template>
+                        </p-cellEditor>
+                    </ng-container>
+                    <ng-template #outputCell>
+                        <ng-container *ngIf="!_dataViewer.hasCustomTemplate(column.field); else customView" [ngSwitch]="column.displayMode">
+                            <ng-container *ngSwitchCase="_dataViewer.displayModeEnum.Checkbox">
+                                <p-checkbox [(ngModel)]="rowData[column.field]"
+                                            [binary]="true"
+                                            [readonly]="!column.editable"
+                                            [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)"
+                                            (ngModelChange)="_onOutputCellValueChanged(rowData, column)" rte="1hE">
+                                </p-checkbox>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="_dataViewer.displayModeEnum.Switcher">
+                                <p-inputSwitch [(ngModel)]="rowData[column.field]"
+                                               [disabled]="column.disabledFunc && column.disabledFunc(_dataEditor.editableRow, _dataEditor.formGroup.value)"
+                                               (ngModelChange)="_onOutputCellValueChanged(rowData, column)" rte="1hF">
+                                </p-inputSwitch>
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                                <span class="output-text" rte="1ov">{{_dataViewer.getCellDisplayValue(rowData, column)}}</span>
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #customView>
+                            <ng-container *ngTemplateOutlet="_dataViewer.getColumnDisplayTemplate(column.field); context:{$implicit: rowData, cellData: _dataViewer.getCellDisplayValue(rowData, column)}"></ng-container>
+                        </ng-template>
+                    </ng-template>
+                </td>
+            </ng-container>
+            <td *ngIf="_showActionsColumn()" height="55" class="actions-column-cell" rte="1hG">
+                <ng-container *ngIf="!gridSettings.readonly && gridSettings.updateMode !== _dataEditor?.updateModeEnum.Disabled" [ngSwitch]="gridSettings.updateMode">
+                    <ng-container *ngSwitchCase="_dataEditor.updateModeEnum.Inline">
+                        <ng-container *ngIf="!_dataEditor.pending || !table.dataKey || !_dataEditor.editableRow || _dataEditor.editableRow[table.dataKey] !== rowData[table.dataKey]; else progressSpinner">
+                            <button *ngIf="!editing && (!gridSettings.updateAvailable || gridSettings.updateAvailable(rowData))"
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    pInitEditableRow
+                                    icon="pi pi-pencil"
+                                    (click)="_onInlineEditingButtonClick(rowData, rowIndex)"
+                                    class="p-button-rounded p-button-text" rte="1hH">
+                            </button>
+                            <button *ngIf="editing"
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    icon="pi pi-check"
+                                    [disabled]="_dataEditor.formGroup?.invalid || pending"
+                                    (click)="_onInlineSaveButtonClick()"
+                                    class="p-button-rounded p-button-text p-button-success p-mr-2" rte="1hI">
+                            </button>
+                            <button *ngIf="editing"
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    pCancelEditableRow
+                                    icon="pi pi-times"
+                                    (click)="_onInlineCancelButtonClick()"
+                                    class="p-button-rounded p-button-text p-button-danger" rte="1hJ">
+                            </button>
+                        </ng-container>
+                        <ng-template #progressSpinner>
+                            <i class="pi pi-spin pi-spinner" rte="1p4"></i>
+                        </ng-template>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        <button *ngIf="!gridSettings.updateAvailable || gridSettings.updateAvailable(rowData)"
+                                pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-pencil"
+                                class="p-button-rounded p-button-text"
+                                (click)="_onEditingButtonClick(rowData, rowIndex)"
+                                rte="1hK">
+                        </button>
+                    </ng-container>
+                </ng-container>
+                <button *ngIf="_rowDeleteButtonVisible(rowData, rowIndex)"
+                        pButton
+                        pRipple
+                        pSaveEditableRow
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-text p-button-danger"
+                        (click)="_onDeleteButtonClick(rowData, rowIndex)"
+                        rte="1hL">
+                </button>
+                <ng-container *ngIf="gridSettings.additionalRowActions?.length">
+                    <ng-container *ngFor="let additionalAction of gridSettings.additionalRowActions">
+                        <button *ngIf="!additionalAction.visible || additionalAction.visible(rowData)"
+                                pButton
+                                pRipple
+                                type="button"
+                                [label]="additionalAction.label ? additionalAction.label : ''"
+                                [title]="additionalAction.hint"
+                                [icon]="additionalAction.primeIcon ? additionalAction.primeIcon : ''"
+                                [class]="additionalAction.buttonClass ? additionalAction.buttonClass : ''"
+                                [disabled]="additionalAction.disabled ? additionalAction.disabled(rowData) : false"
+                                (click)="additionalAction.handler(rowData)" rte="1hM">
+                            <i *ngIf="additionalAction.materialIcon" class="material-icons" rte="1hN">{{additionalAction.materialIcon}}</i>
+                        </button>
+                    </ng-container>
+                </ng-container>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr rte="1hO">
+            <td [attr.colspan]="_getColumnsCount()" height="55" rte="1hP">
+                {{_gridSettings.emptyMessage || "No records found"}}
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorleft">
+        <p-multiSelect *ngIf="_gridSettings.visibleColumnsSelector"
+                       [(ngModel)]="_selectedVisibleColumns"
+                       [options]="_ableToBeVisibleColumns"
+                       appendTo="body"
+                       dropdownIcon="pi pi-cog"
+                       optionLabel="header"
+                       optionValue="field"
+                       styleClass="visible-buttons-multiselect">
+        </p-multiSelect>
+        <p-splitButton *ngIf="_gridSettings.exportEnabled"
+                       #exportSplitButton
+                       label="Export"
+                       icon="pi pi-download"
+                       [model]="_exporter.menuItems"
+                       (onClick)="exportSplitButton.onDropdownButtonClick($event)" rte="1hQ">
+        </p-splitButton>
+        <p-button *ngIf="_gridSettings.importEnabled"
+                  label="Import"
+                  icon="pi pi-upload"
+                  (onClick)="_onImportDialogShowButtonClick()" rte="1hR">
+        </p-button>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+        <span *ngIf="table.value?.length > 0" class="grid-records-count" rte="1hS">
+            {{table.first + 1}} - {{table.totalRecords && table.first + table.rows > table.totalRecords ? table.totalRecords : table.first + table.rows}}
+            <ng-container *ngIf="table.totalRecords">
+                of {{table.totalRecords}}
+            </ng-container>
+        </span>
+        <p-button *ngIf="!gridSettings.readonly && gridSettings.deletingEnabled !== false && gridSettings.deleteAllEnabled"
+                  label="Delete all"
+                  icon="pi pi-trash"
+                  class="button-delete-all"
+                  (onClick)="_onDeleteAllButtonClick()" rte="1hT">
+        </p-button>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+        <div *ngIf="_showButtonsBottomPanel()" class="grid-bottom-buttons-panel" rte="1hU">
+            <ng-container *ngFor="let additionalAction of gridSettings.additionalActions">
+                <button *ngIf="!additionalAction.visible || additionalAction.visible()"
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="additionalAction.label ? additionalAction.label : ''"
+                        [icon]="additionalAction.primeIcon ? additionalAction.primeIcon : ''"
+                        [class]="additionalAction.buttonClass ? additionalAction.buttonClass : ''"
+                        [disabled]="additionalAction.disabled ? additionalAction.disabled() : false"
+                        (click)="additionalAction.handler()" rte="1hV">
+                    <i *ngIf="additionalAction.materialIcon" class="material-icons" rte="1hW">{{additionalAction.materialIcon}}</i>
+                </button>
+            </ng-container>
+
+            <ng-container>
+                <p-button *ngIf="!gridSettings.readonly && gridSettings.createMode !== _dataEditor?.createModeEnum.Disabled"
+                          [label]="gridSettings.createButtonText"
+                          icon="pi pi-plus"
+                          (onClick)="_onCreationButtonClick()" rte="1hX">
+                </p-button>
+            </ng-container>
+        </div>
+    </ng-template>
+
+    
+</p-table>
+
+<grid-editing-dialog *ngIf="_dataEditor" [gridDataEditor]="_dataEditor" rte="1hY"></grid-editing-dialog>
+<grid-import-dialog *ngIf="_importer" [gridImporter]="_importer" rte="1hZ"></grid-import-dialog>

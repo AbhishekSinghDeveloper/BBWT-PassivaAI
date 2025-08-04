@@ -1,0 +1,35 @@
+<a href="#" (click)="showGenerationDialog(); $event.preventDefault();" rte="ku">{{linkText}}</a>
+
+<!-- Generate records dialog -->
+<p-dialog [(visible)]="generationDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          [header]="dialogTitle" rte="kv">
+    <p rte="kw">
+        <label rte="kx">Number of new records to generate:</label>
+        <p-inputNumber [(ngModel)]="recordsCountToGenerate"
+                       [showButtons]="true"
+                       [min]="1"
+                       [max]="recordsLimit"
+                       [step]="1"
+                       [style]="{'margin-left': '1rem'}"
+                       name="recordsCountToGenerate" rte="ky">
+        </p-inputNumber>
+    </p>
+
+    <!-- Progress bar -->
+    <p *ngIf="isInProgress" rte="kz">
+        Generation in progress.
+        <p-progressBar [value]="percentProgress" [showValue]="true" rte="kA"></p-progressBar>
+    </p>
+
+    <p-footer rte="kB">
+        <button *ngIf="!isInProgress" pButton type="button" [disabled]="!recordsCountToGenerate" (click)="startGeneration()" label="Generate" rte="kC">
+            <i class="material-icons" rte="kD">loop</i>
+        </button>
+        <button *ngIf="isInProgress" pButton type="button" (click)="stopGeneration()" label="Stop" rte="kE">
+            <i class="material-icons" rte="kF">stop</i>
+        </button>
+    </p-footer>
+</p-dialog>

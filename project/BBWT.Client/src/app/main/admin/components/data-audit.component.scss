@@ -1,0 +1,45 @@
+:host ::ng-deep {
+    .entity-added {
+        color: green;
+        font-weight: 500;
+    }
+
+    .entity-modified {
+        color: #0070cd;
+        font-weight: 500;
+    }
+
+    .entity-deleted {
+        color: red;
+        font-weight: 500;
+    }
+
+    .change-log-items-table {
+        .change-log-property-row {
+            vertical-align: baseline;
+
+            th {
+                padding: 2px 4px 2px 4px;
+            }
+
+            td {
+                padding: 2px 4px 2px 4px;
+            }
+
+            td:first-of-type {
+                width: 150px;
+                font-weight: 500;
+                color: #555;
+            }
+
+            td:nth-of-type(2) {
+                word-break: break-all;
+            }
+
+            td:nth-of-type(3) {
+                color: #888;
+                word-break: break-all;
+            }
+        }
+    }
+}

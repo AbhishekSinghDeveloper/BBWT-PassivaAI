@@ -1,0 +1,26 @@
+<p-dropdown #iconDropdown
+            [(ngModel)]="iconModel"
+            [options]="options"
+            [filter]="true"
+            filterBy="label"
+            [virtualScroll]="true"
+            itemSize="37"
+            [autoDisplayFirst]="false"
+            [showClear]="true"
+            styleClass="icon-dropdown"
+            appendTo="body"
+            placeholder="Select icon"
+            (onChange)="onIconChange($event)"
+            rte="V">
+    <!-- Custom template for selected item -->
+    <ng-template let-item pTemplate="selectedItem">
+        <span class="material-icons" rte="X">{{ item.value }}</span>
+        <span class="icon-label" rte="Y">{{ item.label }}</span>
+    </ng-template>
+
+    <!-- Custom template for list items -->
+    <ng-template let-item pTemplate="item">
+        <span class="material-icons" [title]="item.value" rte="10">{{ item.value }}</span>
+        <span class="icon-label" rte="11">{{ item.label }}</span>
+    </ng-template>
+</p-dropdown>

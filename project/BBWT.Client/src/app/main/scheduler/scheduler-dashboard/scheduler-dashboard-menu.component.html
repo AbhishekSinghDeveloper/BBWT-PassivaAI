@@ -1,0 +1,32 @@
+<div class="dashboard-menu">
+    <h3 class="header" [routerLink]="['/app/scheduler/dashboard']">
+        Quartz Dashboard
+    </h3>
+    <p-button
+    class="tab-button"
+        label="Jobs"
+        [routerLink]="['/app/scheduler/jobs']"
+        routerLinkActive="active-route"
+    ></p-button>
+    <p-button
+    class="tab-button"
+
+        label="Recurring Jobs"
+        [routerLink]="['/app/scheduler/recurring-jobs']"
+        routerLinkActive="active-route"
+    ></p-button>
+    <p-button
+    class="tab-button"
+
+        label="Retries"
+        [routerLink]="['/app/scheduler/retries']"
+        routerLinkActive="active-route"
+    ></p-button>
+    <p-button
+    class="tab-button"
+
+        label="Servers"
+        [routerLink]="['/app/scheduler/servers']"
+        routerLinkActive="active-route"
+    ></p-button>
+</div>

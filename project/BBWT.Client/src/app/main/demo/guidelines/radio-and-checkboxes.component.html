@@ -1,0 +1,139 @@
+<div class="card--hidden" rte="KG">
+    <h1 rte="KH">Radio Buttons and Checkboxes</h1>
+
+    <p rte="KI">
+        A set of radios each with their own label, to the right of the main
+        label:
+    </p>
+
+    <div class="p-grid" rte="KJ">
+        <div class="p-grid-row" rte="KK">
+            <label for="textField" class="p-grid-col-2 control-label" rte="KL"
+                >Label</label
+            >
+            <div class="label-content p-grid-col-4" rte="KM">
+                <div class="radio" rte="KN">
+                    <p-radioButton
+                        name="group1"
+                        label="Option 1"
+                        rte="KO"
+                    ></p-radioButton>
+                </div>
+                <div class="radio" rte="KP">
+                    <p-radioButton
+                        name="group1"
+                        label="Option 2"
+                        rte="KQ"
+                    ></p-radioButton>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <pre class="codeHighlight" rte="KR">
+                &lt;div class=&quot;p-grid&quot;&gt;
+                    &lt;div class=&quot;p-grid-row&quot;&gt;
+                        &lt;label for=&quot;textField&quot; class=&quot;p-grid-col-2 control-label&quot;&gt;Label&lt;/label&gt;
+                        &lt;div class=&quot;label-content p-grid-col-4&quot;&gt;
+                            &lt;div class=&quot;radio&quot;&gt;
+                                &lt;p-radioButton name=&quot;group1&quot; label=&quot;Option 1&quot;&gt;&lt;/p-radioButton&gt;
+                            &lt;/div&gt;
+                            &lt;div class=&quot;radio&quot;&gt;
+                                &lt;p-radioButton name=&quot;group1&quot; label=&quot;Option 2&quot;&gt;&lt;/p-radioButton&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="KS">A set of radios with the options all on the same line:</p>
+    <div class="p-grid" rte="KT">
+        <div class="p-grid-row" rte="KU">
+            <label for="textField" class="p-grid-col-2 control-label" rte="KV"
+                >Label</label
+            >
+            <div class="label-content p-grid-col-4" rte="KW">
+                <p-radioButton
+                    name="group1"
+                    label="Yes"
+                    rte="KX"
+                ></p-radioButton>
+                <p-radioButton
+                    name="group1"
+                    label="No"
+                    rte="KY"
+                ></p-radioButton>
+            </div>
+        </div>
+    </div>
+
+    <pre class="codeHighlight" rte="KZ">
+                &lt;div class=&quot;p-grid&quot;&gt;
+                    &lt;div class=&quot;p-grid-row&quot;&gt;
+                        &lt;label for=&quot;textField&quot; class=&quot;p-grid-col-2 control-label&quot;&gt;Label&lt;/label&gt;
+                        &lt;div class=&quot;label-content p-grid-col-4&quot;&gt;
+                            &lt;p-radioButton name=&quot;group1&quot; label=&quot;Yes&quot;&gt;&lt;/p-radioButton&gt;
+                            &lt;p-radioButton name=&quot;group1&quot; label=&quot;No&quot;&gt;&lt;/p-radioButton&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="L0">
+        When in a vertical list of mixed controls, checkboxes should appear to
+        the right of their labels. Where a checkbox is by itself, and especially
+        if it requires a long sentence for its label then it consider sowing it
+        on the left of its label.
+    </p>
+    <div class="p-grid" rte="L1">
+        <div class="p-grid-row" rte="L2">
+            <label
+                for="rightCheckbox"
+                class="p-grid-col-2 control-label"
+                rte="L3"
+                >Checkbox</label
+            >
+            <div class="label-content p-grid-col-4" rte="L4">
+                <p-checkbox
+                    id="rightCheckbox"
+                    name="group1"
+                    binary="true"
+                    rte="L5"
+                ></p-checkbox>
+            </div>
+        </div>
+        <div class="p-grid-row" rte="L6">
+            <div class="p-grid-col-2" rte="L7"></div>
+            <div class="p-grid-col-4" rte="L8">
+                <p-checkbox
+                    id="rightCheckbox"
+                    name="group1"
+                    binary="true"
+                    label="This is a checkbox that requires a long sentence to describe its purpose"
+                    rte="L9"
+                ></p-checkbox>
+            </div>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="La">
+                &lt;div class=&quot;p-grid&quot;&gt;
+                    &lt;div class=&quot;p-grid-row&quot;&gt;
+                        &lt;label for=&quot;rightCheckbox&quot; class=&quot;p-grid-col-2 control-label&quot;&gt;Checkbox&lt;/label&gt;
+                        &lt;div class=&quot;label-content p-grid-col-4&quot;&gt;
+                            &lt;p-checkbox id=&quot;rightCheckbox&quot; name=&quot;group1&quot; binary=&quot;true&quot;&gt;&lt;/p-checkbox&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-grid-row&quot;&gt;
+                        &lt;div class=&quot;p-grid-col-2&quot;&gt;&lt;/div&gt;
+                        &lt;div class=&quot;p-grid-col-4&quot;&gt;
+                            &lt;p-checkbox id=&quot;rightCheckbox&quot; name=&quot;group1&quot; binary=&quot;true&quot; label=&quot;This is a checkbox that ...&quot;&gt;&lt;/p-checkbox&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+</div>

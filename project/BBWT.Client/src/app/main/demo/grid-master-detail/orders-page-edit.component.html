@@ -1,0 +1,155 @@
+<!--
+Demonstrations list:
+- Grid's "Redirect" editing mode
+- Grid's "Redirect" creation mode
+- Labels/controls positioning via "inputs-group"
+- Colon showing
+- Modifier of "inputs-group" to right align all labels
+- Modifier of "inputs-group" to right align one label
+-->
+<div class="card--hidden" rte="l2">
+    <h1 rte="l3">{{ order.id ? "Edit" : "Create" }} Order</h1>
+
+    <div class="checkboxes-container" rte="l4">
+        <span class="checkbox-container" rte="l5">
+            <p-checkbox
+                label="Show colons"
+                [(ngModel)]="isColon"
+                [binary]="true"
+                rte="l6"
+            ></p-checkbox>
+        </span>
+        <span class="checkbox-container" rte="l7">
+            <p-checkbox
+                label="Right side aligned labels"
+                [(ngModel)]="allLabelsRightAligned"
+                [binary]="true"
+                rte="l8"
+            ></p-checkbox>
+        </span>
+        <span *ngIf="order.id" class="checkbox-container" rte="l9">
+            <p-checkbox
+                label="Right side aligned 'Order date' label"
+                [(ngModel)]="firstLabelRightAligned"
+                [binary]="true"
+                rte="la"
+            ></p-checkbox>
+        </span>
+    </div>
+
+    <form
+        #form="ngForm"
+        dbDocForm="DemoContext.Orders"
+        (ngSubmit)="save()"
+        rte="lb"
+    >
+        <div
+            class="inputs-group"
+            [class.right-aligned-labels]="allLabelsRightAligned"
+            rte="lc"
+        >
+            <div *ngIf="order.id" class="inputs-group-row" rte="ld">
+                <div class="inputs-group-row-name" rte="17J">
+                    <label for="orderId" [colon]="isColon" rte="le"
+                        >Order ID</label
+                    >
+                    <bb-tooltip
+                        message="This is the order ID"
+                        rte="17I"
+                    ></bb-tooltip>
+                </div>
+                <div class="inputs-group-row-value" rte="lf">
+                    <input
+                        [(ngModel)]="order.id"
+                        pInputText
+                        id="orderId"
+                        name="orderId"
+                        [disabled]="true"
+                        rte="lh"
+                    />
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="lp">
+                <label
+                    for="orderDate"
+                    [colon]="isColon"
+                    [class.right-aligned]="firstLabelRightAligned"
+                    class="inputs-group-row-name"
+                    rte="lq"
+                    >Order date</label
+                >
+                <div class="inputs-group-row-value" rte="lr">
+                    <p-calendar
+                        [(ngModel)]="order.orderDate"
+                        dbDocControl="orderDate"
+                        id="orderDate"
+                        name="orderDate"
+                        rte="lt"
+                    >
+                    </p-calendar>
+                    <dbdoc-validation-errors
+                        fieldName="orderDate"
+                        rte="1ru"
+                    ></dbdoc-validation-errors>
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="lv">
+                <label
+                    for="requiredDate"
+                    [colon]="isColon"
+                    class="inputs-group-row-name"
+                    rte="lw"
+                    >Required date</label
+                >
+                <div class="inputs-group-row-value" rte="lx">
+                    <p-calendar
+                        [(ngModel)]="order.requiredDate"
+                        id="requiredDate"
+                        name="requiredDate"
+                        rte="lz"
+                    >
+                    </p-calendar>
+                </div>
+            </div>
+
+            <div class="inputs-group-row" rte="lB">
+                <label
+                    for="shippedDate"
+                    [colon]="isColon"
+                    class="inputs-group-row-name"
+                    rte="lC"
+                    >Shipped date</label
+                >
+                <div class="inputs-group-row-value" rte="lD">
+                    <p-calendar
+                        [(ngModel)]="order.shippedDate"
+                        id="shippedDate"
+                        name="shippedDate"
+                        rte="lF"
+                    >
+                    </p-calendar>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="lH">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="back()"
+                rte="lI"
+            ></button>
+            <button
+                pButton
+                type="submit"
+                label="Save"
+                [disabled]="!form.valid"
+                rte="lJ"
+            ></button>
+        </div>
+    </form>
+</div>

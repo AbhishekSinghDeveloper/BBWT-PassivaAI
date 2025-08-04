@@ -1,0 +1,129 @@
+<!-- Banner containers above layouts -->
+<cookie-banner rte="Vz"></cookie-banner>
+<idle-banner rte="VA"></idle-banner>
+<runtime-editor rte="VB"></runtime-editor>
+
+<ng-container [ngSwitch]="currentTheme.template">
+    <verona-layout *ngSwitchCase="_themeTemplateEnum.Verona" rte="VD"></verona-layout>
+    <ultima-layout *ngSwitchDefault rte="VE"></ultima-layout>
+</ng-container>
+
+<p-dialog [(visible)]="devToolsDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Development Tools"
+          class="dev-tools-dialog"
+          rte="VF">
+    <div class="inputs-group" rte="VG">
+        <div class="inputs-group-row" rte="VH">
+            <div class="inputs-group-row-name" rte="VI">Simulated HTTP code:</div>
+            <div class="inputs-group-row-value" rte="VJ">
+                <p-dropdown [(ngModel)]="simulatedHttpStatusCode"
+                            [options]="simulatedCodeOptions"
+                            [disabled]="httpStatusCodeSimulationEnabled"
+                            appendTo="body"
+                            rte="VK">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="VL">
+            <div class="inputs-group-row-name" rte="VM">Simulation enabled:</div>
+            <div class="inputs-group-row-value" rte="VN">
+                <p-checkbox [(ngModel)]="httpStatusCodeSimulationEnabled"
+                            [binary]="true"
+                            (onChange)="toggleResponseStatusCodeSimulation($event)"
+                            rte="VO">
+                </p-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <p-footer rte="VP">
+        <button pButton type="button" (click)="devToolsDialogVisible = false" label="Close" rte="VQ">
+            <i class="material-icons" rte="VR">close</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="System Summary"
+          [(visible)]="showSystemDataDialog"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '500px', width: '100%'}"
+          class="system-summary"
+          (onHide)="systemSummary = null"
+          rte="VS">
+    <div class="inputs-group no-labels-padding" *ngIf="systemSummary; else dataEmpty" rte="VU">
+        <ng-container *ngIf="showVersionInfo">
+            <div class="inputs-sub-group-name" rte="1wx">Version Info</div>
+            <div class="inputs-group-row" rte="VY">
+                <div class="inputs-group-row-name" rte="VZ">Product version:</div>
+                <div class="inputs-group-row-value" rte="W0">{{ versionInfo.productVersion }}</div>
+            </div>
+
+            <div class="inputs-group-row" rte="1wy">
+                <div class="inputs-group-row-name" rte="1wz">Git pipeline ID:</div>
+                <div class="inputs-group-row-value" rte="1wA"><a href='{{ gitProjectUrlBase }}/-/pipelines/{{ versionInfo.pipeline }}' target="_blank" rel="noopener noreferrer" rte="1wB">{{ versionInfo.pipeline }}</a></div>
+            </div>
+
+            <div class="inputs-group-row" rte="Wg">
+                <div class="inputs-group-row-name" rte="Wh">Git commit hash:</div>
+                <div class="inputs-group-row-value" rte="Wi"><a href='{{ gitProjectUrlBase }}/-/commit/{{ versionInfo.commitHash }}' target="_blank" rel="noopener noreferrer" rte="1wC">{{ versionInfo.commitHash }}</a></div>
+            </div>
+
+            <div class="inputs-group-row" rte="1wD">
+                <div class="inputs-group-row-name" rte="1wE">Git project name (ID):</div>
+                <div class="inputs-group-row-value" rte="1wF"><a href='{{ gitProjectUrlBase }}' target="_blank" rel="noopener noreferrer" rte="1wG">{{versionInfo.projectName}}</a> ({{ versionInfo.projectID }})</div>
+            </div>
+        </ng-container>
+
+        <div class="inputs-sub-group-name" rte="1wH">Server Info</div>
+        <div class="inputs-group-row" rte="W1">
+            <div class="inputs-group-row-name" rte="W2">Environment:</div>
+            <div class="inputs-group-row-value" rte="W3">{{ systemSummary.serverEnvironment }}</div>
+        </div>
+        <div class="inputs-group-row" rte="W1">
+            <div class="inputs-group-row-name" rte="W2">Server IP:</div>
+            <div class="inputs-group-row-value" rte="W3">{{ systemSummary.serverIp }}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="VV">
+            <div class="inputs-group-row-name" rte="VW">Server name:</div>
+            <div class="inputs-group-row-value" rte="VX">{{ systemSummary.serverName }}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="Wj">
+            <div class="inputs-group-row-name" rte="Wk">Operating system:</div>
+            <div class="inputs-group-row-value" rte="Wl">{{ systemSummary.operatingSystem }}</div>
+        </div>
+
+        <div class="inputs-sub-group-name" rte="1wI">Client Info</div>
+        <div class="inputs-group-row" rte="W4">
+            <div class="inputs-group-row-name" rte="W5">Client IP:</div>
+            <div class="inputs-group-row-value" rte="W6">{{ systemSummary.clientIp }}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="W7">
+            <div class="inputs-group-row-name" rte="W8">User name:</div>
+            <div class="inputs-group-row-value" rte="W9">{{ systemSummary.userName }}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="Wa">
+            <div class="inputs-group-row-name" rte="Wb">Current URL:</div>
+            <div class="inputs-group-row-value" rte="Wc">{{ router.url }}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="Wd">
+            <div class="inputs-group-row-name" rte="We">Page load time:</div>
+            <div class="inputs-group-row-value" rte="Wf">{{ pageLoadTime }}</div>
+        </div>
+    </div>
+    <ng-template #dataEmpty>
+        <div class="inputs-group-row loading-placeholder" rte="X5">Loading...</div>
+    </ng-template>
+    <p-footer rte="X6" *ngIf="debugApiAllowed">
+        <button pButton label="Request Full Debug" (click)="sendDebugRequest()" rte="1kO"></button>
+        <button pButton label="Request API Exceptions" (click)="sendApiExceptionsRequest()" rte="1kP"></button>
+    </p-footer>
+</p-dialog>

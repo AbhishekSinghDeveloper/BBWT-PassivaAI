@@ -1,0 +1,32 @@
+<ng-container *ngIf="!!widgetType && !!widgetSourceId" [ngSwitch]="widgetType">
+    <ng-container *ngSwitchCase="'table'">
+        <widget-grid output="{{output}}" widgetSourceId="{{widgetSourceId}}"
+                     [ignoreDisplayRule]="ignoreDisplayRule"
+                     [variableReceiver]="variableReceiver"
+                     [variableEmitter]="variableEmitter"
+                     [exportable]="exportable">
+        </widget-grid>
+    </ng-container>
+    <ng-container *ngSwitchCase="'chart'">
+        <widget-chart output="{{output}}" widgetSourceId="{{widgetSourceId}}"
+                      [ignoreDisplayRule]="ignoreDisplayRule"
+                      [variableReceiver]="variableReceiver"
+                      [exportable]="exportable">
+        </widget-chart>
+    </ng-container>
+    <ng-container *ngSwitchCase="'control-set'">
+        <widget-control-set output="{{output}}" widgetSourceId="{{widgetSourceId}}"
+                            [ignoreDisplayRule]="ignoreDisplayRule"
+                            [variableReceiver]="variableReceiver"
+                            [variableEmitter]="variableEmitter"
+                            [exportable]="exportable">
+        </widget-control-set>
+    </ng-container>
+    <ng-container *ngSwitchCase="'html'">
+        <widget-html output="{{output}}" widgetSourceId="{{widgetSourceId}}"
+                     [ignoreDisplayRule]="ignoreDisplayRule"
+                     [variableReceiver]="variableReceiver"
+                     [exportable]="exportable">
+        </widget-html>
+    </ng-container>
+</ng-container>

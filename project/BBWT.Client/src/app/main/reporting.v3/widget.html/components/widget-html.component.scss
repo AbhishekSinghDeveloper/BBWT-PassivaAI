@@ -1,0 +1,578 @@
+:host::ng-deep {
+    .widget-html-container, .widget-html-pdf-view-container {
+        .widget-html-topbar {
+            display: grid;
+            grid-auto-flow: column;
+
+            h2 {
+                margin: 7px 0;
+            }
+
+            .pdf-exporting-button {
+                justify-self: end;
+                opacity: 0.3;
+            }
+
+            .pdf-exporting-button:hover {
+                opacity: 1;
+            }
+        }
+
+        .widget-html-content {
+            white-space: pre-wrap;
+        }
+
+        > h2 {
+            height: 30px;
+        }
+
+        > h2 + div {
+            height: calc(100% - 35px);
+        }
+
+        > div {
+            width: 100%;
+            height: calc(100% - 5px);
+
+            p, ol, ul, pre, blockquote, h1, h2, h3, h4, h5, h6 {
+                margin: 0;
+                padding: 0;
+                counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+            }
+
+            ol, ul {
+                padding-left: 1.5em;
+            }
+
+            ol > li, ul > li {
+                list-style-type: none;
+            }
+
+            ul > li::before {
+                content: '\2022';
+            }
+
+            li::before {
+                display: inline-block;
+                white-space: nowrap;
+                width: 1.2em;
+            }
+
+            li:not(.html-direction-rtl)::before {
+                margin-left: -1.5em;
+                margin-right: 0.3em;
+                text-align: right;
+            }
+
+            li.html-direction-rtl::before {
+                margin-left: 0.3em;
+                margin-right: -1.5em;
+            }
+
+            ol li:not(.html-direction-rtl),
+            ul li:not(.html-direction-rtl) {
+                padding-left: 1.5em;
+            }
+
+            ol li.html-direction-rtl,
+            ul li.html-direction-rtl {
+                padding-right: 1.5em;
+            }
+
+            ol li {
+                counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+                counter-increment: list-0;
+            }
+
+            ol li:before {
+                content: counter(list-0, decimal) '. ';
+            }
+
+            ol li.html-indent-1 {
+                counter-increment: list-1;
+            }
+
+            ol li.html-indent-1:before {
+                content: counter(list-1, lower-alpha) '. ';
+            }
+
+            ol li.html-indent-1 {
+                counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+            }
+
+            ol li.html-indent-2 {
+                counter-increment: list-2;
+            }
+
+            ol li.html-indent-2:before {
+                content: counter(list-2, lower-roman) '. ';
+            }
+
+            ol li.html-indent-2 {
+                counter-reset: list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+            }
+
+            ol li.html-indent-3 {
+                counter-increment: list-3;
+            }
+
+            ol li.html-indent-3:before {
+                content: counter(list-3, decimal) '. ';
+            }
+
+            ol li.html-indent-3 {
+                counter-reset: list-4 list-5 list-6 list-7 list-8 list-9;
+            }
+
+            ol li.html-indent-4 {
+                counter-increment: list-4;
+            }
+
+            ol li.html-indent-4:before {
+                content: counter(list-4, lower-alpha) '. ';
+            }
+
+            ol li.html-indent-4 {
+                counter-reset: list-5 list-6 list-7 list-8 list-9;
+            }
+
+            ol li.html-indent-5 {
+                counter-increment: list-5;
+            }
+
+            ol li.html-indent-5:before {
+                content: counter(list-5, lower-roman) '. ';
+            }
+
+            ol li.html-indent-5 {
+                counter-reset: list-6 list-7 list-8 list-9;
+            }
+
+            ol li.html-indent-6 {
+                counter-increment: list-6;
+            }
+
+            ol li.html-indent-6:before {
+                content: counter(list-6, decimal) '. ';
+            }
+
+            ol li.html-indent-6 {
+                counter-reset: list-7 list-8 list-9;
+            }
+
+            ol li.html-indent-7 {
+                counter-increment: list-7;
+            }
+
+            ol li.html-indent-7:before {
+                content: counter(list-7, lower-alpha) '. ';
+            }
+
+            ol li.html-indent-7 {
+                counter-reset: list-8 list-9;
+            }
+
+            ol li.html-indent-8 {
+                counter-increment: list-8;
+            }
+
+            ol li.html-indent-8:before {
+                content: counter(list-8, lower-roman) '. ';
+            }
+
+            ol li.html-indent-8 {
+                counter-reset: list-9;
+            }
+
+            ol li.html-indent-9 {
+                counter-increment: list-9;
+            }
+
+            ol li.html-indent-9:before {
+                content: counter(list-9, decimal) '. ';
+            }
+
+            .html-indent-1:not(.html-direction-rtl) {
+                padding-left: 3em;
+            }
+
+            li.html-indent-1:not(.html-direction-rtl) {
+                padding-left: 4.5em;
+            }
+
+            .html-indent-1.html-direction-rtl.html-align-right {
+                padding-right: 3em;
+            }
+
+            li.html-indent-1.html-direction-rtl.html-align-right {
+                padding-right: 4.5em;
+            }
+
+            .html-indent-2:not(.html-direction-rtl) {
+                padding-left: 6em;
+            }
+
+            li.html-indent-2:not(.html-direction-rtl) {
+                padding-left: 7.5em;
+            }
+
+            .html-indent-2.html-direction-rtl.html-align-right {
+                padding-right: 6em;
+            }
+
+            li.html-indent-2.html-direction-rtl.html-align-right {
+                padding-right: 7.5em;
+            }
+
+            .html-indent-3:not(.html-direction-rtl) {
+                padding-left: 9em;
+            }
+
+            li.html-indent-3:not(.html-direction-rtl) {
+                padding-left: 10.5em;
+            }
+
+            .html-indent-3.html-direction-rtl.html-align-right {
+                padding-right: 9em;
+            }
+
+            li.html-indent-3.html-direction-rtl.html-align-right {
+                padding-right: 10.5em;
+            }
+
+            .html-indent-4:not(.html-direction-rtl) {
+                padding-left: 12em;
+            }
+
+            li.html-indent-4:not(.html-direction-rtl) {
+                padding-left: 13.5em;
+            }
+
+            .html-indent-4.html-direction-rtl.html-align-right {
+                padding-right: 12em;
+            }
+
+            li.html-indent-4.html-direction-rtl.html-align-right {
+                padding-right: 13.5em;
+            }
+
+            .html-indent-5:not(.html-direction-rtl) {
+                padding-left: 15em;
+            }
+
+            li.html-indent-5:not(.html-direction-rtl) {
+                padding-left: 16.5em;
+            }
+
+            .html-indent-5.html-direction-rtl.html-align-right {
+                padding-right: 15em;
+            }
+
+            li.html-indent-5.html-direction-rtl.html-align-right {
+                padding-right: 16.5em;
+            }
+
+            .html-indent-6:not(.html-direction-rtl) {
+                padding-left: 18em;
+            }
+
+            li.html-indent-6:not(.html-direction-rtl) {
+                padding-left: 19.5em;
+            }
+
+            .html-indent-6.html-direction-rtl.html-align-right {
+                padding-right: 18em;
+            }
+
+            li.html-indent-6.html-direction-rtl.html-align-right {
+                padding-right: 19.5em;
+            }
+
+            .html-indent-7:not(.html-direction-rtl) {
+                padding-left: 21em;
+            }
+
+            li.html-indent-7:not(.html-direction-rtl) {
+                padding-left: 22.5em;
+            }
+
+            .html-indent-7.html-direction-rtl.html-align-right {
+                padding-right: 21em;
+            }
+
+            li.html-indent-7.html-direction-rtl.html-align-right {
+                padding-right: 22.5em;
+            }
+
+            .html-indent-8:not(.html-direction-rtl) {
+                padding-left: 24em;
+            }
+
+            li.html-indent-8:not(.html-direction-rtl) {
+                padding-left: 25.5em;
+            }
+
+            .html-indent-8.html-direction-rtl.html-align-right {
+                padding-right: 24em;
+            }
+
+            li.html-indent-8.html-direction-rtl.html-align-right {
+                padding-right: 25.5em;
+            }
+
+            .html-indent-9:not(.html-direction-rtl) {
+                padding-left: 27em;
+            }
+
+            li.html-indent-9:not(.html-direction-rtl) {
+                padding-left: 28.5em;
+            }
+
+            .html-indent-9.html-direction-rtl.html-align-right {
+                padding-right: 27em;
+            }
+
+            li.html-indent-9.html-direction-rtl.html-align-right {
+                padding-right: 28.5em;
+            }
+
+            .html-video {
+                display: block;
+                max-width: 100%;
+            }
+
+            .html-video.html-align-center {
+                margin: 0 auto;
+            }
+
+            .html-video.html-align-right {
+                margin: 0 0 0 auto;
+            }
+
+            .html-bg-black {
+                background-color: #000;
+            }
+
+            .html-bg-red {
+                background-color: #e60000;
+            }
+
+            .html-bg-orange {
+                background-color: #f90;
+            }
+
+            .html-bg-yellow {
+                background-color: #ff0;
+            }
+
+            .html-bg-green {
+                background-color: #008a00;
+            }
+
+            .html-bg-blue {
+                background-color: #06c;
+            }
+
+            .html-bg-purple {
+                background-color: #93f;
+            }
+
+            .html-color-white {
+                color: #fff;
+            }
+
+            .html-color-red {
+                color: #e60000;
+            }
+
+            .html-color-orange {
+                color: #f90;
+            }
+
+            .html-color-yellow {
+                color: #ff0;
+            }
+
+            .html-color-green {
+                color: #008a00;
+            }
+
+            .html-color-blue {
+                color: #06c;
+            }
+
+            .html-color-purple {
+                color: #93f;
+            }
+
+            .html-font-serif {
+                font-family: Georgia, Times New Roman, serif;
+            }
+
+            .html-font-monospace {
+                font-family: Monaco, Courier New, monospace;
+            }
+
+            .html-size-small {
+                font-size: 0.75em;
+            }
+
+            .html-size-large {
+                font-size: 1.5em;
+            }
+
+            .html-size-huge {
+                font-size: 2.5em;
+            }
+
+            .html-direction-rtl {
+                direction: rtl;
+                text-align: inherit;
+            }
+
+            .html-align-center {
+                text-align: center;
+            }
+
+            .html-align-justify {
+                text-align: justify;
+            }
+
+            .html-align-right {
+                text-align: right;
+            }
+
+            .html-blank::before {
+                color: rgba(0, 0, 0, 0.6);
+                content: attr(data-placeholder);
+                font-style: italic;
+                left: 15px;
+                pointer-events: none;
+                position: absolute;
+                right: 15px;
+            }
+
+            .html-formats {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .html-formats:after {
+                clear: both;
+                content: '';
+                display: table;
+            }
+
+            .html-stroke {
+                fill: none;
+                stroke: #444;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-width: 2;
+            }
+
+            .html-stroke-miter {
+                fill: none;
+                stroke: #444;
+                stroke-miterlimit: 10;
+                stroke-width: 2;
+            }
+
+            .html-fill,
+            .html-stroke.html-fill {
+                fill: #444;
+            }
+
+            .html-empty {
+                fill: none;
+            }
+
+            .html-even {
+                fill-rule: evenodd;
+            }
+
+            .html-thin,
+            .html-stroke.html-thin {
+                stroke-width: 1;
+            }
+
+            .html-transparent {
+                opacity: 0.4;
+            }
+
+            .html-direction svg:last-child {
+                display: none;
+            }
+
+            .html-direction.html-active svg:last-child {
+                display: inline;
+            }
+
+            .html-direction.html-active svg:first-child {
+                display: none;
+            }
+
+            blockquote {
+                border-left: 4px solid #ccc;
+                margin-bottom: 5px;
+                margin-top: 5px;
+                padding-left: 16px;
+            }
+
+            code, pre {
+                background-color: #f0f0f0;
+                border-radius: 3px;
+            }
+
+            pre {
+                white-space: pre-wrap;
+                margin-bottom: 5px;
+                margin-top: 5px;
+                padding: 5px 10px;
+            }
+
+            code {
+                font-size: 85%;
+                padding: 2px 4px;
+            }
+
+            img {
+                max-width: 100%;
+            }
+
+            a {
+                text-decoration: underline;
+                color: #06c !important;
+            }
+        }
+    }
+
+    .widget-html-pdf-view-container {
+        min-width: 1000px;
+        width: min-content;
+        height: fit-content;
+
+        td, th, h1, h2, h3, h4, h5, h6, label, p, li, span {
+            font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
+        }
+
+        .widget-control-set-item:has(.widget-control-set-item-empty) {
+            display: none !important;
+        }
+    }
+
+    .pdf-view-hidden {
+        z-index: -1;
+        position: absolute;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .widget-html-pdf-view-page-footer {
+        margin-right: 20px;
+        text-align: right;
+        font-size: 12px;
+        width: 100%;
+    }
+}

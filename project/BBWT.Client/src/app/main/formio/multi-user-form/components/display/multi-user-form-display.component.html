@@ -1,0 +1,17 @@
+<div class="container mt-2">
+    <!--Can be the regular render, a custom render must be created-->
+    <bb-form-renderer *ngIf="formReady && !formFilled"
+        [formDefId]="formId"
+        [formDataId]="formDataId"
+        [revisionId]="revisionId"
+        [readOnlyForm]="readOnlyForm"
+        [isMultiUserForm]="true"
+        [mufStages]="mufStages"
+        [currentStage]="currentStage"
+        [mufDefinitionId]="mufDefinitionId"
+        [mufAssocId]="mufAssocId"
+        [extraData]="extraData"></bb-form-renderer>
+    <p *ngIf="formWrongId">This Multi-User form has wrong target form or user. You can close the tab now.</p>
+    <p *ngIf="!formReady">This Multi-User form is loading please wait.</p>
+    <p *ngIf="formFilled">This Multi-User form stage has already being filled. You can close the tab now.</p>
+</div>

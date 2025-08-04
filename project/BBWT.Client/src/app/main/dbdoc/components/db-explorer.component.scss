@@ -1,0 +1,89 @@
+:host ::ng-deep {
+    .p-tree-loading-overlay {
+        background-color: transparent;
+    }
+
+    .page-content {
+        display: flex;
+        flex-wrap: wrap;
+
+        .tree-container {
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            max-width: 400px;
+
+            .p-tree {
+                padding: 0.5rem;
+            }
+
+            @media (max-width: 1450px) {
+                margin-bottom: 20px;
+            }
+
+            .p-treenode-content {
+                padding: 0.2rem;
+
+                .p-treenode-icon {
+                    font-size: 1.25rem;
+                }
+            }
+
+            .copy-to-tree {
+                position: absolute;
+                display: block;
+                visibility: hidden;
+                top: 0;
+                left: calc(#{100%} + 20px);
+                width: 350px;
+                opacity: 0.95;
+                z-index: -1;
+
+                &.visible {
+                    visibility: visible;
+                    z-index: 1;
+                }
+
+                @media (max-width: 1450px) {
+                    transition: right 0s linear 1ms;
+                    left: auto;
+                    right: 100%;
+
+                    &.visible {
+                        right: 0;
+                    }
+                }
+            }
+
+            .tree-buttons-panel {
+                padding-bottom: 10px;
+
+                .buttons-panel {
+                    margin-top: 7px;
+
+                    & > * {
+                        margin-top: 2px
+                    }
+
+                    &.table-buttons-container {
+                        overflow: visible;
+                    }
+
+                    .p-splitbutton .p-button:first-of-type {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+
+        .view-panel {
+            width: calc(#{100%} - 400px);
+            padding-left: 15px;
+
+            @media (max-width: 1450px) {
+                padding-left: 0;
+                width: 100%;
+            }
+        }
+    }
+}

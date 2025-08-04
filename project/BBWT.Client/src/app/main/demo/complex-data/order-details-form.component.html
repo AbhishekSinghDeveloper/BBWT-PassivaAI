@@ -1,0 +1,71 @@
+<div class="inputs-group" [formGroup]="complexForm" rte="1p5">
+    <div class="inputs-group-row" rte="1p6">
+        <label class="inputs-group-row-name" rte="1p7"> Product: </label>
+        <div class="inputs-group-row-value" rte="1p8">
+            <p-autoComplete
+                [formControl]="product"
+                [suggestions]="productSuggestions"
+                (completeMethod)="searchProducts($event.query)"
+                [forceSelection]="true"
+                placeholder="Enter product title..."
+                field="title"
+                dataKey="id"
+                [minLength]="1"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(product) }"
+                (onBlur)="onTouched()"
+                (onSelect)="productId.setValue($event.id)"
+                (onClear)="productId.setValue(null)"
+                [style]="{ width: '100%' }"
+             rte="1p9">
+            </p-autoComplete>
+            <div class="p-error" *ngIf="invalid(product)" rte="1pa">
+                <small *ngIf="productId.errors.required" rte="1pb">The product is required.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pc">
+        <label class="inputs-group-row-name" rte="1pd">Price:</label>
+        <div class="inputs-group-row-value" rte="1pe">
+            <p-inputNumber
+                [formControl]="price"
+                mode="currency"
+                currency="GBP"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(price) }"
+                (onBlur)="onTouched()"
+             rte="1pf"></p-inputNumber>
+            <div class="p-error" *ngIf="invalid(price)" rte="1pg">
+                <small *ngIf="price.errors.required" rte="1ph">The price is required.</small>
+                <small *ngIf="price.errors.pattern" rte="1pi">The price value is invalid.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pj">
+        <label class="inputs-group-row-name" rte="1pk">Quantity: </label>
+        <div class="inputs-group-row-value" rte="1pl">
+            <p-inputNumber
+                [formControl]="quantity"
+                mode="decimal"
+                locale="en-UK"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(quantity) }"
+                (onBlur)="onTouched()"
+             rte="1pm"></p-inputNumber>
+            <div class="p-error" *ngIf="invalid(quantity)" rte="1pn">
+                <small *ngIf="quantity.errors.required" rte="1po">The quantity is required.</small>
+                <small *ngIf="quantity.errors.pattern" rte="1pp">The quantity value is invalid.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1pq">
+        <label class="inputs-group-row-name" rte="1pr">Is Reseller: </label>
+        <div class="inputs-group-row-value" rte="1ps">
+            <p-checkbox
+                [formControl]="isReseller"
+                [binary]="true"
+                (onChange)="onTouched()"
+             rte="1pt"></p-checkbox>
+        </div>
+    </div>
+</div>

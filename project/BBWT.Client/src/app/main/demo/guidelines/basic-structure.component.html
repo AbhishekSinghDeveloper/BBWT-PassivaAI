@@ -1,0 +1,75 @@
+<div class="card" rte="IT">
+    <h1 rte="IU">Basic Page Structure</h1>
+
+    <p rte="IV">All pages should have a title (displayed on the page) that matches the menu item used to select it.</p>
+
+    <P rte="IW"><img src="/assets/images/page-title.png"  rte="IX"/></P>
+
+    <p rte="IY">All pages should have a simple description below the title.</p>
+
+    <p rte="IZ">Here is the basic layout of a page:</p>
+    <!--Inline style for this basic structure are used to simulate out page template inside real page, code show to
+            visitor is the right one. Probably could change it to a picture. -->
+    <div id="demoPage" rte="J0">
+        <div class="p-g" rte="J1">
+            <div class="p-g-12" rte="J2">
+                <div class="card card-w-title" rte="J3">
+                    <h1 rte="J4">Page Title</h1>
+                    <div class="p-grid p-grid-responsive p-fluid" rte="J5">
+                        <div class="p-g-12" rte="J6">
+                            <div class="label-content p-grid-col-3" rte="J7">
+                                <span class="p-float-label" rte="J8">
+                                    <input pInputText id="textField"  rte="J9"/>
+                                    <label rte="Ja">Edit Text</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-g-12" rte="Jb">
+                            ...
+                        </div>
+                    </div>
+
+                    <div class="p-grid-row" rte="Jc">
+                        <button pButton type="button" label="Cancel" class="p-button-secondary" rte="Jd"></button>
+                        <button pButton type="button" label="Save" rte="Je"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p rte="Jf"></p>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Jg">
+            &lt;div class=&quot;p-g&quot;&gt;
+                &lt;div class=&quot;p-g-12&quot;&gt;
+                    &lt;div class=&quot;card card-w-title&quot;&gt;
+                        &lt;h1&gt;Page Title&lt;/h1&gt;
+                        &lt;div class=&quot;p-grid p-grid-responsive p-fluid&quot;&gt;
+                            &lt;div class=&quot;p-g-12&quot;&gt;
+                                &lt;label for=&quot;name&quot; class=&quot;p-grid-col-2 control-label&quot;&gt;Label&lt;/label&gt;
+                                &lt;div class=&quot;label-content p-grid-col-3&quot;&gt;
+                                    &lt;span class=&quot;p-float-label&quot;&gt;
+                                        &lt;input pInputText id=&quot;textField&quot; class=&quot;form-control&quot;/&gt;
+                                        &lt;label&gt;Edit Text&lt;/label&gt;
+                                    &lt;/span&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                            &lt;div class=&quot;p-g-12&quot;&gt;
+                                ...
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;p-grid-row&quot;&gt;
+                            &lt;button pButton type=&quot;button&quot; label=&quot;Save&quot;&gt;&lt;/button&gt;
+                            &lt;button pButton type=&quot;button&quot; label=&quot;Cancel&quot;&gt;&lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            </pre>
+    <p rte="Jh">
+        Consider whether the page needs a description line. Description lines should be preferred when the use of a page
+        is non-obvious,
+        or when most of the user-base of the page will not be familiar with the page.
+    </p>
+</div>

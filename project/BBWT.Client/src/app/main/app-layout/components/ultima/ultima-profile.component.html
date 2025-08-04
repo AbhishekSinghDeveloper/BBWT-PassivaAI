@@ -1,0 +1,37 @@
+<div class="profile" [ngClass]="{'profile-expanded':active}" rte="15G">
+    <a href="#" (click)="onClick($event)" rte="15H">
+        <img class="profile-image" [src]="app.avatarUrl" onerror="this.src = '/assets/images/noavatar.png'"  rte="15I"/>
+        <span class="profile-name" rte="15J">{{app.currentUserName}}</span>
+        <i class="pi pi-angle-down" rte="15K"></i>
+    </a>
+</div>
+
+<ul class="ultima-menu profile-menu" [@menu]="active ? 'visible' : 'hidden'" rte="15L">
+    <li role="menuitem" rte="15M">
+        <a [routerLink]="['profile']"
+           [attr.tabindex]="!active ? '-1' : null"
+           class="ripplelink" rte="15N">
+            <i class="pi pi-user" rte="15O"></i>
+            <span rte="15P">Profile</span>
+        </a>
+    </li>
+    <li role="menuitem" rte="15Q">
+        <a href="#"
+           [attr.tabindex]="!active ? '-1' : null"
+           class="ripplelink"
+           (click)="app.logout(); $event.preventDefault()" rte="15R">
+            <i class="pi pi-power-off" rte="15S"></i>
+            <span rte="15T">Logout</span>
+        </a>
+    </li>
+    <li role="menuitem" rte="15U">
+        <a href="#"
+           [attr.tabindex]="!active ? '-1' : null"
+           [hidden]="!app.isUserImpersonate"
+           class="ripplelink"
+           (click)="app.stopImpersonation(); $event.preventDefault()" rte="15V">
+            <i class="pi pi-power-off" rte="15W"></i>
+            <span rte="15X">End Impersonation</span>
+        </a>
+    </li>
+</ul>

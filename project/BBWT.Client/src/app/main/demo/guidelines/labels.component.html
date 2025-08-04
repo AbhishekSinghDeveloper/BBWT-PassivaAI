@@ -1,0 +1,362 @@
+<div class="card--hidden" rte="FH">
+    <h1 rte="FI">Labels and Inputs</h1>
+
+    <p rte="FJ">
+        Label and text with a ‘hint’ text in the edit box. During editing, this
+        hint moves/shrinks to a location above the edit text
+    </p>
+    <div class="p-g" rte="FK">
+        <div class="fixed-label" rte="FL">
+            <label for="textField" rte="FM">Label</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="FN">
+            <span class="p-float-label" rte="FO">
+                <input
+                    class="LabelsComponent"
+                    pInputText
+                    id="textField"
+                    rte="FP"
+                />
+                <label rte="FQ">Edit text</label>
+            </span>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="FR">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;fixed-label&quot;&gt;
+                &lt;label for=&quot;textField&quot;&gt;Label&lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input pInputText id=&quot;textField&quot;&gt;
+                    &lt;label&gt;Edit Text&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <p rte="FS">
+        Allow for label-less edit fields with just the hint in the box, as per
+        this example
+    </p>
+
+    <div class="p-g" rte="FT">
+        <div class="p-g-12" rte="FU">
+            <span class="p-float-label" rte="FV">
+                <input
+                    class="LabelsComponent"
+                    pInputText
+                    id="textField"
+                    rte="FW"
+                />
+                <label rte="FX">Edit Text</label>
+            </span>
+        </div>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="FY">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;p-g-12&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input pInputText id=&quot;textField&quot;&gt;
+                    &lt;label&gt;Edit Text&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <p rte="FZ">
+        Similarly for checkboxes, radios, select controls and textareas:
+    </p>
+
+    <div class="p-g" rte="G0">
+        <div class="p-g-12 padding-top-15" rte="G1">
+            <strong rte="G2">Checkbox</strong>
+        </div>
+
+        <div class="p-g-12 margin-top-5" rte="G3">
+            <div class="p-g" rte="G4">
+                <div class="p-g-12" rte="G5">
+                    <p-checkbox
+                        name="group"
+                        label="Check Box 1"
+                        binary="true"
+                        rte="G6"
+                    ></p-checkbox>
+                </div>
+                <div class="p-g-12" rte="G7">
+                    <p-checkbox
+                        name="group"
+                        label="Check Box 2"
+                        binary="true"
+                        rte="G8"
+                    ></p-checkbox>
+                </div>
+                <div class="p-g-12" rte="G9">
+                    <p-checkbox
+                        name="group"
+                        label="Check Box 3"
+                        binary="true"
+                        rte="Ga"
+                    ></p-checkbox>
+                </div>
+            </div>
+        </div>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" ng-non-bindable id="Radiobutton" rte="Gb">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;p-g-12 padding-top-15&quot;&gt;
+                 &lt;strong&gt;Checkbox&lt;/strong&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;p-g-12 margin-top-5&quot;&gt;
+                &lt;div class=&quot;p-g&quot;&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-checkbox name=&quot;group&quot; label=&quot;Check Box 1&quot; binary=&quot;true&quot;&gt;&lt;/p-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-checkbox name=&quot;group&quot; label=&quot;Check Box 2&quot; binary=&quot;true&quot;&gt;&lt;/p-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-checkbox name=&quot;group&quot; label=&quot;Check Box 3&quot; binary=&quot;true&quot;&gt;&lt;/p-checkbox&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <div class="p-g" rte="Gc">
+        <div class="p-g-12 padding-top-15" rte="Gd">
+            <strong rte="Ge">Radiobutton</strong>
+        </div>
+
+        <div class="p-g-12 margin-top-5" rte="Gf">
+            <div class="p-g" rte="Gg">
+                <div class="p-g-12" rte="Gh">
+                    <p-radioButton
+                        name="group1"
+                        label="Option 1"
+                        rte="Gi"
+                    ></p-radioButton>
+                </div>
+                <div class="p-g-12" rte="Gj">
+                    <p-radioButton
+                        name="group1"
+                        label="Option 2"
+                        rte="Gk"
+                    ></p-radioButton>
+                </div>
+                <div class="p-g-12" rte="Gl">
+                    <p-radioButton
+                        name="group1"
+                        label="Option 3"
+                        rte="Gm"
+                    ></p-radioButton>
+                </div>
+            </div>
+        </div>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" ng-non-bindable rte="Gn">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;p-g-12 padding-top-15&quot;&gt;
+                &lt;strong&gt;Radiobutton&lt;/strong&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;p-g-12 margin-top-5&quot;&gt;
+                &lt;div class=&quot;p-g&quot;&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-radioButton name=&quot;group1&quot; label=&quot;Option 1&quot;&gt;&lt;/p-radioButton&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-radioButton name=&quot;group1&quot; label=&quot;Option 2&quot;&gt;&lt;/p-radioButton&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-radioButton name=&quot;group1&quot; label=&quot;Option 3&quot;&gt;&lt;/p-radioButton&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <div class="p-g" rte="Go">
+        <div class="p-g-12 padding-top-15" rte="Gp">
+            <strong rte="Gq">Dropdown</strong>
+        </div>
+
+        <div class="p-g-12 margin-top-5" rte="Gr">
+            <div class="p-g" rte="Gs">
+                <div class="fixed-label" rte="Gt">
+                    <label for="dropdown" rte="Gu">Label</label>
+                </div>
+
+                <div class="p-g-12 p-md-4" rte="Gv">
+                    <p-dropdown
+                        id="dropdown"
+                        [options]="cities"
+                        [(ngModel)]="selectedCity"
+                        rte="Gw"
+                    ></p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Gx">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;dropdown&quot;&gt;Label&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+            &lt;p-dropdown id=&quot;dropdown&quot; [options]=&quot;cities&quot; [(ngModel)]=&quot;selectedCity&quot;&gt;&lt;/p-dropdown&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <br />
+    <div class="p-g" rte="Gy">
+        <div class="p-g-12 padding-top-15" rte="Gz">
+            <strong rte="GA">Textarea</strong>
+        </div>
+
+        <div class="p-g-12 margin-top-5" rte="GB">
+            <div class="fixed-label" rte="GC">
+                <label for="textArea" rte="GD">Label</label>
+            </div>
+
+            <div class="p-g-12 p-md-4" rte="GE">
+                <span class="md-textarea" rte="GF">
+                    <textarea
+                        pInputTextarea
+                        id="textArea"
+                        rows="5"
+                        class="form-control textarea-border"
+                        rte="GG"
+                    >
+                    </textarea>
+                    <label rte="GH">Edit Text</label>
+                </span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="p-g" rte="GI">
+        <div class="fixed-label" rte="GJ">
+            <label for="textArea" rte="GK">Label</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="GL">
+            <span class="md-textarea" rte="GM">
+                <textarea
+                    pInputTextarea
+                    id="textArea"
+                    rows="5"
+                    class="form-control textarea-background"
+                    rte="GN"
+                >
+                </textarea>
+                <label rte="GO">Edit Text</label>
+            </span>
+        </div>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="GP">
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;textArea&quot;&gt;Label&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12&quot;&gt;
+            &lt;textarea pInputTextarea id=&quot;textArea&quot; rows=&quot;5&quot; type=&quot;text&quot; class=&quot;form-control textarea-border&quot;&gt;&lt;/textarea&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;p-g&quot;&gt;
+        &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;textArea&quot;&gt;Label&lt;/label&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;p-g-12&quot;&gt;
+            &lt;textarea pInputTextarea id=&quot;textArea&quot; rows=&quot;5&quot; type=&quot;text&quot; class=&quot;form-control textarea-background&quot;&gt;&lt;/textarea&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    </pre>
+
+    <p rte="GQ">
+        On a page displaying read-only controls only, align the controls to the
+        left. Try and avoid mixing editable and read-only controls on the same
+        pane. Where this is not possible prefer showing all the controls
+        centrally aligned.
+    </p>
+
+    <div class="p-g" rte="GR">
+        <div class="fixed-label" rte="GS">
+            <label for="text" rte="GT">Label</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="GU">
+            <span id="text" rte="GV">Text Value 1</span>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" ng-non-bindable rte="GW">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;fixed-label&quot;&gt;
+            &lt;label for=&quot;text&quot;&gt;Label&lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+                &lt;span id=&quot;text&quot;&gt;Text Value 1&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <p rte="GX">
+        We can manage label position and colon by applying [colon] and [right]
+        custom attributes (code available in directives folder). Both attributes
+        are boolean attributes. Example and code below:
+    </p>
+
+    <div class="p-g" rte="GY">
+        <div class="fixed-label" rte="GZ">
+            <label for="textField" [colon]="true" [right]="true" rte="H0"
+                >Label</label
+            >
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="H1">
+            <span class="p-float-label" rte="H2">
+                <input
+                    class="LabelsComponent"
+                    pInputText
+                    id="textField"
+                    rte="H3"
+                />
+                <label rte="H4">Edit Text</label>
+            </span>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="H5">
+        &lt;div class=&quot;p-g&quot;&gt;
+            &lt;div class=&quot;fixed-label&quot;&gt;
+                &lt;label for=&quot;textField&quot; [colon]=&quot;true&quot; [right]=&quot;true&quot;&gt;Label&lt;/label&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;p-g-12&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input pInputText id=&quot;textField&quot; /&gt;
+                    &lt;label&gt;Edit Text&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    </pre>
+</div>

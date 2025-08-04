@@ -1,0 +1,113 @@
+{
+    "$schema": "./appsettings.schema.json",
+    "ConnectionStrings": {
+        "DefaultConnection": "Data Source=.;Initial Catalog=bbwt3;Integrated Security=true;Encrypt=False",
+        "DemoConnection": "Data Source=.;Initial Catalog=bbwt3_demo;Integrated Security=true;Encrypt=False",
+        "AuditConnection": "Data Source=.;Initial Catalog=bbwt3_audit;Integrated Security=true;Encrypt=False",
+        "MySqlConnection": "server=localhost;port=3306;database=bbwt3;Uid=root;Pwd=Password123",
+        "DemoMySqlConnection": "server=localhost;port=3306;database=bbwt3_demo;Uid=root;Pwd=Password123",
+        "AuditMySqlConnection": "server=localhost;port=3306;database=bbwt3_audit;Uid=root;Pwd=Password123"
+    },
+    "RunMigrationsOnStart": true,
+    // Use this setting to emulate live environment's behavior of the locally running application
+    //"LiveTypeEnvironments": "development",
+    "Logging": {
+        "IncludeScopes": false,
+        "LogLevel": {
+            "Default": "Debug",
+            "System": "Debug",
+            "Microsoft.AspNetCore": "Debug"
+        }
+    },
+    "Serilog": {
+        "WriteTo": [
+            {
+                "Name": "Console",
+                "Args": {
+                    "RestrictedToMinimumLevel": "Information"
+                }
+            }
+        ]
+    },
+    "EmailSettings": {
+        "SMTP": "",
+        "UserName": "",
+        "Password": "",
+        "Port": 465,
+        "FromAddress": "",
+        "EnableSsl": true,
+        "AdminAddress": ""
+    },
+    "SupportSettings": {
+        "EmailAddress1": "",
+        "EmailAddress2": "",
+        "EmailAddress3": "",
+        "EmailAddress4": ""
+    },
+    "StorageSettings": {
+        "ProviderName": "DiskSpace"
+    },
+    "AwsSettings": {
+        "AccessKeyId": "",
+        "SecretAccessKey": "",
+        "AwsRegion": "eu-west-2",
+        "BucketName": "",
+        "ParametersPath": "",
+        "ParametersReloadingInterval": 60,
+        "DataProtectionEnabled": false,
+        "DataProtectionAppName": "BBWT3"
+    },
+    "ReCaptchaSettings": {
+        "SiteKey": "",
+        "SecretKey": "",
+        "ApiLink": "",
+        "AcceptableScore": 0.6
+    },
+    "AwsEventBridgeSettings": {
+        "APIKey": "A-KEY-IS-REQUIRED",
+        "ApiConnectionName": "",
+        "ApiDestinationName": "",
+        "TargetRoleArn": "",
+        "AuthHeader": ""
+    },
+    "AzureSettings": {
+        "ConnectionString": "",
+        "ContainerName": ""
+    },
+    "SustainsysSaml": {
+        "IdentifierUrl": "",
+        "ProviderIdentifierUrl": "",
+        "AppFederationMetadataUrl": "",
+        "Enabled": false
+    },
+    "Jwt": {
+        "Key": ""
+    },
+    "RuntimeEditor": {
+        "EditionFilePath": "",
+        "DictionaryFilePath": "",
+        "EditsGitBranch": "",
+        "EditJsonFilesPath": "",
+        "EditsCommitName": ""
+    },
+    "DbDocSettings": {
+        "FilePath": "",
+        "ShowTableDump": true,
+        "ReadOnlyDump": false
+    },
+    "ContentSecurityPolicy": {
+        "SendViolationReport": false
+    },
+    "AggregatedLogsSettings": {
+        "Enabled": true,
+        "DatabaseType": "MySql",
+        "ConnectionString": "server=localhost;port=3306;database=bbwt3_logs;Uid=root;Pwd=Password123",
+        "LogEventLevel": "Warning"
+    },
+    "WebServerLogsSettings": {
+        "AppName": "BBWT3",
+        "FolderPath": "",
+        "SourceName": ""
+    },
+    "SpaDevelopmentServer": "http://localhost:4200"
+}

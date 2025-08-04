@@ -1,0 +1,43 @@
+@import "screenMixins";
+
+:host {
+    .inputs-group-row {
+        display: flex;
+        align-items: center;
+
+        .inputs-group-row-value {
+            .input-with-button {
+                width: calc(#{100%} - 70px);
+                max-width: 800px;
+                margin-right: 5px;
+
+                & + button {
+                    width: 80px;
+                }
+            }
+        }
+
+        @include for-phone-only {
+            flex-wrap: wrap;
+
+            .inputs-group-row-value {
+                width: 100%;
+            }
+        }
+    }
+    .manually-typed-group {
+        margin-top: 50px;
+    }
+    .request-result-container {
+        margin-top: 50px;
+
+        code {
+            white-space: pre;
+        }
+        .error-response {
+            display: block;
+            width: 100%;
+            color: red;
+        }
+    }
+}

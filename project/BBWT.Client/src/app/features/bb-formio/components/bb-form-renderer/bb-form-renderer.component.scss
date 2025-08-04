@@ -1,0 +1,13 @@
+.component-container {
+    margin: 0px;
+    padding: 0px;
+}
+
+.mobile-only {
+    visibility: collapse;
+
+    @media screen and (max-width: 800px) {
+        margin-top: 0.5rem;
+        visibility: visible !important;
+    }
+}

@@ -1,0 +1,70 @@
+﻿:host::ng-deep {
+    .widget-chart-container, .widget-chart-pdf-view-container {
+        .widget-chart-topbar {
+            display: grid;
+            grid-auto-flow: column;
+
+            h2 {
+                margin: 7px 0;
+            }
+
+            .pdf-exporting-button {
+                justify-self: end;
+                opacity: 0.3;
+            }
+
+            .pdf-exporting-button:hover {
+                opacity: 1;
+            }
+        }
+
+        .chart-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            p-chart, p-chart > div, p-chart > div > canvas {
+                max-width: 100%;
+            }
+        }
+    }
+
+    .widget-chart-pdf-view-container {
+        min-width: 1000px;
+        width: min-content;
+        height: fit-content;
+        page-break-inside: avoid;
+
+        td, th, h1, h2, h3, h4, h5, h6, label, p, li, span {
+            font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
+        }
+    }
+
+    .dataset-manager {
+        width: 330px;
+
+        p-multiselect {
+            display: block;
+            width: 280px;
+
+            .p-multiselect {
+                width: 100%;
+            }
+        }
+    }
+
+    .pdf-view-hidden {
+        z-index: -1;
+        position: absolute;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .widget-chart-pdf-view-page-footer {
+        margin-right: 20px;
+        text-align: right;
+        font-size: 12px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,44 @@
+:host ::ng-deep {
+    display: inline-flex;
+
+    > p-inputNumber, > .p-float-label {
+        display: inline-block;
+        width: 50%;
+    }
+
+    p-inputNumber {
+        display: inline-block;
+        width: 100%;
+
+        .p-inputnumber {
+            width: 100%;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+
+    .input-number-range-from {
+        .p-inputnumber-input {
+            order: 2;
+            border-radius: 0;
+        }
+        .p-inputnumber-button-group {
+            order: 1;
+
+            .p-inputnumber-button-up {
+                border-radius: 4px 0 0 0;
+            }
+            .p-inputnumber-button-down {
+                border-radius: 0 0 0 4px;
+            }
+        }
+    }
+    .input-number-range-to {
+        .p-inputnumber-input {
+            border-radius: 0;
+            text-align: right;
+        }
+    }
+}

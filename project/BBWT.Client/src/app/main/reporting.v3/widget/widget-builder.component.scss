@@ -1,0 +1,112 @@
+﻿:host::ng-deep {
+    .widget-source-options {
+        height: 42px;
+        max-height: 42px;
+        flex: 1 0 0;
+        display: flex;
+        align-self: stretch;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+        border-radius: 12px;
+        padding: 6px;
+        margin: 0 20px 5px 20px;
+        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+
+        .widget-source-settings {
+            margin-left: 20px;
+            flex: 1 0 0;
+            display: flex;
+            align-self: stretch;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+
+            > input.p-inputtext {
+                padding-top: 7px !important;
+                padding-bottom: 7px !important;
+                margin-left: 7px !important;
+                margin-right: 7px !important;
+                height: 30px !important;
+                width: 300px !important;
+            }
+
+            > input.p-inputtext.ng-invalid {
+                border-color: #c42436 !important;
+            }
+
+            > i {
+                color: #777777;
+            }
+
+            > label {
+                position: relative;
+                font-feature-settings: 'clig' off, 'liga' off;
+
+                font-family: Roboto, sans-serif;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                letter-spacing: 0.15px;
+            }
+        }
+
+        .widget-source-label {
+            color: #3F51B5;
+            margin-right: 20px;
+            font-feature-settings: 'clig' off, 'liga' off;
+
+            font-family: Roboto, sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 120%;
+        }
+    }
+
+    .widget-builder.builder-disabled {
+        .reporting-form-body {
+            background-color: rgb(249, 249, 249);
+        }
+
+        p-tabpanel:not(:first-child) {
+            pointer-events: none;
+            opacity: 0.6;
+
+            .editor-disabled {
+                opacity: 1;
+            }
+        }
+
+        .chart-preview {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    }
+
+    .widget-creation-dialog.p-dialog {
+        width: 100%;
+        max-width: 450px;
+
+        .p-dialog-content {
+            padding-bottom: 3px;
+
+            .inputs-group-row {
+
+                .inputs-group-row-name {
+                    width: 100px;
+                }
+
+                .inputs-group-row-name + .inputs-group-row-value {
+                    width: calc(100% - 100px);
+                }
+            }
+        }
+
+        .p-dialog-footer {
+            padding-top: 3px;
+        }
+    }
+}

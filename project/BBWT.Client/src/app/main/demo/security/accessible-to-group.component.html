@@ -1,0 +1,67 @@
+<div class="card--hidden" rte="uH">
+    <h1 rte="uI">{{ "Accessible to a Manager within Group " + group }}</h1>
+
+    <span class="page-sub-header" rte="uJ"
+        >This is a form for some complex data to test dynamic form layout and
+        usability.</span
+    >
+
+    <p rte="uK">
+        This page requires a user to both have the permission ‘Access Control
+        Demo – View Orders’ and also belong to group {{ group }}. In this demo,
+        this permission has been given to the Manager. Group A may see orders
+        with OrderDate set, group B may see orders with ShippedDate set. The
+        results of a service call for an id with restricted access are below:
+    </p>
+
+    <h2 rte="uL">
+        Specifed Order Details (id: {{ specifedOrder ? specifedOrder.id : 0 }}):
+    </h2>
+    <ng-container *ngIf="!isBusySpecifedOrder">
+        <div
+            class="inputs-group no-labels-padding"
+            *ngIf="specifedOrder; else none"
+            rte="uN"
+        >
+            <div class="inputs-group-row" rte="uO">
+                <div class="inputs-group-row-name" rte="uP">Id:</div>
+                <div class="inputs-group-row-value" rte="uR">
+                    {{ specifedOrder.id }}
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="uS">
+                <div class="inputs-group-row-name" rte="uT">Customer</div>
+                <div class="inputs-group-row-value" rte="uV">
+                    {{ specifedOrder.customerCode }}
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="1iH">
+                <div class="inputs-group-row-name" rte="1iI">Company</div>
+                <div class="inputs-group-row-value" rte="1iJ">
+                    {{ specifedOrder.customerCompanyName }}
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="1iK">
+                <div class="inputs-group-row-name" rte="1iL">Is Paid</div>
+                <div class="inputs-group-row-value" rte="1iM">
+                    {{ specifedOrder.isPaid ? "Yes" : "No" }}
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="1iN">
+                <div class="inputs-group-row-name" rte="1iO">Order Date</div>
+                <div class="inputs-group-row-value" rte="1iP">
+                    {{ specifedOrder.orderDate | date : "dd/MM/yyyy" }}
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="1iQ">
+                <div class="inputs-group-row-name" rte="1iR">Shipped Date</div>
+                <div class="inputs-group-row-value" rte="1iS">
+                    {{ specifedOrder.shippedDate | date : "dd/MM/yyyy" }}
+                </div>
+            </div>
+        </div>
+        <ng-template #none>
+            <i rte="v1">None</i>
+        </ng-template>
+    </ng-container>
+</div>

@@ -1,0 +1,54 @@
+@import "screenMixins";
+
+:host ::ng-deep {
+    .main-menu-content {
+        display: inline-block;
+        width: 100%;
+
+        .tree-container {
+            width: 300px;
+            margin-right: 20px;
+            float: left;
+
+            .tree-panel {
+                max-height: calc(100vh - 390px);
+                min-height: 200px;
+                overflow: auto;
+                margin: -10px 0 10px 0;
+            }
+
+            p-tree {
+                /* Fix vertical alignment of icons */
+                i.material-icons {
+                    vertical-align: middle;
+                }
+
+                [role="treeitem"], .p-tree {
+                    padding: 0;
+                }
+
+                .p-tree {
+                    border: none;
+                }
+            }
+        }
+
+        .form-container {
+            float: right;
+            width: calc(#{100%} - 320px);
+        }
+
+        @include for-tablet-down {
+            .tree-container {
+                float: none;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .form-container {
+                float: none;
+                width: 100%;
+            }
+        }
+    }
+}

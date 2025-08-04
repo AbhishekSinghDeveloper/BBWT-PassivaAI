@@ -1,0 +1,89 @@
+@import "screenMixins";
+
+:host ::ng-deep {
+    display: block;
+    min-height: 100vh;
+    overflow-y: auto;
+    text-align: center;
+
+    h1 {
+        font-size: 1.5em !important;
+        font-weight: 400 !important;
+        margin: 0 0 30px !important;
+    }
+    p {
+        margin-bottom: 5px;
+        line-height: 1.5em;
+    }
+
+    .account-wrapper {
+        margin: 7vh auto;
+        width: 100%;
+        max-width: 600px;
+
+        .logo-container {
+            margin: 0 auto 35px;
+            height: 50px;
+
+            img {
+                height: 100%
+            }
+        }
+
+        .account-panel {
+            background-color: white;
+            padding: 40px 50px 50px;
+
+            @include for-phone-only {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .text-left {
+                text-align: left;
+            }
+
+            .full-width-button, .full-width-button button {
+                width: 100%;
+
+                i.material-icons {
+                    font-size: 20px;
+                }
+                .p-button-label {
+                    margin-left: 0;
+                }
+            }
+
+            .inputs-group {
+                margin: 30px auto;
+                max-width: 400px;
+
+                .inputs-group-row {
+                    margin-bottom: 35px;
+
+                    password-feedback, password-match {
+                        width: 100%;
+                    }
+
+                    .inputs-group-row-value {
+                        input {
+                            max-width: unset;
+                            padding-top: 7px;
+                            padding-bottom: 7px;
+                            font-size: 1em;
+                        }
+
+                        .p-inputtext + i {
+                            top: 6px;
+                        }
+
+                        .validation-error {
+                            text-align: left;
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

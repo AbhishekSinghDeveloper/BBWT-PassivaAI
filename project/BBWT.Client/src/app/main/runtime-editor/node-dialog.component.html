@@ -1,0 +1,71 @@
+<p-dialog header="Element: {{elementTitle}}"
+          [(visible)]="isDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          rte-hidden rte="e6">    
+    <ng-container *ngIf="tooltipEdit && showTooltip">
+        <div class="inputs-group" rte="e8">
+            <div class="inputs-sub-group-name" rte="e9">Add New Tooltip</div>
+            <div class="inputs-group-row" rte="ea">
+                <div class="inputs-group-row-name" rte="eb">
+                    <label for="tooltipMessage" rte="ec">Tooltip:</label>
+                </div>
+                <div class="inputs-group-row-value" rte="ed">
+                    <textarea pInputTextarea
+                              #tooltipMessage
+                              id="tooltipMessage"
+                              name="tooltipMessage"
+                              rows="5"
+                              [(ngModel)]="tooltipEdit.message"                              
+                              placeholder="Add tooltip text" rte="ee">        
+                    </textarea>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="ef">
+                <div class="inputs-group-row-name" rte="eg">
+                </div>
+                <div class="inputs-group-row-value" rte="eh">
+                    <p-radioButton [(ngModel)]="tooltipEdit.dock" [value]="dockRight" name="tooltipDock"
+                                    label="To the right of element" rte="ei"></p-radioButton>
+                    <br /> <!--temporarily, until styling gets fixed-->
+                    <p-radioButton [(ngModel)]="tooltipEdit.dock" [value]="dockLeft" name="tooltipDock"
+                                    label="To the left of element" rte="ej"></p-radioButton>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="showAttrs">
+        <div class="inputs-group" rte="el">            
+            <ng-container *ngFor="let edit of attrEdits">
+                <div class="inputs-sub-group-name" rte="en">{{edit.attr === 'innerHTML' ? 'Inner HTML' : ('Attribute: "' + edit.attr + '"')}}</div>
+                <div class="inputs-group-row" rte="eo">
+                    <div class="inputs-group-row-name" rte="ep">
+                        <label for="attr_{{edit.attr}}" rte="eq">Value:</label>
+                    </div>
+                    <div class="inputs-group-row-value" rte="er">
+                        <textarea pInputTextarea [(ngModel)]="edit.value"
+                                  #editAttr
+                                  id="attr_{{edit.attr}}"
+                                  name="attr_{{edit.attr}}"
+                                  rows="5"
+                                  placeholder="Add attribute value" rte="es"></textarea>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <p-footer rte="et">
+        <button pButton [disabled]="dialogParams.isNew" (click)="undo()" label="Undo" class="p-button-secondary"  rte="eu">
+            <i class="material-icons" rte="ev">undo</i>
+        </button>
+        <button pButton (click)="isDialogVisible = false" label="Cancel" class="p-button-secondary"  rte="ew">
+            <i class="material-icons" rte="ex">clear</i>
+        </button>
+        <button pButton [disabled]="!valid()" (click)="applyChanges()" label="Apply"  rte="ey">
+            <i class="material-icons" rte="ez">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

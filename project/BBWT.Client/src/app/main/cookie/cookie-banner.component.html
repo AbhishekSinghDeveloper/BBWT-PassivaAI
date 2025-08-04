@@ -1,0 +1,32 @@
+<p-sidebar [(visible)]="showCookieBanner"
+           appendTo="body"
+           position="bottom"
+           [modal]="false"
+           [closeOnEscape]="false"
+           [baseZIndex]="11000" rte="go">
+    <span class="cookie-banner-heading" rte="gp">Cookies</span>
+    <div class="cookie-banner-content" rte="gq">
+        <div class="cookie-banner-text" rte="gr">
+            <p rte="gs">
+                Blueberry uses cookies to ensure that we give you the best experience on our website.
+                We can also use these cookies to record how often you visit the site and the areas
+                you visit within it. Although they can identify a user’s computer, cookies themselves
+                do not personally identify users. You can set your browser to refuse cookies if you
+                wish to.
+            </p>
+
+            <p rte="gt">
+                If you continue without changing your settings, we’ll assume that you are happy to
+                receive all cookies on the Blueberry website.
+            </p>
+        </div>
+        <div class="cookie-banner-button" rte="gu">
+            <button pButton
+                    type="button"
+                    label="Got it"
+                    class="p-button-success"
+                    (click)="hideBanner()" rte="gv">
+            </button>
+        </div>
+    </div>
+</p-sidebar>

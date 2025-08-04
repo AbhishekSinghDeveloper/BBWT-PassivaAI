@@ -1,0 +1,51 @@
+:host ::ng-deep {
+    .columns-settings-table {
+        .reorderable-row {
+            td {
+                padding-top: 0.3rem;
+                padding-bottom: 0.3rem;
+            }
+        }
+
+        .header-line-1 {
+            th {
+                padding-bottom: 0.2rem;
+                border-bottom: none;
+            }
+        }
+
+        .header-line-2 {
+            th {
+                padding-top: 0.2rem;
+                padding-bottom: 0.6rem;
+            }
+        }
+    }
+
+    .aggregate-scalar-function-inputs-group-row, .custom-aggregate-expression-inputs-group-row {
+        margin-bottom: 5px;
+    }
+
+    .aggregate-expressions {
+        display: flex;
+        flex-direction: column;
+
+        .aggregate-expression-item {
+            background-color: #cccccc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            margin-top: 5px;
+
+            &.selected {
+                outline: 2px solid #aaaaaa;
+            }
+
+            .aggregate-expression-item-value {
+                padding: 10px;
+            }
+        }
+    }
+}

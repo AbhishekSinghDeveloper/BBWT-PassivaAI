@@ -1,0 +1,10 @@
+namespace BBF.Reporting.Core.Model;
+
+public class CustomColumnType
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public string? Mask { get; set; }
+}

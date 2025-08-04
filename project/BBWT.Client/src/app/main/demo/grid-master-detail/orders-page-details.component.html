@@ -1,0 +1,59 @@
+<!--
+Demonstrations list:
+- Grid's "View" action
+- Labels/controls positioning via "inputs-group" CSS class
+-->
+<div class="card--hidden" rte="kG">
+    <h1 rte="kH">Order Details</h1>
+
+    <div class="p-g" rte="kI">
+        <div
+            *ngIf="order"
+            class="inputs-group no-labels-padding p-g-12"
+            rte="kJ"
+        >
+            <div class="inputs-group-row" rte="kK">
+                <span class="inputs-group-row-name" rte="kL">Order ID:</span>
+                <span class="inputs-group-row-value" rte="kM">{{
+                    order.id
+                }}</span>
+            </div>
+            <div class="inputs-group-row" rte="kN">
+                <span class="inputs-group-row-name" rte="kO"
+                    >Customer code:</span
+                >
+                <span class="inputs-group-row-value" rte="kP">{{
+                    order.customerCode
+                }}</span>
+            </div>
+            <div class="inputs-group-row" rte="kQ">
+                <span class="inputs-group-row-name" rte="kR">Order date:</span>
+                <span class="inputs-group-row-value" rte="kS">{{
+                    order.orderDate | date : "dd/MM/yyyy"
+                }}</span>
+            </div>
+            <div class="inputs-group-row" rte="kT">
+                <span class="inputs-group-row-name" rte="kU"
+                    >Required date:</span
+                >
+                <span class="inputs-group-row-value" rte="kV">{{
+                    order.requiredDate | date : "dd/MM/yyyy"
+                }}</span>
+            </div>
+            <div class="inputs-group-row" rte="kW">
+                <span class="inputs-group-row-name" rte="kX"
+                    >Shipped date:</span
+                >
+                <span class="inputs-group-row-value" rte="kY">{{
+                    order.shippedDate | date : "dd/MM/yyyy"
+                }}</span>
+            </div>
+        </div>
+
+        <div class="p-g-12 button-panel" rte="kZ">
+            <div class="left" rte="l0">
+                <button pButton (click)="back()" label="Back" rte="l1"></button>
+            </div>
+        </div>
+    </div>
+</div>

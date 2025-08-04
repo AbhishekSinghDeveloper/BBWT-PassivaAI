@@ -1,0 +1,91 @@
+@import "screenMixins";
+
+:host ::ng-deep {
+    @include for-phone-only {
+        p-table .p-datatable .p-paginator {
+            height: auto !important;
+        }
+    }
+
+    .tools-panel {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+
+        @include for-tablet-down {
+            flex-wrap: wrap;
+        }
+
+        &.tools-panel-top {
+            margin-bottom: 20px;
+        }
+        &.tools-panel-bottom {
+            margin-top: 20px;
+        }
+
+        .tools-panel-left, .tools-panel-right, .tools-panel-full {
+            display: flex;
+            align-items: center;
+            width: 50%;
+
+            @include for-tablet-down {
+                width: 100%;
+            }
+        }
+        .tools-panel-full {
+            width: 100%;
+
+            @include for-tablet-down {
+                flex-wrap: wrap;
+
+                .tools-panel-item {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+            }
+            @include for-phone-only {
+                .tools-panel-item {
+                    .p-inputnumber-input {
+                        width: 50px;
+                    }
+                }
+            }
+
+            .tools-panel-item {
+                margin-right: 10px;
+            }
+        }
+        .tools-panel-item {
+            display: inline-flex;
+            align-items: center;
+
+            label {
+                white-space: pre;
+            }
+        }
+        .tools-panel-left {
+            .tools-panel-item {
+                margin-right: 5px;
+            }
+        }
+        .tools-panel-right {
+            justify-content: flex-end;
+
+            @include for-tablet-down {
+                justify-content: flex-start;
+
+                .tools-panel-item {
+                    margin-top: 10px;
+                }
+            }
+            @include for-phone-only {
+                flex-wrap: wrap;
+            }
+
+            .tools-panel-item {
+                margin-left: 5px;
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+<div *ngIf="bannerVisible" class="global-info-banner" [class.collapsed]="collapsed" rte="gY">
+    <span *ngIf="!collapsed" class="maintenance-banner-message" rte="gZ">The site will be in maintenance mode at {{timeStart}} - {{timeEnd}}.<br />{{message}}</span>
+    <i class="material-icons expand-icon" (click)="collapsed = false" rte="h0">expand_more</i>
+    <i class="material-icons collapse-icon" (click)="collapsed = true" rte="h1">expand_less</i>
+</div>

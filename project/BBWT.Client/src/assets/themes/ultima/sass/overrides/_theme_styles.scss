@@ -1,0 +1,272 @@
+/* Add your customizations of the theme here */
+
+@import "../../../../sass/screenMixins";
+
+
+/* Validation errors color */
+.validation-error {
+    color: $errorColor;
+}
+
+
+p-tabMenu {
+    /* Space between tabs and content */
+    & + router-outlet {
+        display: block;
+        padding-top: 20px;
+    }
+}
+
+
+p-tabView {
+    .p-tabview {
+        .p-tabview-nav {
+            height: $stateHeight + 0.3;
+
+            li {
+                .p-tabview-nav-link {
+                    height: $stateHeight;
+                }
+            }
+
+            /* Replacement of the float underline to the static bottom border. */
+            li.p-highlight {
+                border-bottom: 2px solid $primaryColor;
+            }
+
+            li.p-tabview-ink-bar {
+                display: none !important;
+            }
+        }
+    }
+}
+
+
+p-table {
+    .p-datatable {
+        .p-datatable-thead > tr {
+            > th {
+                background: rgba($primaryColor, 0.2);
+            }
+        }
+    }
+
+    /* Increasing cells distance between each other for mobile screen */
+    @include for-tablet-down {
+        tbody {
+            tr:not(:last-of-type) {
+                td:last-of-type {
+                    padding-bottom: 10px;
+                }
+            }
+        }
+    }
+
+    /* Fix content cutting for small screens */
+    @include for-phone-only {
+        .p-datatable-auto-layout > .p-datatable-wrapper > table {
+            table-layout: unset;
+        }
+
+        .p-paginator {
+            .p-paginator-element {
+                min-width: 40px;
+            }
+        }
+    }
+}
+
+p-dropdown {
+    .p-dropdown {
+        height: $inputHeight;
+    }
+}
+
+p-multiselect {
+    .p-multiselect {
+        height: $inputHeight;
+        padding: $inputPadding;
+
+        .p-multiselect-label {
+            padding: unset;
+        }
+    }
+}
+
+p-splitbutton {
+    .p-splitbutton {
+        //splitbutton global styling
+    }
+
+    .p-paginator {
+        &-left-content {
+            .p-button, .p-splitbutton {
+                background-color: transparent;
+                color: $primaryColor;
+
+                &:hover {
+                    background-color: rgba($primaryColor, .12);
+                    color: $primaryColor;
+                }
+
+                &:focus, &:active {
+                    background-color: $primaryColor;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+
+p-listbox {
+    .p-listbox {
+        .p-listbox-list {
+            .p-listbox-item {
+                height: $stateHeight;
+            }
+        }
+    }
+}
+
+p-selectbutton {
+    .p-selectbutton {
+        .p-button {
+            height: $stateHeight;
+
+            &:focus {
+                background: $highlightBg;
+            }
+        }
+    }
+}
+
+p-inputnumber {
+    .p-inputnumber {
+        .p-inputnumber-button-group {
+            height: $inputHeight;
+            border-left: unset;
+            border-top-right-radius: $borderRadius;
+            border-bottom-right-radius: $borderRadius;
+
+            .p-inputnumber-button-up {
+                border-radius: 0 $borderRadius 0 0;
+            }
+            .p-inputnumber-button-down {
+                border-radius: 0 0 $borderRadius 0;
+            }
+        }
+    }
+}
+
+.p-button.p-button-secondary, .p-buttonset.p-button-secondary > .p-button, .p-splitbutton.p-button-secondary > .p-button {
+    &:enabled:focus {
+        background: $secondaryButtonActiveBg;
+        color: $primaryTextColor;
+        border-color: $secondaryButtonActiveBorderColor;
+    }
+
+    &.p-button-outlined {
+        color: $secondaryButtonTextActiveColor;
+
+        &:enabled:active {
+            background: $secondaryButtonActiveBg;
+            color: $primaryTextColor;
+        }
+        &:enabled:hover {
+            color: $secondaryButtonTextActiveColor;
+        }
+    }
+
+    &.p-button-text {
+        &:enabled:active {
+            background: $secondaryButtonActiveBg;
+        }
+    }
+}
+
+.p-highlight {
+    font-weight: $highlightFontWeight;
+}
+
+.p-inputtext {
+    height: $inputHeight;
+    padding: $inputPadding;
+}
+
+.p-column-filter-row {
+    p-columnfilterformelement {
+        .p-inputwrapper {
+            border-radius: $borderRadius 0 0 $borderRadius;
+        }
+    }
+    p-columnfilterformelement:first-child:nth-last-child(2){
+        .p-inputwrapper {
+            border-radius: $borderRadius;
+        }
+    }
+    .p-column-filter-menu-button {
+        height: $inputHeight;
+        width: 2.357rem;
+    }
+}
+
+.p-dialog {
+    border-radius: $dialogBorderRadius;
+
+    .p-dialog-header {
+        .p-dialog-header-icon {
+            &:last-child {
+                margin-right: -0.5rem;
+            }
+        }
+    }
+
+    .p-dialog-footer {
+        border-bottom-right-radius: $dialogBorderRadius;
+        border-bottom-left-radius: $dialogBorderRadius;
+
+        button {
+            margin: 0 0 0 6px;
+        }
+    }
+
+    &.p-confirm-dialog {
+        .p-confirm-dialog-message {
+            margin-left: 0;
+        }
+    }
+}
+
+bb-input-number-range {
+    > .p-float-label:first-of-type > label {
+        left: $inputNumberRangeFloatingLabelLeft;
+    }
+}
+
+
+/* Padding for labels depending on inputs padding */
+.inputs-group {
+    .inputs-group-row {
+        .inputs-group-row-name {
+            padding-top: nth($inputPadding, 1) - calculateRem(nth($inputBorder, 1));
+        }
+        .inputs-group-row-value {
+            > p-checkbox:first-of-type, > p-radioButton:first-of-type {
+                padding-top: nth($inputPadding, 1) - calculateRem(nth($inputBorder, 1));
+            }
+        }
+    }
+}
+
+.p-paginator {
+    &-left-content, &-right-content {
+        .p-multiselect {
+            .p-multiselect-trigger-icon {
+                color: $primaryColor;
+            }
+            &:hover {
+                background-color: rgba($primaryColor, .16);
+            }
+        }
+    }
+}

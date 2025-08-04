@@ -1,0 +1,18 @@
+<h2>Formio PDF Generator</h2>
+<div class="block">
+    <h3>Formio HTML</h3>
+
+    <textarea #textAreaHTML rows="5" cols="30" pInputTextarea [(ngModel)]="html"
+              style="width: 100%; height: 250px;"></textarea>
+</div>
+<div class="block">
+    <h2>Formio JSON</h2>
+
+    <textarea #textAreaJsonData rows="5" cols="30" pInputTextarea [(ngModel)]="jsonData"
+              style="width: 100%; height: 250px;"></textarea>
+    <div class="block">
+        <h3>Generate PDF</h3>
+        <button pButton (click)="generateJsPDFReport()" label="jsPDF" class="mr-2"></button>
+        <button pButton (click)="generateJsReportPDF()" label="jsreport"></button>
+    </div>
+</div>

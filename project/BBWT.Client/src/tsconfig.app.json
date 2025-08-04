@@ -1,0 +1,28 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../out-tsc/app",
+        "types": ["node"],
+        "typeRoots": ["../node_modules/@types"]
+    },
+    "exclude": [
+        "test.ts",
+        "**/*.spec.ts",
+        /* This was required to allow linting to succeed (error doc:  https://typescript-eslint.io/linting/troubleshooting#i-get-errors-telling-me-eslint-was-configured-to-run--however-that-tsconfig-does-not--none-of-those-tsconfigs-include-this-file)
+        "./app/account/modules/strong-password/index.ts",
+        "./app/bbwt/guards/reactive-form-can-deactivate.ts",
+        "./app/bbwt/utils/equal-deep.ts",
+        "./app/bbwt/utils/deep-object.ts",
+        "./app/features/carousel/carousel.module.ts",
+        "./app/features/carousel/carousel.component.ts",
+        "./app/features/carousel/slide.component.ts",
+        "./app/main/aws-event-bridge/index.ts",
+        "./app/main/demo/grid-master-detail/can-cancel-tdform-popup.ts",
+        "./app/main/email-templates/index.ts",
+        "./app/main/home/index.ts",
+        "./app/main/profile/index.ts",
+        "./app/main/reports/index.ts",
+        "./app/account/enums/authentication.ts"
+        */
+    ]
+}

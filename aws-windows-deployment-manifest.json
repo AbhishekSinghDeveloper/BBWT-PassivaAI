@@ -1,0 +1,20 @@
+{
+    "manifestVersion": 1,
+    "deployments": {
+        "aspNetCoreWeb": [
+            {
+                "name": "bbwt3",
+                "parameters": {
+                    "appBundle": "app.zip",
+                    "iisPath": "/",
+                    "iisWebSite": "Default Web Site"
+                },
+                "scripts": {
+                    "postInstall": {
+                        "file": "scripts/win-postinstall.ps1"
+                    }
+                }
+            }
+        ]
+    }
+}

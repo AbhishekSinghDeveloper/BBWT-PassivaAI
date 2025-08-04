@@ -1,0 +1,6 @@
+<ng-container *ngIf="parametersStoreAvailable; else warning">
+    <grid [tableSettings]="tableSettings" [gridSettings]="gridSettings" rte="1kL"></grid>
+</ng-container>
+<ng-template #warning>
+    Application Parameters Store is unset.
+</ng-template>

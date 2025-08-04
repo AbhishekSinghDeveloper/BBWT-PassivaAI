@@ -1,0 +1,10 @@
+<div class="account-wrapper" rte="7a">
+    <div class="logo-container" rte="7b">
+        <img [src]="systemConfigurationService.logoImageUrl" onerror="this.src = '/assets/images/logo.png'" rte="7c">
+    </div>
+    <div class="account-panel" rte="7d">
+        <div class="form-container" rte="7e">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

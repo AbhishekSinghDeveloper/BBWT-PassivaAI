@@ -1,0 +1,88 @@
+{
+    "root": true,
+    "ignorePatterns": [
+        "!**/*"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "*.ts"
+            ],
+            "extends": [
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@angular-eslint/recommended",
+                "plugin:@angular-eslint/template/process-inline-templates"
+            ],
+            "parserOptions": {
+                "project": [
+                    ".//tsconfig.json"
+                ],
+                "createDefaultProgram": true
+            },
+            "rules": {
+                "@angular-eslint/component-class-suffix": "off",
+                "@angular-eslint/directive-class-suffix": "off",
+                "@angular-eslint/no-output-on-prefix": "off",
+                "@typescript-eslint/consistent-type-definitions": "off",
+                "@typescript-eslint/dot-notation": "off",
+
+                //TODO: LOW priority. To consider if we can apply the rule by default.
+                //It forces us to get rid of all "any"
+                "@typescript-eslint/no-explicit-any": "off",
+
+                //TODO: High priority. To consider if we apply the rule by default.
+                //It forces us to get rid of all unused variables and imports, but it does look worthy
+                //to make code less messy. Besides, it seems not taking much efforts for coder to follow this rule
+                "@typescript-eslint/no-unused-vars": "off",
+
+                //TODO: HIGH priority. We should fix all these errors (not much efforts - currently 8 errors)
+                "@typescript-eslint/ban-types": "off",
+
+                "no-var": "error",
+
+                "@typescript-eslint/explicit-member-accessibility": [
+                    "off",
+                    {
+                        "accessibility": "explicit"
+                    }
+                ],
+                "@typescript-eslint/quotes": [
+                    "error",
+                    "double",
+                    {
+                        "avoidEscape": true
+                    }
+                ],
+                "brace-style": [
+                    "error",
+                    "1tbs"
+                ],
+                "capitalized-comments": "off",
+                "curly": [
+                    "error",
+                    "multi-line"
+                ],
+                "id-blacklist": "off",
+                "id-match": "off",
+                "max-len": [
+                    "error",
+                    {
+                        "code": 280
+                    }
+                ],
+                "no-irregular-whitespace": "error",
+                "no-underscore-dangle": "off",
+                "radix": "off"
+            }
+        },
+        {
+            "files": [
+                "*.html"
+            ],
+            "extends": [
+                "plugin:@angular-eslint/template/recommended"
+            ],
+            "rules": {}
+        }
+    ]
+}

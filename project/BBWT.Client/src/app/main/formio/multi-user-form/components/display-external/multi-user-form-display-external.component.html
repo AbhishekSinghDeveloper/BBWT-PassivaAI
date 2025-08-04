@@ -1,0 +1,20 @@
+<p *ngIf="wrongStage">This Multi-User form is on another stage. It is not ready for you yet.</p>
+<p *ngIf="accessDenied">You are not authorized to see this Multi-User form stage.</p>
+<div *ngIf="!wrongStage || !accessDenied" class="container mt-2">
+    <!--Can be the regular render, a custom render must be created-->
+    <bb-form-renderer *ngIf="formReady && !formFilled"
+        [formDefId]="formId"
+        [formDataId]="formDataId"
+        [revisionId]="revisionId"
+        [readOnlyForm]="readOnlyForm"
+        [isMultiUserForm]="true"
+        [mufStages]="mufStages"
+        [currentStage]="currentStage"
+        [mufDefinitionId]="mufDefinitionId"
+        [extraData]="extraData"
+        [mufAssocId]="mufAssocId"
+        (formSaved)="formSaved()">
+    </bb-form-renderer>    
+    <p *ngIf="!formReady">This Multi-User form is loading please wait.</p>
+    <p *ngIf="formFilled">This Multi-User form stage has already being filled. You can close the tab now.</p>
+</div>

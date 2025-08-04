@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\BBWM.Core\BBWM.Core.csproj" />
+        <ProjectReference Include="..\BBWM.Menu\BBWM.Menu.csproj" />
+        <ProjectReference Include="..\BBWM.Metadata\BBWM.Metadata.csproj" />
+        <ProjectReference Include="..\BBWM.GitLab\BBWM.GitLab.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="libphonenumber-csharp" Version="8.13.9" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Api\" />
+    </ItemGroup>
+</Project>

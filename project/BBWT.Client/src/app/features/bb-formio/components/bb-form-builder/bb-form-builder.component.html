@@ -1,0 +1,72 @@
+<div class="component-container">
+    <div class="row row-no-gutters mb-2 mt-1">
+        <div class="col-xs-12 col-md-3">
+            <input type="text" class="form-control" placeholder="Form name" [(ngModel)]="formName" [disabled]="formRevisionHasData">
+        </div>
+        <div class="col-xs-12 form-check">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="mobileFriendly" id="flexCheckDefault"/>
+            <label class="form-check-label" for="flexCheckDefault">
+                Mobile form
+            </label>
+        </div>
+        <div class="col-xs-12 form-check">
+            <input [disabled]="formDefId?.length > 0" class="form-check-input" type="checkbox" [(ngModel)]="byRequestOnly" id="byRequestOnly"/>
+            <label class="form-check-label" for="byRequestOnly">
+                By request only
+            </label>
+        </div>
+        <div class="col-xs-12 form-dd">
+            <p-dropdown *ngIf="categories" [(ngModel)]="selectedCat" [options]="categories" [disabled]="editMode"
+                        placeholder="Select a Category" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+        <div class="col-xs-12 col-md-2">
+            <button type="button" class="btn btn-primary" (click)="saveForm($event)">Save form</button>
+            <button type="button" class="btn btn-secondary ml-2" (click)="clearForm()">Clear form</button>
+        </div>
+    </div>
+
+    <h2>Form builder editor{{ editMode ? " - Edit Mode" : "" }}</h2>
+    <form-builder [form]="form" [options]="options" (change)="changeEvent($event)"></form-builder>
+
+    <h5 *ngIf="status" class="text-error mt-2">{{ status }}</h5>
+
+    <h5 *ngIf="formStatus">{{ formStatus }}</h5>
+    <div *ngIf="editMode" class="mt-5">
+        <div>
+            <h3 class="text-danger"> Revision Note</h3>
+        </div>
+        <div>
+            <textarea style="width: 100%; min-height: 50px;" pInputTextarea [(ngModel)]="revisionNote"></textarea>
+            <label class="text-info text-muted">Describe the changes made to this revision.</label>
+        </div>
+    </div>
+</div>
+
+<!-- display error if the form definition load fails -->
+<div class="card" *ngIf="errorWhileLoadingForm">
+    <h4 class="mt-2 text-center text-danger">Form definition's load failed. Please close the tab. </h4>
+    <h5 class="mt-2 text-center text-danger">
+        Note: To create a new form design please head to FormIO Designs -> New
+        Design
+    </h5>
+</div>
+<hr/>
+<h3 class=" text-center text-muted">Form Definition JSON Schema</h3>
+<div class="well">
+    <pre id="json"><code class="language-json" #json></code></pre>
+</div>
+
+<!--TODO: better to move these data versioning management to component-->
+<p-dialog [(visible)]="displayFormVersionChangesDialog"
+          [modal]="true"
+          header="Confirm Form Version Data Changes">
+    <bb-form-version-handler></bb-form-version-handler>
+    <p-footer>
+        <button pButton label="Cancel" class="p-button-secondary" (click)="displayFormVersionChangesDialog = false"></button>
+        <!--TODO: this button's enabled state is determined by any tree node is checked because when 2 nodes checked (add + remove ones)
+        then we can mark them as a single action Rename (when the key was only renamed). And here we should complare component type
+        and maybe other criteria to filter out not matching components-->
+        <button pButton label="Mark as renamed" [disabled]="true" (click)="markFormVersionComponentsRenamed()"></button>
+        <button pButton label="Apply" (click)="applyFormVersionChangesToData()"></button>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,52 @@
+<div class="card--hidden" rte="md">
+    <h1 rte="me">Popup Edit</h1>
+
+    <span class="page-sub-header" rte="mf"
+        >Demonstration of popup editing data in a grid component.</span
+    >
+
+    <p rte="mg">
+        You can
+        <data-generation
+            startGenerationMethodName="GenerateOrders"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="mh"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        [(selection)]="selection"
+        rte="1iB"
+    ></grid>
+
+    <div *ngIf="selection?.length" class="p-g selected-data" rte="mk">
+        <h4 rte="ml">Selected Data</h4>
+        <div *ngFor="let item of selection" class="p-g-12" rte="mm">
+            <div class="p-g-12 p-md-4" rte="mn">
+                Customer code: {{ item["customerCode"] }}
+            </div>
+            <div class="p-g-12 p-md-4" rte="mo">
+                Order date: {{ item["orderDate"] | date : "dd/MM/yyyy" }}
+            </div>
+            <div class="p-g-12 p-md-4" rte="mp">
+                Required date: {{ item["requiredDate"] | date : "dd/MM/yyyy" }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    [(visible)]="additionalActionDialogVisible"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    header="Dialog from additional action"
+    rte="mq"
+>
+    <p *ngIf="shownOrder" rte="mr">
+        Order with Customer Code "{{ shownOrder.customerCode }}" was shown!
+    </p>
+</p-dialog>

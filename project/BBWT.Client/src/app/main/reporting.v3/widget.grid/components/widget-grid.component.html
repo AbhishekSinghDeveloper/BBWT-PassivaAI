@@ -1,0 +1,78 @@
+<ng-container *ngIf="widgetVisible && !!gridDisplayView">
+    <div *ngIf="output === 'web'" class="widget-grid-container">
+
+        <div class="widget-grid-topbar">
+            <h2 *ngIf="!!widgetTitle?.length">
+                {{ widgetTitle }}
+            </h2>
+            <p-button *ngIf="exportable"
+                      styleClass="p-button-lg p-button-outlined p-button-text p-button-icon-only"
+                      class="pdf-exporting-button" icon="pi pi-file-pdf" title="Export to PDF" (onClick)="generatePdf()">
+            </p-button>
+        </div>
+
+        <grid *ngIf="tableSettings && gridSettings"
+              [tableSettings]="tableSettings"
+              [gridSettings]="gridSettings"
+              class="reporting-table"
+              (onRowSelect)="onGridRowSelect($event)"
+              (onRowUnselect)="onGridRowUnselect()">
+            <ng-template *ngFor="let columnTemplate of getCustomFormattedColumns()"
+                         [columnName]="columnTemplate.column.field"
+                         gridColumnTemplate="displayingRow" let-rowData>
+                <div class="custom-output"
+                     [innerHTML]="getCustomFormattedCellHtml(columnTemplate.customTemplate, columnTemplate.column, rowData)"></div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr *ngIf="aggregatedValues" class="footer-row">
+                    <td *ngFor="let column of tableSettings.columns">
+                    <span class="column-header-text"
+                          [style.text-align]="aggregatedValues[column['field']]?.textAlign || 'left'">
+                        {{ aggregatedValues[column["field"]]?.value }}
+                    </span>
+                    </td>
+                </tr>
+            </ng-template>
+        </grid>
+    </div>
+
+    <div #pdfViewContainer *ngIf="output === 'PDF' || renderPdfViewHidden"
+         [class]="'widget-grid-pdf-view-container' + (renderPdfViewHidden ? ' pdf-view-hidden': '')">
+
+        <div class="widget-grid-topbar">
+            <h2 *ngIf="!!widgetTitle?.length">
+                {{ widgetTitle }}
+            </h2>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th *ngFor="let column of columnTemplates" [style]="getColumnStyles(column.column)">
+                    {{ column.column.header }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of gridPagedData?.items ?? []">
+                <td *ngFor="let column of columnTemplates" [style]="getColumnStyles(column.column)">
+                    <div *ngIf="!!column.customTemplate; else cellValue"
+                         [innerHTML]="getCustomFormattedCellHtml(column.customTemplate, column.column, row)">
+                    </div>
+                    <ng-template #cellValue>
+                        {{ column.column.displayHandler(row[column.column.field], row) }}
+                    </ng-template>
+                </td>
+            </tr>
+            <tr class="aggregations" *ngIf="aggregatedValues">
+                <td *ngFor="let column of columnTemplates">
+                    <span class="column-header-text"
+                          [style.text-align]="aggregatedValues[column.column['field']]?.textAlign || 'left'">
+                        {{ aggregatedValues[column.column["field"]]?.value }}
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>

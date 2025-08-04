@@ -1,0 +1,37 @@
+@use 'sass:math';
+
+/* Add your variable customizations of theme here */
+
+$emphasis-medium: #00000099;
+$overlayColor:#000000DE;
+$tableBottomPaginatorBorderWidth: 0 1px 1px 1px;
+$tableFooterBorderWidth: 0 1px 1px 1px;
+$borderRadius: 6px;
+$highlightFontWeight: 500;
+$stateHeight:2.5rem;
+$outlinedButtonBorder:1px solid #0000003D;
+$secondaryButtonBg:transparent;
+$secondaryButtonActiveBg:$primaryColor;
+$secondaryButtonTextActiveColor:#fff;
+$secondaryButtonTextColor:$primaryColor;
+$secondaryButtonBorder:1px solid #0000003D;
+$secondaryButtonHoverBg:rgba($primaryColor, .12);
+$secondaryButtonTextHoverColor:$primaryColor;
+$secondaryButtonHoverBorderColor:#0000003D;
+$secondaryButtonTextActiveColor:$primaryColor;
+$toggleButtonActiveBg:$primaryColor;
+$tabviewHeaderPadding:0.7rem 1.5rem;
+$tabviewHeaderActiveBg:rgba($primaryColor,.12);
+$dialogHeaderPadding:1.42rem 1.72rem;
+$dialogContentPadding: 0 1.72rem 1.42rem 1.72rem;
+$dialogFooterPadding:1.42rem 1.72rem;
+$dialogBorderRadius: 0.857rem;
+$stateHeight: 36px;
+$buttonHeight: 36px;
+$checkboxBorder:1px solid rgba(0,0,0,.38);
+$radiobuttonBorder:1px solid rgba(0,0,0,.38);
+
+@function calculateRem($size) {
+    $remSize: math.div($size, 16px);
+    @return $remSize;
+}

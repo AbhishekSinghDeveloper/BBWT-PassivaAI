@@ -1,0 +1,81 @@
+<p-panel *ngIf="!!columnViewMetadata.gridColumnView" class="grid-column-view" rte="1uR">
+    <p-header class="view-settings-panel-header" rte="1uS">
+        <span class="panel-bold-header-text" rte="1uT">Grid column view settings</span>
+        <div class="view-settings-header-buttons" rte="1uU">
+            <p-button icon="pi pi-pencil" class="p-button-icon-only" (click)="gridColumnViewStartEditing(columnViewMetadata.gridColumnView)" rte="1uV"></p-button>
+            <p-button icon="pi pi-trash" class="p-button-icon-only" (click)="startGridColumnViewDeleting()" rte="1uW"></p-button>
+        </div>
+    </p-header>
+    <div class="inputs-group no-labels-padding" rte="1uX">
+        <div class="inputs-group-row" rte="1uY">
+            <label class="inputs-group-row-name" rte="1uZ">Min width (px):</label>
+            <div class="inputs-group-row-value" rte="1v0">{{columnViewMetadata.gridColumnView.minWidth}}</div>
+        </div>
+        <div class="inputs-group-row" rte="1v1">
+            <label class="inputs-group-row-name" rte="1v2">Max width (px):</label>
+            <div class="inputs-group-row-value" rte="1v3">{{columnViewMetadata.gridColumnView.maxWidth}}</div>
+        </div>
+        <div class="inputs-group-row" rte="1v4">
+            <label class="inputs-group-row-name" rte="1v5">Mask:</label>
+            <div class="inputs-group-row-value" rte="1v6">{{columnViewMetadata.gridColumnView.mask}}</div>
+        </div>
+    </div>
+</p-panel>
+<div class="buttons-panel" rte="1v7">
+    <p-button *ngIf="!columnViewMetadata.gridColumnView" type="button" label="Add grid column view settings" (click)="gridColumnViewStartEditing()" rte="1v8"></p-button>
+</div>
+
+<p-dialog #editingGridColumnViewDialog
+          header="Edit Rule"
+          [(visible)]="editingGridViewDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          appendTo="body"
+          (onHide)="cancelGridColumnViewEditing()"
+          rte="1v9">
+    <form *ngIf="editGridView" #editingGridColumnViewForm="ngForm" class="inputs-group" (ngSubmit)="saveEditingGridColumnView()" rte="1va">
+        <div class="inputs-group-row" rte="10X">
+            <label class="inputs-group-row-name" rte="10Y">Min width (px):</label>
+            <div class="inputs-group-row-value" rte="10Z">
+                <p-inputNumber #min="ngModel"
+                               [(ngModel)]="editGridView.minWidth"
+                               [showButtons]="true"
+                               [min]="15"
+                               [lessThan]="max"
+                               name="min" rte="1vb">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="111">
+            <label class="inputs-group-row-name" rte="112">Max width (px):</label>
+            <div class="inputs-group-row-value" rte="113">
+                <p-inputNumber #max="ngModel"
+                               [(ngModel)]="editGridView.maxWidth"
+                               [showButtons]="true"
+                               [min]="15"
+                               [greaterThan]="min"
+                               name="max" rte="1vc">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="1l8">
+            <div class="inputs-group-row-name" rte="1l9">
+                <label rte="1la">Mask:</label>
+                <bb-tooltip message="Use underscore (_) to substitute it by the character from actual value." rte="1lb"></bb-tooltip>
+            </div>
+            <div class="inputs-group-row-value" rte="1lc">
+                <input [(ngModel)]="editGridView.mask" pInputText name="mask"  rte="1vd"/>
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="1ve">
+            <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="cancelGridColumnViewEditing()" rte="1vf">
+                <i class="material-icons" rte="1vg">clear</i>
+            </button>
+            <button pButton type="submit" label="Save" [disabled]="!!editingGridColumnViewForm?.invalid" rte="1vh">
+                <i class="material-icons" rte="1vi">check</i>
+            </button>
+        </div>
+    </form>
+</p-dialog>

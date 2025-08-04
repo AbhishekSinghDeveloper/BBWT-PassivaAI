@@ -1,0 +1,21 @@
+<div class="card--hidden" rte="xr">
+    <h1 rte="xs">Data Import</h1>
+    <span class="page-sub-header" rte="xt"
+        >Example of using the data import mechanism.</span
+    >
+
+    <p-tabView rte="xu">
+        <p-tabPanel header="Employees" rte="xv">
+            <import-result rte="xw"></import-result>
+        </p-tabPanel>
+        <p-tabPanel header="Configuration" rte="xx">
+            <import-config rte="xy"></import-config>
+        </p-tabPanel>
+        <p-tabPanel header="Errors" *ngIf="invalidEntries?.length" rte="xz">
+            <import-errors
+                [invalidEntries]="invalidEntries"
+                rte="xA"
+            ></import-errors>
+        </p-tabPanel>
+    </p-tabView>
+</div>

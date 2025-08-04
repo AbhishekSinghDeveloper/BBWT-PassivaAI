@@ -1,0 +1,70 @@
+<ng-container *ngIf="!item.hidden">
+    <a
+        *ngIf="shouldShowHrefItem()"
+        pRipple
+        [attr.href]="item.href"
+        [attr.tabindex]="0"
+        (click)="itemClick($event)"
+        (keydown.enter)="itemClick($event)"
+        rte="15Z"
+    >
+        <i class="material-icons" rte="160">{{ item.icon ? item.icon : "" }}</i>
+        <span rte="161">{{ item.label }}</span>
+    </a>
+    <a
+        *ngIf="shouldShowRouterItem()"
+        pRipple
+        [attr.tabindex]="0"
+        [routerLink]="item.routerLink"
+        routerLinkActive="active-menuitem-routerlink"
+        [routerLinkActiveOptions]="{ exact: true }"
+        rte="162"
+    >
+        <i class="material-icons" rte="163">{{ item.icon ? item.icon : "" }}</i>
+        <span rte="164">{{ item.label }}</span>
+    </a>
+    <a
+        *ngIf="shouldShowCustomHandledItem()"
+        pRipple
+        href="#"
+        [attr.tabindex]="0"
+        (click)="itemClick($event)"
+        (keydown.enter)="itemClick($event)"
+        rte="165"
+    >
+        <i class="material-icons" rte="166">{{ item.icon ? item.icon : "" }}</i>
+        <span rte="167">{{ item.label }}</span>
+    </a>
+    <a
+        *ngIf="shouldShowLabelItem()"
+        pRipple
+        href="#"
+        [attr.tabindex]="0"
+        (click)="itemClick($event)"
+        (keydown.enter)="itemClick($event)"
+        rte="168"
+    >
+        <i class="material-icons" rte="169">{{ item.icon ? item.icon : "" }}</i>
+        <span rte="16a">{{ item.label }}</span>
+        <i
+            *ngIf="item.children?.length"
+            class="pi pi-fw pi-angle-down layout-submenu-toggler"
+            rte="16b"
+        ></i>
+    </a>
+    <ul
+        *ngIf="item.children && active"
+        [@children]="active ? 'visibleAnimated' : 'hiddenAnimated'"
+        rte="16c"
+    >
+        <ng-template ngFor let-child let-i="index" [ngForOf]="item.children">
+            <li
+                verona-menu-item
+                [item]="child"
+                [index]="i"
+                [parentKey]="key"
+                rte="16e"
+            ></li>
+        </ng-template>
+    </ul>
+</ng-container>

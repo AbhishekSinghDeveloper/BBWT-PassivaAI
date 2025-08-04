@@ -1,0 +1,24 @@
+<div class="card--hidden" rte="XZ">
+    <h1 rte="Y0">Orders</h1>
+
+    <p rte="Y1">
+        There are currently
+        {{ grid.getTableProperty("totalRecords") }} records.<br />
+        <!-- Only for generating order records we allow such a big records limit, in order to test complex data cases -->
+        You can
+        <data-generation
+            recordsLimit="1000000"
+            startGenerationMethodName="GenerateOrders"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="Y2"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <grid
+        #grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        rte="1kX"
+    ></grid>
+</div>

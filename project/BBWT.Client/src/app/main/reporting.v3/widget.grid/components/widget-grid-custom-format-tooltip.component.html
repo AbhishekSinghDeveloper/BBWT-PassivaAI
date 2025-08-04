@@ -1,0 +1,13 @@
+<p-overlayPanel #op appendTo="body">
+  <ng-template pTemplate>
+      <h3>Syntax Explanation</h3>
+      <p>
+          To insert column value into cell's HTML, use this inserts:
+              <li>special variable <code>{{ '{col}' }}</code> to insert <i>current</i> column value.</li>
+              <li><code>{{ '{[ColumnName]}' }}</code> syntax to insert value of <i>any</i> column of grid columns list.</li>
+      </p>
+      <grid [tableSettings]="tableSettings" [gridSettings]="gridSettings"></grid>
+  </ng-template>
+</p-overlayPanel>
+
+<bb-tooltip message="Click for hint" (click)="op.toggle($event)" rte="1jA"></bb-tooltip>

@@ -1,0 +1,242 @@
+<div class="card--hidden" rte="Ax">
+    <h1 rte="Ay">Disabled Controls</h1>
+
+    <div class="inputs-group" rte="19m">
+        <div class="inputs-group-row" rte="Az">
+            <label for="textField" class="inputs-group-row-name" rte="AB"
+                >Input</label
+            >
+            <div class="inputs-group-row-value" rte="AC">
+                <input
+                    pInputText
+                    id="textField"
+                    value="Simple text"
+                    [attr.disabled]="isDisabled"
+                    rte="AE"
+                />
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="AG">
+            <label for="dropDownCalendar" class="inputs-group-row-name" rte="AI"
+                >Dropdown Calendar</label
+            >
+            <div class="inputs-group-row-value" rte="AJ">
+                <p-calendar
+                    [(ngModel)]="dateValue"
+                    [showIcon]="true"
+                    id="dropDownCalendar"
+                    [disabled]="isDisabled"
+                    rte="AK"
+                >
+                </p-calendar>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="AL">
+            <label for="calendar" class="inputs-group-row-name" rte="AN"
+                >Calendar</label
+            >
+            <div class="inputs-group-row-value" rte="AO">
+                <p-calendar
+                    [(ngModel)]="dateValue"
+                    [inline]="true"
+                    id="calendar"
+                    [disabled]="isDisabled"
+                    rte="AP"
+                >
+                </p-calendar>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="AQ">
+            <label for="dropdown" class="inputs-group-row-name" rte="AS"
+                >Dropdown</label
+            >
+            <div class="inputs-group-row-value" rte="AT">
+                <p-dropdown
+                    [options]="cities"
+                    id="dropdown"
+                    [disabled]="isDisabled"
+                    rte="AU"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="AV">
+            <label class="inputs-group-row-name" rte="AW">Checkbox</label>
+            <div class="inputs-group-row-value" rte="AX">
+                <p-checkbox
+                    label="Check 1"
+                    [binary]="true"
+                    [disabled]="isDisabled"
+                    class="inputs-group-row-value-item"
+                    rte="AY"
+                ></p-checkbox>
+                <p-checkbox
+                    [(ngModel)]="trueVal"
+                    label="Check 2"
+                    [binary]="true"
+                    [disabled]="isDisabled"
+                    class="inputs-group-row-value-item"
+                    rte="AZ"
+                ></p-checkbox>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="B0">
+            <label class="inputs-group-row-name" rte="B1">Radiobutton</label>
+            <div class="inputs-group-row-value" rte="B2">
+                <p-radioButton
+                    [(ngModel)]="radioVal"
+                    name="group1"
+                    label="Option 1"
+                    value="Option 1"
+                    [disabled]="isDisabled"
+                    class="inputs-group-row-value-item"
+                    rte="B3"
+                >
+                </p-radioButton>
+                <p-radioButton
+                    [(ngModel)]="radioVal"
+                    name="group1"
+                    label="Option 2"
+                    value="Option 2"
+                    [disabled]="isDisabled"
+                    class="inputs-group-row-value-item"
+                    rte="B4"
+                >
+                </p-radioButton>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="B5">
+            <label for="slider" class="inputs-group-row-name" rte="B7"
+                >Slider</label
+            >
+            <div class="inputs-group-row-value" rte="B8">
+                <p-slider
+                    [(ngModel)]="numberVal"
+                    id="slider"
+                    [disabled]="isDisabled"
+                    rte="B9"
+                ></p-slider>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="Ba">
+            <label class="inputs-group-row-name" rte="Bc">Button</label>
+            <div class="inputs-group-row-value" rte="Bd">
+                <button
+                    pButton
+                    type="button"
+                    label="Button"
+                    [disabled]="isDisabled"
+                    class="btn-standard-size"
+                    rte="Be"
+                >
+                    <i class="material-icons" rte="Bf">save</i>
+                </button>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="Bg">
+            <label for="listBox" class="inputs-group-row-name" rte="Bi"
+                >ListBox</label
+            >
+            <div class="inputs-group-row-value" rte="Bj">
+                <p-listbox
+                    id="listBox"
+                    [options]="cities"
+                    [disabled]="isDisabled"
+                    rte="Bk"
+                ></p-listbox>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="Bl">
+            <label class="inputs-group-row-name" rte="Bn">Accordion</label>
+            <div class="inputs-group-row-value" rte="Bo">
+                <p-accordion rte="Bp">
+                    <p-accordionTab
+                        header="Header 1"
+                        [selected]="true"
+                        [disabled]="isDisabled"
+                        rte="Bq"
+                    >
+                        The story begins as Don Vito Corleone, the head of a New
+                        York Mafia family, overseeshis daughter's wedding.
+                    </p-accordionTab>
+                    <p-accordionTab
+                        header="Header 2"
+                        [disabled]="isDisabled"
+                        rte="Br"
+                    >
+                        Content 2
+                    </p-accordionTab>
+                    <p-accordionTab
+                        header="Header 3"
+                        [disabled]="isDisabled"
+                        rte="Bs"
+                    >
+                        Content 3
+                    </p-accordionTab>
+                </p-accordion>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="Bt">
+            <label class="inputs-group-row-name" rte="Bv">TabView</label>
+            <div class="inputs-group-row-value" rte="Bw">
+                <p-tabView rte="Bx">
+                    <p-tabPanel
+                        header="Header 1"
+                        [disabled]="isDisabled"
+                        rte="By"
+                    >
+                        The story begins as Don Vito Corleone, the head of a New
+                        York Mafia family, overseeshis daughter's wedding.
+                    </p-tabPanel>
+                    <p-tabPanel
+                        header="Header 2"
+                        [disabled]="isDisabled"
+                        rte="Bz"
+                    >
+                        Content 2
+                    </p-tabPanel>
+                    <p-tabPanel
+                        header="Header 3"
+                        [disabled]="isDisabled"
+                        rte="BA"
+                    >
+                        Content 3
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="BU">
+            <label class="inputs-group-row-name" rte="BW">Menu</label>
+            <div class="inputs-group-row-value" rte="BX">
+                <p-menu [model]="menuData" rte="BY"></p-menu>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="BZ">
+            <label for="textArea" class="inputs-group-row-name" rte="C1"
+                >TextArea</label
+            >
+            <div class="inputs-group-row-value" rte="C2">
+                <textarea
+                    pInputTextarea
+                    id="textArea"
+                    rows="5"
+                    [disabled]="true"
+                    class="textarea-border"
+                    rte="C3"
+                >
+                </textarea>
+            </div>
+        </div>
+    </div>
+</div>

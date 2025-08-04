@@ -1,0 +1,15 @@
+<div class="p-g">
+    <div class="inputs-group p-g-12">
+        <div class="inputs-group-row">
+            <p-checkbox [(ngModel)]="settings.isFormIOActive"
+                        label="Forms feature enabled"
+                        [binary]="true"
+                        (onChange)="saveFeatureEnabled()">
+            </p-checkbox>
+        </div>
+    </div>
+    <h1 class="mt-4">Form Parameter List</h1>
+    <grid class="mt-2" #parameterGrid [tableSettings]="tableSettingsFormioParameterViewer"
+          [gridSettings]="formioViewerParameterGridSettings">
+    </grid>
+</div>

@@ -1,0 +1,114 @@
+:host::ng-deep {
+    .query-table-selector {
+        height: 100%;
+        display: flex;
+        padding: 10px 5px;
+        flex-direction: column;
+        align-items: flex-start;
+        border: 1px solid rgb(0, 0, 0, 0.38);
+        overflow-y: auto;
+        gap: 10px;
+
+        .folder-selector {
+            width: 100%;
+            margin-bottom: 5px;
+            padding-left: 12px;
+            padding-right: 12px;
+
+            .p-dropdown.p-inputwrapper {
+                width: 100%;
+                height: 36px;
+                border: 1px solid rgb(0, 0, 0, 0.38);
+                background: #FFF;
+            }
+        }
+
+        .table-selector {
+            width: 100%;
+            padding-left: 15px;
+            padding-right: 15px;
+
+            .table-selector-body {
+                padding-bottom: 10px;
+
+                .tables-tree {
+                    flex: 1 0 0;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    align-self: stretch;
+                    background: transparent;
+
+                    .p-treetable-scrollable-body {
+                        min-height: 100% !important;
+                        overflow: hidden !important;
+                    }
+
+                    .tree-row {
+                        border: transparent;
+                        background: transparent;
+
+                        .tree-node {
+                            display: flex;
+                            height: 28px;
+                            padding: 10px;
+                            align-items: center;
+                            align-self: stretch;
+                            border: transparent;
+                            background: transparent;
+                            border-radius: 6px;
+                            gap: 9px;
+
+                            .p-treetable-toggler {
+                                margin-right: 0;
+                            }
+
+                            &.tables-only {
+                                flex-direction: row-reverse;
+                                justify-content: flex-end;
+
+                                .p-treetable-toggler {
+                                    margin-left: 0 !important;
+                                }
+                            }
+
+                            &.folder-node {
+                                padding-top: 20px;
+                                padding-bottom: 20px;
+                            }
+
+                            &.folder-node > label {
+                                font-size: 16px;
+                                font-weight: 500;
+                            }
+
+                            &.table-node > label {
+                                font-size: 14px;
+                                font-weight: 400;
+                                letter-spacing: 0.15px;
+                            }
+
+                            &.column-node > label {
+                                font-size: 13px;
+                                font-weight: 400;
+                                letter-spacing: 0.15px;
+                            }
+
+                            > i {
+                                color: rgb(0, 0, 0, 0.7);
+                            }
+                        }
+
+                        .tree-node.node-selected {
+                            background: rgb(63, 81, 181, 0.2) !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        .table-selector:not(:last-child) {
+            border-bottom: 1px solid rgb(0, 0, 0, 0.12);
+        }
+    }
+}

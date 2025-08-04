@@ -1,0 +1,23 @@
+<p-dialog [(visible)]="gridImporter.importDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Import" rte="1ig">
+    <div class="p-g" rte="1ih">
+        <div class="p-g-12" rte="1ii">
+            <p-fileUpload name="grid-import-file"
+                          [customUpload]="true"
+                          [accept]="gridImporter.importAllowedFormats"
+                          (uploadHandler)="onUpload($event)" rte="1ij">
+            </p-fileUpload>
+        </div>
+        <div *ngIf="gridImporter.importedDataSavingProgress" class="p-g-12" rte="1ik">
+            <span rte="1il">Uploaded file data saving...</span>
+            <div class="display-flex p-grid-row" rte="1im">
+                <div class="p-g-12" rte="1in">
+                    <p-progressBar [value]="gridImporter.importedDataSavingProgress" rte="1io"></p-progressBar>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

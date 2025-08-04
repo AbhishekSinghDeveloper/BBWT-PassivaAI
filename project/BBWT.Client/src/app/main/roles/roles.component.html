@@ -1,0 +1,28 @@
+<div class="card--hidden" rte="hO">
+    <h1 rte="hP">Roles</h1>
+    <p rte="hQ">
+        In systems with simple security needs this page is not necessary.
+    </p>
+    <p rte="hR">
+        To avoid costly mistakes, the SystemAdmin and SuperAdmin BBWT-roles are
+        not editable through this page.
+    </p>
+    <p rte="hS">
+        If this project has been delivered into a live environment, it is
+        recommended that any further changes to the definition of BBWT-roles are
+        made <strong rte="hT">within</strong> the live environment. Otherwise
+        there is a risk of failure to deploy changes into the live environment.
+        If properly configured, changes will result in an update to GitLab
+        containing the change. This can be accepted or rejected by the
+        development team as necessary. Bearing in mind that the test
+        environments should stay as close to the live environment as possible,
+        and bearing in mind that differing data in another environment may
+        require data clean-up before the change can be deployed to that
+        environment.
+    </p>
+    <grid
+        [gridSettings]="gridSettings"
+        [tableSettings]="tableSettings"
+        rte="1gA"
+    ></grid>
+</div>

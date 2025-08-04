@@ -1,0 +1,74 @@
+<div class="card--hidden" rte="lX">
+    <h1 rte="lY">Inline Edit</h1>
+
+    <span class="page-sub-header" rte="lZ"
+        >Demonstration of inline editing data in a grid component.</span
+    >
+
+    <p rte="m0">
+        You can
+        <data-generation
+            startGenerationMethodName="GenerateOrders"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="m1"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <p rte="m2">
+        <p-checkbox
+            [binary]="true"
+            label="Paginator"
+            [ngModel]="grid.getTableProperty('paginator')"
+            (onChange)="grid.setTableProperty('paginator', $event.checked)"
+            rte="m3"
+        ></p-checkbox>
+    </p>
+
+    <grid
+        #grid
+        [gridSettings]="gridSettings"
+        [tableSettings]="tableSettings"
+        [(selection)]="selection"
+        rte="1iA"
+    >
+        <ng-template
+            gridColumnTemplate="displayingRow"
+            columnName="customColumn"
+            let-rowData
+        >
+            <!--<a target="_blank" [href]="'https://google.com/search?q=' + rowData['customerCode']" rte="m6">Click me - {{rowData["customerCode"]}}</a>-->
+            {{ gridSettings.rowExpandableFunc(rowData) }}
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-item>
+            <tr>
+                <td [attr.colspan]="tableSettings.columns.length + 3">
+                    <expansion-row
+                        [gridSettings]="expansionGridSettings"
+                        [tableSettings]="expansionTableSettings"
+                        [parentRow]="item"
+                        expandedField="orderDetails"
+                    >
+                    </expansion-row>
+                </td>
+            </tr>
+        </ng-template>
+    </grid>
+
+    <div *ngIf="selection" class="p-g selected-data" rte="m7">
+        <h4 rte="m8">Selected Data</h4>
+        <div class="p-g-12" rte="m9">
+            <div class="p-g-12 p-md-4" rte="ma">
+                Customer code: {{ selection["customerCode"] }}
+            </div>
+            <div class="p-g-12 p-md-4" rte="mb">
+                Order date: {{ selection["orderDate"] | date : "dd/MM/yyyy" }}
+            </div>
+            <div class="p-g-12 p-md-4" rte="mc">
+                Required date:
+                {{ selection["requiredDate"] | date : "dd/MM/yyyy" }}
+            </div>
+        </div>
+    </div>
+</div>

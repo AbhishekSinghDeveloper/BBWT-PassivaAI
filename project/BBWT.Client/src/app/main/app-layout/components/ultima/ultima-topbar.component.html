@@ -1,0 +1,130 @@
+<div class="topbar clearfix" rte="14C">
+    <div class="topbar-left" routerLink="/" rte="14D">
+        <div class="logo" [style.background-image]="'url(' + app.logoImageUrl + ')'" rte="14E"></div>
+    </div>
+
+    <div class="topbar-right" rte="14F">
+        <a id="menu-button" href="#" (click)="ultimaMain.onMenuButtonClick($event)" rte="14G">
+            <i class="pi pi-angle-left" rte="14H"></i>
+        </a>
+
+        <div class="right-side" rte="14I">
+            <app-offline-indicator *ngIf="app.offlineIndicatorVisible" rte="14J"></app-offline-indicator>
+
+            <a href="#" id="topbar-menu-button" (click)="ultimaMain.onTopbarMenuButtonClick($event);" rte="14O">
+                <img alt="main logo" [src]="app.avatarUrl" onerror="this.src='assets/images/noavatar.png';" rte="14P">
+            </a>
+
+            <ul class="topbar-items animated fadeInDown" [ngClass]="{'topbar-items-visible': ultimaMain.topbarMenuActive}" rte="14M">
+                <li rte="15C">
+                    <div class="user-data" rte="15D">
+                        <span class="user-name" rte="15E">{{app.currentUserName}}</span>
+                    </div>
+                </li>
+                <li *ngIf="app.loadingTimeAvailable" #loadingTimeTopbarItem
+                    [ngClass]="{'active-top-menu': ultimaMain.activeTopbarItem === loadingTimeTopbarItem}"
+                    title="Page Loading Time"
+                    rte="15x">
+                    <a routerLink="/app/loading-time" class="loading-time-button" (click)="ultimaMain.onTopbarItemClick($event, loadingTimeTopbarItem)" rte="15y">
+                        <i class="topbar-icon material-icons" rte="15z">timelapse</i>
+                        <span *ngIf="app.loadTime" class="topbar-badge animated rubberBand" rte="15A">{{app.loadTime}}</span>
+                        <span class="topbar-item-name" rte="15B">Loading Time</span>
+                    </a>
+                </li>
+                <li *ngIf="app.feedbackAvailable" #feedbackTopbarItem
+                    [ngClass]="{'active-top-menu': ultimaMain.activeTopbarItem === feedbackTopbarItem}"
+                    title="Feedback Tool"
+                    rte="15n">
+                    <a href="#" class="feedback-button" (click)="app.showFeedback(); ultimaMain.onTopbarItemClick($event, feedbackTopbarItem)" rte="15o">
+                        <feedbacks-launcher project-code="BC-BBWT3"
+                                            server-code="test"
+                                            attr.first-name="{{app.feedbackUserFirstName}}"
+                                            attr.last-name="{{app.feedbackUserLastName}}"
+                                            attr.email="{{app.feedbackUserEmail}}"
+                                            style="display: none;"
+                                            rte="15p">
+                        </feedbacks-launcher>
+                        <i class="topbar-icon pi pi-comment" rte="15q"></i>
+                        <span class="topbar-item-name" rte="15s">Feedback</span>
+                        <span *ngIf="app.feedbackService.counter" class="topbar-badge animated rubberBand" rte="15r">{{app.feedbackService.counter}}</span>
+                    </a>
+                </li>
+                <li *ngIf="app.runtimeEditorService.editorAllowedForUser" #rutimeEditorTopbarItem
+                    [ngClass]="{'active-top-menu': ultimaMain.activeTopbarItem === rutimeEditorTopbarItem}"
+                    title="Runtime Editor"
+                    rte="154">
+                    <a href="#" class="runtime-editor-button" (click)="onRuntimeEditorTopbarItemClick($event, rutimeEditorTopbarItem)" rte="155">
+                        <i class="topbar-icon material-icons" rte="156">center_focus_strong</i>
+                        <span *ngIf="app.runtimeEditorUi.isEditorLoading" class="topbar-badge animated rubberBand" rte="157">
+                            load...
+                        </span>
+                        <span *ngIf="app.runtimeEditorUi.isEditorOn" class="topbar-badge animated rubberBand" rte="158">
+                            {{app.runtimeEditorUi.newChangesCount}}/{{app.runtimeEditorUi.changesCount}}
+                        </span>
+                        <span class="topbar-item-name" rte="159">Runtime Editor</span>
+                    </a>
+
+                    <ul class="ultima-menu animated fadeInDown" rte="15a">
+                        <li role="menuitem" rte="15b">
+                            <a href="#" (click)="app.runtimeEditorSave(); ultimaMain.onTopbarSubItemClick($event)" rte="15c">
+                                <i class="material-icons" rte="15d">send</i>
+                                <span rte="15e">Submit to PM</span>
+                            </a>
+                        </li>
+                        <li role="menuitem" rte="15f">
+                            <a href="#" (click)="app.runtimeEditorClose(); ultimaMain.onTopbarSubItemClick($event)" rte="15g">
+                                <i class="material-icons" rte="15h">close</i>
+                                <span rte="15i">Close Editor</span>
+                            </a>
+                        </li>
+                        <li role="menuitem" rte="15j">
+                            <a href="#" (click)="app.runtimeEditorCancel(); ultimaMain.onTopbarSubItemClick($event)" rte="15k">
+                                <i class="material-icons" rte="15l">cancel</i>
+                                <span rte="15m">Cancel New Changes</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                       <li *ngIf="app.devToolsAvailable" #showDevToolsTopbarItem
+                    [ngClass]="{'active-top-menu': ultimaMain.activeTopbarItem === showDevToolsTopbarItem}"
+                    title="Development Tools"
+                    rte="15t">
+                    <a href="#" class="development-tools-button" (click)="app.showDevToolsDialog(); ultimaMain.onTopbarItemClick($event, showDevToolsTopbarItem)" rte="15u">
+                        <i class="topbar-icon material-icons" rte="15v">tune</i>
+                        <span class="topbar-item-name" rte="15w">Development Tools</span>
+                    </a>
+                </li>
+                <li *ngIf="ultimaMain.profileMode==='top' || ultimaMain.isHorizontal"
+                    #profileTopbarItem
+                    class="profile-item"
+                    [ngClass]="{'active-top-menu': ultimaMain.activeTopbarItem === profileTopbarItem}" rte="14N">
+                    <a href="#" (click)="ultimaMain.onTopbarItemClick($event, profileTopbarItem)" rte="14O">
+                        <img class="profile-image" [src]="app.avatarUrl" onerror="this.src='assets/images/noavatar.png';" rte="14P"/>
+                        <span class="topbar-item-name" rte="14Q">{{app.currentUserName}}</span>
+                    </a>
+
+                    <ul class="ultima-menu animated fadeInDown" rte="14R">
+                        <li role="menuitem" rte="14S">
+                            <a [routerLink]="['profile']" rte="14T">
+                                <i class="pi pi-user" rte="14U"></i>
+                                <span rte="14V">Profile</span>
+                            </a>
+                        </li>
+                        <li role="menuitem" rte="14W">
+                            <a href="#" (click)="app.logout(); ultimaMain.onTopbarSubItemClick($event)" rte="14X">
+                                <i class="pi pi-power-off" rte="14Y"></i>
+                                <span rte="14Z">Logout</span>
+                            </a>
+                        </li>
+                        <li role="menuitem" [hidden]="!app.isUserImpersonate" rte="150">
+                            <a href="#" (click)="app.stopImpersonation(); ultimaMain.onTopbarSubItemClick($event)" rte="151">
+                                <i class="pi pi-power-off" rte="152"></i>
+                                <span rte="153">End Impersonation</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

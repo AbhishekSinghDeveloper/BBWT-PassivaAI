@@ -1,0 +1,10 @@
+<p-overlayPanel #opJobDescription appendTo="body" [style]="{ 'max-width': '450px' }" rte="1jP">
+    <ng-template pTemplate>
+        <p rte="1jQ">{{ jobDescription }}</p>
+    </ng-template>
+</p-overlayPanel>
+
+<bb-tooltip *ngIf="jobDescription"
+            message="Click to see the job description"
+            (click)="opJobDescription.toggle($event)" rte="1jR">
+</bb-tooltip>

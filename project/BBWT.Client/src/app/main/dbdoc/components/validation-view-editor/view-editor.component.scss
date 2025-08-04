@@ -1,0 +1,17 @@
+:host ::ng-deep {
+    .panel-bold-header-text {
+        font-weight: bold;
+    }
+    .view-settings-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        .view-settings-header-buttons {
+            button {
+                margin-left: 5px;
+            }
+        }
+    }
+}

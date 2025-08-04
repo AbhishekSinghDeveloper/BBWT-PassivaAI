@@ -1,0 +1,274 @@
+<p-tabView rte="Zf">
+    <p-tabPanel header="Details" rte="10O">
+        <div class="inputs-group no-labels-padding" rte="1sr">
+            <div class="inputs-group-row" rte="1vn">
+                <label class="inputs-group-row-name" rte="1vo">Unique ID:</label>
+                <div class="inputs-group-row-value" rte="1vp">{{columnMetadata.columnId}}</div>
+            </div>
+            <div class="inputs-group-row no-label-padding" rte="1vq">
+                <label class="inputs-group-row-name" rte="1vr">Column name:</label>
+                <div class="inputs-group-row-value" rte="1vs">{{columnMetadata.staticData.columnName}}</div>
+            </div>
+            <div class="inputs-group-row" rte="1vw">
+                <label class="inputs-group-row-name" rte="1vx">Default value:</label>
+                <div class="inputs-group-row-value" rte="1vy">{{columnMetadata.staticData.defaultValueSql}}</div>
+            </div>
+            <div class="inputs-group-row" rte="104">
+                <label class="inputs-group-row-name" rte="106">Type:</label>
+                <div class="inputs-group-row-value" rte="107">{{columnMetadata.staticData.type}}</div>
+            </div>
+            <div class="inputs-group-row" rte="10a">
+                <label class="inputs-group-row-name" rte="10c">Primary key:</label>
+                <div class="inputs-group-row-value" rte="10d">{{columnMetadata.staticData.isPrimaryKey  ? "Yes" : "No" }}</div>
+            </div>
+            <div class="inputs-group-row" rte="10q">
+                <label class="inputs-group-row-name" rte="10s">Foreign key:</label>
+                <div class="inputs-group-row-value" rte="10t">{{columnMetadata.staticData.isForeignKey  ? "Yes" : "No" }}</div>
+            </div>
+            <div class="inputs-group-row" rte="10l">
+                <label class="inputs-group-row-name" rte="10n">Index:</label>
+                <div class="inputs-group-row-value" rte="10o">{{columnMetadata.staticData.isIndex ? "Yes" : "No" }}</div>
+            </div>
+            <div class="inputs-group-row" rte="10f">
+                <label class="inputs-group-row-name" rte="10h">Allow null:</label>
+                <div class="inputs-group-row-value" rte="10i">{{columnMetadata.staticData.allowNull ? "Yes" : "No" }}</div>
+            </div>
+            <div *ngIf="columnMetadata.staticData.isPrimaryKey || columnMetadata.staticData.isForeignKey" class="inputs-group-row" rte="10v">
+                <label class="inputs-group-row-name" rte="10x">References:</label>
+                <div class="referenced-tables-list inputs-group-row-value" rte="10y">
+                    <ng-container *ngFor="let reference of columnMetadata.staticData.tableReferences">
+                        <ng-container *ngIf="dbExplorerComponent.isTableMetadataExistsInFolder(columnMetadata.staticData.isPrimaryKey ? reference.sourceTableId : reference.targetTableId, containingFolder.id); else textRef">
+                            <a href="javascript:void(0);"
+                               class="table-reference"
+                               (click)="dbExplorerComponent.selectNodeByTableMetadataId(dbExplorerComponent.findTableMetadataInFolder(columnMetadata.staticData.isPrimaryKey ? reference.sourceTableId : reference.targetTableId, containingFolder.id).id)" rte="10A">
+                                {{columnMetadata.staticData.isPrimaryKey ? reference.sourceColumnId : reference.targetColumnId}}
+                            </a>
+                        </ng-container>
+                        <ng-template #textRef>
+                            <span class="table-reference" rte="1ss">{{columnMetadata.staticData.isPrimaryKey ? reference.sourceColumnId : reference.targetColumnId}}</span>
+                        </ng-template>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Metadata" rte="Zg">
+        <form #form="ngForm" class="inputs-group" (ngSubmit)="save()" rte="Zh">
+            <div class="inputs-group-row" rte="1f7">
+                <label class="inputs-group-row-name" rte="1f8">Description:</label>
+                <div class="inputs-group-row-value" rte="1f9">
+                    <input [(ngModel)]="columnMetadata.description"
+                           pInputText
+                           name="description"
+                           style="resize: none;"
+                           rte="1fa">
+                </div>
+            </div>
+            <ng-container *ngIf="!columnMetadata.staticData.isPrimaryKey && !columnMetadata.staticData.isForeignKey">
+                <div class="inputs-group-row" rte="1vz">
+                    <div class="inputs-group-row-name" rte="1vA">
+                        <label rte="1vB">Title:</label>
+                        <bb-tooltip message="Representation of table field for titles, headers, placeholders etc." rte="1vC"></bb-tooltip>
+                    </div>
+                    <div class="inputs-group-row-value" rte="1fg">
+                        <input [(ngModel)]="columnMetadata.title"
+                               pInputText
+                               name="title"
+                               rte="1fh">
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="1vD">
+                    <div class="inputs-group-row-name" rte="1vE">
+                        <label rte="1vF">Copy custom column type metadata:</label>
+                        <bb-tooltip message="If this option is enabled then metadata of the selected custom column type will be copied to the column metadata instead of inheritance." rte="1vG"></bb-tooltip>
+                    </div>
+                    <div class="inputs-group-row-value" rte="1vH">
+                        <p-inputSwitch [(ngModel)]="copyCustomColumnTypeEnabled" name="copyCustomColumnType" rte="1vI"></p-inputSwitch>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="1w1">
+                    <ng-container *ngIf="!copyCustomColumnTypeEnabled; else copyCustomColumnType">
+                        <label class="inputs-group-row-name" rte="1w2">Inherited column type:</label>
+                        <div class="inputs-group-row-value" rte="1w3">
+                            <p-dropdown [(ngModel)]="columnMetadata.columnTypeId"
+                                        [options]="columnTypeOptions"
+                                        [showClear]="true"
+                                        name="columnType"
+                                        placeholder="Select custom column type"
+                                        (ngModelChange)="setSelectedColumnType()"
+                                        rte="1vJ">
+                            </p-dropdown>
+                        </div>
+                    </ng-container>
+                    <ng-template #copyCustomColumnType>
+                        <label class="inputs-group-row-name" rte="1vK">Copying column type:</label>
+                        <div class="inputs-group-row-value copy-column-input-container" rte="1vL">
+                            <p-dropdown [(ngModel)]="copyingCustomColumnTypeId"
+                                        [options]="columnTypeOptions"
+                                        name="copyingColumnType"
+                                        placeholder="Select custom column type"
+                                        rte="1vM">
+                            </p-dropdown>
+                            <p-button type="button" [disabled]="!copyingCustomColumnTypeId" icon="pi pi-copy" class="p-button-icon" (onClick)="performCustomColumnTypeCopying()" rte="1vN"></p-button>
+                        </div>
+                    </ng-template>
+                </div>
+                <div *ngIf="!selectedColumnType" class="inputs-group-row" rte="10J">
+                    <label class="inputs-group-row-name" rte="10L">Anonymization rule:</label>
+                    <div class="inputs-group-row-value" rte="10M">
+                        <p-dropdown [(ngModel)]="columnMetadata.anonymizationRule"
+                                    [options]="anonymizationRuleOptions"
+                                    [showClear]="true"
+                                    name="anonymizationRule"
+                                    placeholder="Select"
+                                    [disabled]="columnMetadata.columnTypeId"
+                                    rte="10N">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </ng-container>
+            <div class="buttons-panel" rte="1st">
+                <button type="submit" pButton [disabled]="!!form.invalid" label="Save" rte="1su"></button>
+            </div>
+        </form>
+
+        <ng-container *ngIf="!columnMetadata.staticData.isPrimaryKey && !columnMetadata.staticData.isForeignKey && !selectedColumnType">
+            <p-accordion [multiple]="true" class="validation-view-metadata-editor" rte="1sv">
+                <p-accordionTab *ngIf="columnMetadata.validationMetadata" [selected]="true" rte="1sw">
+                    <p-header class="validation-metadata-header" rte="1sx">
+                        <span class="panel-bold-header-text" rte="1sy">Validation metadata</span>
+                        <p-button type="button"
+                                  icon="pi pi-trash"
+                                  label="Delete"
+                                  class="delete-validation-button"
+                                  (click)="startValidationMetadataDeleting(); $event.stopPropagation();" rte="1sz">
+                        </p-button>
+                    </p-header>
+                    <validation-editor *ngIf="columnMetadata.validationMetadata"
+                                       [columnValidationMetadata]="columnMetadata.validationMetadata"
+                                       [typeGroup]="columnMetadata.staticData.clrTypeGroup"
+                                       (change)="updateValidationMetadata()" rte="1sA">
+                    </validation-editor>
+                </p-accordionTab>
+                <p-accordionTab *ngIf="columnMetadata.viewMetadata" [selected]="true" rte="1sB">
+                    <p-header class="view-metadata-header" rte="1sC">
+                        <span class="panel-bold-header-text" rte="1sD">View metadata</span>
+                        <p-button type="button"
+                                  icon="pi pi-trash"
+                                  label="Delete"
+                                  class="delete-validation-button"
+                                  (click)="startViewMetadataDeleting(); $event.stopPropagation();" rte="1sE">
+                        </p-button>
+                    </p-header>
+                    <view-editor *ngIf="columnMetadata.viewMetadata"
+                                 [columnViewMetadata]="columnMetadata.viewMetadata"
+                                 (change)="updateViewMetadata()" rte="1sF">
+                    </view-editor>
+                </p-accordionTab>
+            </p-accordion>
+
+            <button *ngIf="!columnMetadata.validationMetadata"
+                    pButton
+                    type="button"
+                    label="Add validation metadata"
+                    class="validation-metadata-add-button"
+                    (click)="addValidationMetadata()" rte="1sG">
+            </button>
+            <button *ngIf="!columnMetadata.viewMetadata"
+                    pButton
+                    type="button"
+                    label="Add view metadata"
+                    class="view-metadata-add-button"
+                    (click)="addViewMetadata()" rte="1sH">
+            </button>
+        </ng-container>
+        <p-fieldset *ngIf="selectedColumnType" legend="Inherited metadata" class="inherited-metadata" rte="1sI">
+            <div class="inputs-group no-labels-padding" rte="1sJ">
+                <div class="inputs-group-row" rte="1sK">
+                    <label class="inputs-group-row-name" rte="1sL">Inherited column type:</label>
+                    <a [routerLink]="['..', 'column-types', 'edit', selectedColumnType.id]" class="inputs-group-row-value" rte="1sM">{{selectedColumnType.name}}</a>
+                </div>
+            </div>
+            <div class="inputs-group no-labels-padding" rte="1sN">
+                <div class="inputs-group-row" rte="1sO">
+                    <label class="inputs-group-row-name" rte="1sP">Anonymization rule:</label>
+                    <div class="inputs-group-row-value" rte="1sQ">{{selectedColumnType.anonymizationRule}}</div>
+                </div>
+            </div>
+            <div *ngIf="selectedColumnType.validationMetadata" class="inherited-validation-metadata" rte="1sR">
+                <h5 rte="1sS">Validation metadata</h5>
+                <p-panel *ngFor="let inheritedRule of selectedColumnType.validationMetadata.rules" class="inherited-validation-rule" rte="1sT">
+                    <p-header rte="1sU">
+                        <span [ngSwitch]="inheritedRule.$type" class="panel-bold-header-text" rte="1sV">
+                            <ng-container *ngSwitchCase="'required'">Required</ng-container>
+                            <ng-container *ngSwitchCase="'input_format'">Input format</ng-container>
+                            <ng-container *ngSwitchCase="'max_length'">Max length</ng-container>
+                            <ng-container *ngSwitchCase="'number_range'">Number range</ng-container>
+                            <ng-container *ngSwitchCase="'date_range'">Date range</ng-container>
+                        </span>
+                    </p-header>
+                    <div class="inputs-group no-labels-padding" rte="1sW">
+                        <div class="inputs-group-row" rte="1sX">
+                            <label class="inputs-group-row-name" rte="1sY">Error message:</label>
+                            <div class="inputs-group-row-value" rte="1sZ">{{inheritedRule['errorMessage']}}</div>
+                        </div>
+                        <div *ngIf="inheritedRule.$type === 'max_length'" class="inputs-group-row" rte="1t0">
+                            <label class="inputs-group-row-name" rte="1t1">Max length:</label>
+                            <div class="inputs-group-row-value" rte="1t2">{{inheritedRule['maxLength']}}</div>
+                        </div>
+                        <ng-container *ngIf="inheritedRule.$type === 'input_format'">
+                            <div class="inputs-group-row" rte="1t3">
+                                <label class="inputs-group-row-name" rte="1t4">Format type:</label>
+                                <div class="inputs-group-row-value" rte="1t5">{{inheritedRule['type']}}</div>
+                            </div>
+                            <div class="inputs-group-row" rte="1t6">
+                                <label class="inputs-group-row-name" rte="1t7">Regex:</label>
+                                <div class="inputs-group-row-value" rte="1t8">{{inheritedRule['format']}}</div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="inheritedRule.$type === 'number_range'">
+                            <div class="inputs-group-row" rte="1t9">
+                                <label class="inputs-group-row-name" rte="1ta">Min:</label>
+                                <div class="inputs-group-row-value" rte="1tb">{{inheritedRule['min']}}</div>
+                            </div>
+                            <div class="inputs-group-row" rte="1tc">
+                                <label class="inputs-group-row-name" rte="1td">Max:</label>
+                                <div class="inputs-group-row-value" rte="1te">{{inheritedRule['max']}}</div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="inheritedRule.$type === 'date_range'">
+                            <div class="inputs-group-row" rte="1tf">
+                                <label class="inputs-group-row-name" rte="1tg">Min:</label>
+                                <div class="inputs-group-row-value" rte="1th">{{inheritedRule['min'] | date:"dd/MM/yyyy"}}</div>
+                            </div>
+                            <div class="inputs-group-row" rte="1ti">
+                                <label class="inputs-group-row-name" rte="1tj">Max:</label>
+                                <div class="inputs-group-row-value" rte="1tk">{{inheritedRule['max'] | date:"dd/MM/yyyy"}}</div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </p-panel>
+            </div>
+            <div *ngIf="selectedColumnType.viewMetadata" class="inherited-view-metadata" rte="1tl">
+                <h5 rte="1tm">View metadata</h5>
+                <p-panel *ngIf="!!selectedColumnType.viewMetadata.gridColumnView" class="inherited-view-settings" rte="1tn">
+                    <p-header rte="1to"><span class="panel-bold-header-text" rte="1tp">Grid column view</span></p-header>
+                    <div class="inputs-group no-labels-padding" rte="1tq">
+                        <div class="inputs-group-row" rte="1tr">
+                            <label class="inputs-group-row-name" rte="1ts">Min width (px):</label>
+                            <div class="inputs-group-row-value" rte="1tt">{{selectedColumnType.viewMetadata.gridColumnView.minWidth}}</div>
+                        </div>
+                        <div class="inputs-group-row" rte="1tu">
+                            <label class="inputs-group-row-name" rte="1tv">Max width (px):</label>
+                            <div class="inputs-group-row-value" rte="1tw">{{selectedColumnType.viewMetadata.gridColumnView.maxWidth}}</div>
+                        </div>
+                        <div class="inputs-group-row" rte="1tx">
+                            <label class="inputs-group-row-name" rte="1ty">Mask:</label>
+                            <div class="inputs-group-row-value" rte="1tz">{{selectedColumnType.viewMetadata.gridColumnView.mask}}</div>
+                        </div>
+                    </div>
+                </p-panel>
+            </div>
+        </p-fieldset>
+    </p-tabPanel>
+</p-tabView>

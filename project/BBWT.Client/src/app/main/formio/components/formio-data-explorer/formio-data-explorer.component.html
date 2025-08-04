@@ -1,0 +1,17 @@
+<div class="card main-container">
+    <h1>Form Data Explorer</h1>
+    <filter #gridFilter [settings]="filterSettings"></filter>
+    <bbwt-data-explorer-custom-grid #definitionGrid [tableSettings]="tableSettingsFormioViewer" [filter]="gridFilter"
+        [gridSettings]="formioViewerGridSettings" >
+        <ng-template pTemplate="rowexpansion" let-row>
+            <tr>
+                <td colspan="7">
+                    <div class="p-3">
+                        <bbwt-form-tree-view [json] ="row.json"></bbwt-form-tree-view>         
+                        <bbwt-formio-data-grid style="max-width: 100%;" [json] = "row.json" [formId] ="row.id_original"></bbwt-formio-data-grid>              
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </bbwt-data-explorer-custom-grid>   
+</div>

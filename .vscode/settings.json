@@ -1,0 +1,33 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/.node_modules": true,
+    "**/.wwwroot/dist": true,
+    "**/node_modules": true,
+    "**/wwwroot/dist": true,
+    "**/logs": true,
+    "**/*.js.map": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "**/*.css": {
+      "when": "$(basename).less"
+    },
+    "**/obj": true,
+    "**/bin": true,
+    "**/project.lock.json": true,
+    "**/wwwroot": true
+  },
+  "npm.useRootDirectory": false,
+  "npm.includeDirectories": [
+    "src/BBWT.Web/"
+  ],
+  "npm.runInTerminal": false,
+  "typescript.preferences.quoteStyle": "double",
+  "javascript.preferences.quoteStyle": "double",
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": false
+}

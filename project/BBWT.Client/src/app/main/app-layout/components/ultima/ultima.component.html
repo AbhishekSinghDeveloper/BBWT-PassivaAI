@@ -1,0 +1,35 @@
+<div class="layout-wrapper" (click)="onLayoutClick()" rte="145">
+    <div class="layout-container"
+         [ngClass]="{
+            'menu-layout-static': !isOverlay,
+            'menu-layout-overlay': isOverlay,
+            'layout-menu-overlay-active': overlayMenuActive,
+            'menu-layout-horizontal': isHorizontal,
+            'menu-layout-slim': isSlim,
+            'layout-menu-static-inactive': staticMenuDesktopInactive,
+            'layout-menu-static-active': staticMenuMobileActive,
+            'p-ripple-disabled': !ripple,
+            'p-input-filled': inputStyle === 'filled'}" rte="146">
+        <ultima-topbar rte-hidden rte="147"></ultima-topbar>
+
+        <div class="layout-menu" [ngClass]="{'layout-menu-dark':darkMenu}" (click)="onMenuClick($event)" rte-hidden rte="148">
+            <p-scrollPanel #layoutMenuScroller [style]="{height: '100%'}" rte="149">
+                <ultima-inline-profile *ngIf="profileMode === 'inline' && !isHorizontal" rte="14a"></ultima-inline-profile>
+                <ultima-menu rte="14b"></ultima-menu>
+            </p-scrollPanel>
+        </div>
+
+        <div class="layout-main" rte="14c">
+            <div class="layout-content" rte="14d">
+                <maintenance-banner rte="14e"></maintenance-banner>
+
+                <router-outlet></router-outlet>
+            </div><bb-tooltip message="Hello Chris" rte="1xu"></bb-tooltip>
+
+        </div>
+
+        <ultima-footer rte-hidden rte="14g"></ultima-footer>
+
+        <div class="layout-mask" rte="14h"></div>
+    </div>
+</div>

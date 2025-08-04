@@ -1,0 +1,135 @@
+<h1 rte="4X">Registration</h1>
+
+<ng-container [ngSwitch]="status">
+    <ng-container *ngSwitchCase="accountRegistrationStatusEnum.OperationCompleted">
+        <span class="page-sub-header" rte="1om">Registration Complete</span>
+        <p rte="51">Please <a routerLink="/app/login" rte="52">login</a></p>
+    </ng-container>
+    <ng-container *ngSwitchCase="accountRegistrationStatusEnum.ConfirmationSent">
+        <span class="page-sub-header" rte="1on">Registration Complete</span>
+        <p rte="1oo">You will receive a confirmation email to complete registration.</p>
+        <p rte="1op">Back to the <a routerLink="/account/login" rte="1oq">Login</a> page.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="accountRegistrationStatusEnum.ApprovalRequired">
+        <span class="page-sub-header" rte="1or">Registration Complete</span>
+        <p rte="1os">You will receive a confirmation email once your application has been approved.</p>
+        <p rte="1ot">Back to the <a routerLink="/account/login" rte="1ou">Login</a> page.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="accountRegistrationStatusEnum.FormReady">
+        <span class="page-sub-header" rte="54">{{welcomeMessage}}</span>
+        <form *ngSwitchCase="accountRegistrationStatusEnum.FormReady"
+              #form="ngForm"
+              [antiAutoComplete]="antiAutocomplete"
+              class="inputs-group top-placed-labels"
+              (ngSubmit)="onSubmit()" rte="58">
+            <div class="inputs-group-row" rte="59">
+                <span class="p-float-label inputs-group-row-value" rte="5a">
+                    <input #email="ngModel"
+                           pInputText
+                           [(ngModel)]="user.email"
+                           id="email"
+                           name="email"
+                           type="email"
+                           autocomplete="off"
+                           [pattern]="validationPatterns.email"
+                           emailMaxLength
+                           required  rte="5b"/>
+                    <label for="email" class="asterisk-mark" rte="5c">Email</label>
+                </span>
+            </div>
+            <div class="inputs-group-row" rte="5d">
+                <span class="p-float-label inputs-group-row-value" rte="5e">
+                    <input [(ngModel)]="user.firstname"
+                           id="firstname"
+                           name="firstname"
+                           pInputText
+                           #firstname="ngModel"
+                           autocomplete="off"
+                           required
+                           [pattern]="validationPatterns.notEmpty" 
+                           maxlength="35" rte="5f"/>
+                    <label for="firstname" class="asterisk-mark" rte="5g">First name</label>
+                </span>
+            </div>
+            <div class="inputs-group-row" rte="5h">
+                <span class="p-float-label inputs-group-row-value" rte="5i">
+                    <input [(ngModel)]="user.lastname"
+                           id="lastname"
+                           name="lastname"
+                           pInputText
+                           #lastname="ngModel"
+                           autocomplete="off"
+                           required
+                           [pattern]="validationPatterns.notEmpty" 
+                           maxlength="35" rte="5j"/>
+                    <label for="lastname" class="asterisk-mark" rte="5k">Last name</label>
+                </span>
+            </div>
+            <div class="inputs-group-row" rte="5l">
+                <span class="p-float-label inputs-group-row-value" rte="5m">
+                    <input #password="ngModel"
+                           pPassword
+                           showPassword
+                           noSideWhitespaces
+                           [(ngModel)]="user.password"
+                           [feedback]="false"
+                           id="password"
+                           name="password"
+                           autocomplete="new-password"
+                           required
+                           strongPassword
+                           [maxLength]='200'
+                           [validCharactersSettings]="passwordValidationSettings"  rte="5n"/>
+                    <label for="password" class="asterisk-mark" rte="5o">Password</label>
+                    <password-score *ngIf="password.dirty" [password]="password.value" rte="18i"></password-score>
+                    <span *ngIf="password.control.hasError('side-whitespaces')" class="validation-error" rte="18j">Your passwords can't start or end with a blank space</span>
+                </span>
+                <password-feedback *ngIf="password.dirty" [feedback]="password.errors?.strongPassword" [validCharactersSettings]="passwordValidationSettings" rte="5r"></password-feedback>
+            </div>
+            <div class="inputs-group-row" rte="5s">
+                <span class="p-float-label inputs-group-row-value" rte="5t">
+                    <input #confirmPassword
+                           pPassword
+                           showPassword
+                           noWhitespaces
+                           id="confirmPassword"
+                           name="confirmPassword"
+                           autocomplete="new-password"
+                           required
+                           [match]="user.password"
+                           [feedback]="false"
+                           rte="5u"/>
+                    <label for="confirmPassword" class="asterisk-mark" rte="5v">Confirm password</label>
+                </span>
+                <password-match [confirmPassword]="confirmPassword.value" [password]="user.password" rte="5w"></password-match>
+            </div>
+
+            <div class="buttons-panel buttons-panel-center-alignment" rte="5x">
+                <div *ngIf="emailAsPassword" class="validation-error" rte="5y">You can't use the email as password</div>
+
+                <button pButton type="button" label="Cancel" class="p-button-secondary" routerLink="/account/login" rte="5z"></button>
+                <button pButton type="submit" label="Continue" [disabled]="form.invalid || confirmPassword.value !== user.password || emailAsPassword" rte="5A"></button>
+            </div>
+        </form>
+    </ng-container>
+</ng-container>
+
+
+<p-dialog [(visible)]="showPwnedWarning"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Warning"
+          [modal]="true"
+          [draggable]="false"
+          rte="5B">
+    <p rte="5C">
+        This password has been seen <b rte="5D">{{breaches}}</b> times before.<br />
+        This password has previously appeared in a data breach and should never be used.
+        Data source:&nbsp;<a href="https://haveibeenpwned.com/" rel="noopener noreferrer" target="_blank" rte="5E">Have I Been Pwned</a>
+    </p>
+
+    <p-footer rte="5F">
+        <button pButton type="button" label="Close" (click)="showPwnedWarning = false" rte="5G">
+            <i class="material-icons" rte="5H">clear</i>
+        </button>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,108 @@
+:host ::ng-deep {
+    .hoverable:hover {
+        cursor: pointer;
+        background-color: rgba(204, 204, 204, 0.4);
+    }
+
+    .login-reasons-container {
+        margin: 0 auto 20px;
+        width: 100%;
+        max-width: 400px;
+
+        p-message {
+            width: 100%;
+
+            .p-inline-message {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: .5rem;
+
+                .p-inline-message-icon {
+                    margin-right: 5px;
+                    font-size: 1.75em;
+                    height: 24px;
+
+                    &:before {
+                        font-family: "Material Icons";
+                        content: "error_outline";
+                    }
+                }
+                .p-inline-message-text {
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+
+    .captcha-container {
+        visibility: hidden;
+    }
+
+    .another-two-step-login-link {
+        cursor: pointer;
+    }
+
+    .two-step-login-panel {
+        display: flex;
+        align-items: center;
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            margin: 0 20px 0 0;
+        }
+
+        p {
+            word-break: normal;
+            overflow-wrap: break-word;
+        }
+    }
+
+    .additional-login-options-container {
+        margin-top: 30px;
+
+        .label-separator {
+            display: block;
+            margin: 15px 0;
+        }
+        .additional-login-option {
+            display: block;
+            margin-top: 5px;
+
+            &.sign-in-button {
+                background-repeat: no-repeat;
+                background-size: contain;
+                padding-left: 30px;
+
+                &.google {
+                    background-image: url(../../../assets/images/sso_providers/google.png);
+                }
+
+                &.facebook {
+                    background-image: url(../../../assets/images/sso_providers/facebook.png);
+                }
+
+                &.linkedin {
+                    background-image: url(../../../assets/images/sso_providers/linkedin.png);
+                }
+            }
+        }
+    }
+
+    .login-lock-message {
+        font-weight: bold;
+    }
+    
+    .login-lock-message-container {
+        margin-bottom: 25px;
+    }
+
+    .recaptcha-terms-message {
+        margin-top: 10px;
+        display: block;
+        font-size: 12px;
+        color: #A0A0A0;
+    }
+}

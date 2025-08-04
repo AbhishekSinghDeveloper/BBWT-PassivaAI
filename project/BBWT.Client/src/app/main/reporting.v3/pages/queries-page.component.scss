@@ -1,0 +1,52 @@
+﻿:host::ng-deep {
+    .query-preview-dialog.p-dialog {
+        height: 80%;
+        max-width: 80%;
+
+        query-preview > .query-preview {
+            height: 100% !important;
+        }
+    }
+
+    .query-builder-dialog.p-dialog {
+        width: 80%;
+        height: 80%;
+        min-height: 400px;
+
+        query-builder > .query-builder {
+            height: 100% !important;
+        }
+    }
+
+    .administration-dialog.p-dialog {
+        width: 100%;
+        max-width: 450px;
+
+        .p-dialog-content {
+            padding-bottom: 3px;
+
+            .inputs-group-row {
+
+                .inputs-group-row-name {
+                    width: 100px;
+                }
+
+                .inputs-group-row-name + .inputs-group-row-value {
+                    width: calc(100% - 100px);
+                }
+            }
+        }
+
+        .p-dialog-footer {
+            padding-top: 3px;
+        }
+    }
+
+    .p-datatable-table td {
+        background: #FFFFFF !important;
+    }
+
+    .actions-column-cell {
+        width: 350px !important;
+    }
+}

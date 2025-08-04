@@ -1,0 +1,13 @@
+<div class="card main-container">
+    <h1>Form Instances Explorer</h1>
+    <div class="mt-4">
+        <filter #gridFilter [settings]="filterSettings"></filter>
+        <grid #dataGrid
+              [tableSettings]="tableSettingsFormioDataViewer"
+              [gridSettings]="formioViewerDataGridSettings"
+              [filter]="gridFilter"
+              [(selection)]="selectedFormData"
+              (delete)="onGridDeleteHandler()">
+        </grid>
+    </div>
+</div>

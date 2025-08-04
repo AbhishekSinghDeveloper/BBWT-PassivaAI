@@ -1,0 +1,9 @@
+<div class="card main-container">
+    <h1>Form Instances</h1>
+    <div class="mt-4">
+        <h2 *ngIf="formDef">Data instances of {{formDef.name}}</h2>
+        <filter #gridFilter [settings]="filterSettings"></filter>
+        <grid #dataGrid [tableSettings]="tableSettingsFormioDataViewer" [gridSettings]="formioViewerDataGridSettings" [filter]="gridFilter">
+        </grid>
+    </div>
+</div>

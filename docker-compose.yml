@@ -1,0 +1,40 @@
+services:
+  app:
+    image: gitlab-registry.bbconsult.co.uk/blueberry/bbwt3-cicd/bbwt3-dev-backend:net70-1.0.1
+    container_name: bbwt3-app
+    hostname: bbwt3-app
+    depends_on:
+    - db
+    - ui
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ASPNETCORE_Kestrel__Endpoints__HttpsDefaultCert__Url: http://0.0.0.0:5000
+      ASPNETCORE_Kestrel__Endpoints__HttpsDefaultCert__Protocols: Http1AndHttp2
+    ports:
+    - 5000:5000
+    volumes:
+      - .:/app
+    working_dir: /app/project/BBWT.Server
+    command: dotnet run --property:ArtifactsPath=.docker_artifacts -c Debug
+    restart: unless-stopped
+  db:
+    image: mysql:8
+    command: ["mysqld", "--mysql-native-password=ON"]
+    container_name: bbwt3-db
+    hostname: bbwt3-db
+    ports:
+    - 5001:3306
+    restart: unless-stopped
+  ui:
+    image: gitlab-registry.bbconsult.co.uk/blueberry/bbwt3-cicd/bbwt3-dev-frontend:ui-1.0.1
+    container_name: bbwt3-ui
+    hostname: bbwt3-ui
+    command: >
+        sh -c "npm ci &&
+               npm run docker"
+    volumes:
+      - ./project/BBWT.Client:/app
+    working_dir: /app
+    restart: unless-stopped
+  

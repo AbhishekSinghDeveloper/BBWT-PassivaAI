@@ -1,0 +1,55 @@
+<div class="card--hidden" rte="Ft">
+    <h1 rte="Fu">Links</h1>
+
+    <p rte="Fv">You may want to have links in a form.</p>
+
+    <div id="links" class="p-g" rte="Fw">
+        <div class="fixed-label" rte="Fx">
+            <label rte="Fy">Label</label>
+        </div>
+        <div class="p-g-12 p-md-4" rte="Fz">
+            <a routerLink="/app/demo/guidelines/links" rte="FA">A link</a>
+        </div>
+    </div>
+
+    <pre class="codeHighlight" rte="FB">
+                &lt;div class=&quot;p-g&quot;&gt;
+                    &lt;div class=&quot;fixed-label&quot;&gt;
+                        &lt;label&gt;Label&lt;/label&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+                        &lt;a href=&quot;app/demo/guidelines/links&quot;&gt;A link&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="FC">
+        Anchor links (href="#foo") must include the full path even when linking
+        within the page. Example:
+    </p>
+    <p rte="FD">
+        <a
+            [routerLink]="['/app/demo/guidelines/links']"
+            fragment="links"
+            (click)="onAnchorClick()"
+            rte="FE"
+            >In page anchor link</a
+        >
+        <br />
+        <a
+            [routerLink]="['/app/demo/guidelines/inputs']"
+            fragment="Radiobutton"
+            (click)="onAnchorClick()"
+            rte="FF"
+            >Radiobutton section on labels and inputs page</a
+        >
+    </p>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="FG">
+                &lt;a [routerLink]=&quot;['/app/demo/guidelines/links']&quot; (click)=&quot;onAnchorClick()&quot;&gt;Links section&lt;/a&gt;
+                &lt;br/&gt;
+                &lt;a [routerLink]=&quot;['/app/demo/guidelines/inputs']&quot; (click)=&quot;onAnchorClick()&quot;&gt;Radiobutton section on labels and inputs page&lt;/a&gt;
+            </pre
+    >
+</div>

@@ -1,0 +1,130 @@
+<h2 rte="aV">Personal Information</h2>
+
+<form *ngIf="user" #form="ngForm" autocomplete="off" class="inputs-group" (ngSubmit)="save()" rte="aW">
+    <div class="inputs-group-row" rte="aX">
+        <label for="email" class="inputs-group-row-name asterisk-mark" rte="aY">Email address:</label>
+        <div class="inputs-group-row-value" rte="aZ">
+            <input [(ngModel)]="user.email" pInputText id="email" name="email" required
+                [pattern]="validationPatterns.email" rte="b0" />
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="b1">
+        <label for="phoneNumber" class="inputs-group-row-name" rte="b2">Telephone number:</label>
+        <div class="inputs-group-row-value" rte="b3">
+            <input [(ngModel)]="user.phoneNumber" pInputText id="phoneNumber" name="phoneNumber"
+                [pattern]="validationPatterns.phone" maxlength="20" rte="b4" />
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="b5">
+        <label for="firstName" class="inputs-group-row-name asterisk-mark" rte="b6">First name:</label>
+        <div class="inputs-group-row-value" rte="b7">
+            <input [(ngModel)]="user.firstName" pInputText id="firstName" name="firstName" required
+                [pattern]="validationPatterns.notEmpty" maxlength="100" rte="b8" />
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="b9">
+        <label for="lastName" class="inputs-group-row-name asterisk-mark" rte="ba">Last name:</label>
+        <div class="inputs-group-row-value" rte="bb">
+            <input [(ngModel)]="user.lastName" pInputText id="lastName" name="lastName" required
+                [pattern]="validationPatterns.notEmpty" maxlength="100" rte="bc" />
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="bd">
+        <label class="inputs-group-row-name" rte="be">Picture:</label>
+        <div class="inputs-group-row-value" rte="bf">
+            <p-radioButton [(ngModel)]="user.pictureMode" label="No picture" name="Avatar"
+                [value]="_pictureModeEnum.Empty" class="inputs-group-row-value-item" rte="bg">
+            </p-radioButton>
+            <p-radioButton [(ngModel)]="user.pictureMode" label="Use uploaded picture" name="Avatar"
+                [value]="_pictureModeEnum.Upload" class="inputs-group-row-value-item" rte="bh">
+            </p-radioButton>
+            <p-radioButton [(ngModel)]="user.pictureMode" label="Use picture from gravatar.com" name="Avatar"
+                [value]="_pictureModeEnum.Gravatar" class="inputs-group-row-value-item" rte="bi">
+            </p-radioButton>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="bd">
+        <label class="inputs-group-row-name" rte="be">Signature:</label>
+        <div class="inputs-group-row-value" rte="bf">
+            <div class="inputs-group-row" rte="bP">
+                <bb-user-signature class="signature"></bb-user-signature>
+            </div>
+        </div>
+    </div>
+    <div [ngSwitch]="user.pictureMode" class="inputs-group-row" rte="bj">
+        <ng-container *ngSwitchCase="_pictureModeEnum.Upload">
+            <label for="avatarImageUploader" class="inputs-group-row-name" rte="bl"></label>
+            <div class="inputs-group-row-value inputs-group-row-value-uploader" rte="bm">
+                <div class="margin-bottom-10" rte="bn">
+                    <p-fileUpload #avatarImageUploader id="avatarImageUploader" name="avatarImageFiles[]" mode="basic"
+                        accept=".png,.gif,.jpg,.jpeg" [auto]="true" (uploadHandler)="avatarImageUploading($event)"
+                        (onError)="onAvatarImageUploadingError($event)" [customUpload]="true" rte="bo">
+                    </p-fileUpload>
+                    <div *ngIf="user.avatarImage" class="logo-preview-image-container" rte="bp">
+                        <img [src]="user.avatarImage.url" class="logo-preview-image" rte="bq">
+                        <p-button icon="pi pi-trash" (onClick)="clearAvatarImage()" rte="br"></p-button>
+                    </div>
+                </div>
+                <div class="uploading-file-requirements" rte="bs">
+                    This graphic must be supplied in PNG, GIF or JPEG formats. File size must not exceed 300Kb.
+                    Recommended proportions are 1x1.
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="_pictureModeEnum.Gravatar">
+            <label for="email" class="inputs-group-row-name" rte="bu"></label>
+            <div class="inputs-group-row-value" rte="bv">
+                <div class="inputs-group-row" rte="bw">
+                    <label for="gravatar" class="inputs-group-row-name" rte="bx">Use my email:</label>
+                    <div class="inputs-group-row-value" rte="by">
+                        <p-checkbox [binary]="true" name="useDefaultEmail" (onChange)="switchUsingDefaultEmail($event)"
+                            rte="bz"></p-checkbox>
+                    </div>
+                </div>
+                <div *ngIf="!useDefaultEmail" class="inputs-group-row" rte="bA">
+                    <label for="email" class="inputs-group-row-name" rte="bB">Use another email:</label>
+                    <div class="inputs-group-row-value" rte="bC">
+                        <input pInputText id="gravatar" name="gravatar" [(ngModel)]="user.gravatarEmail"
+                            [pattern]="validationPatterns.email" maxlength="100" rte="bD" />
+                    </div>
+                </div>
+                <div *ngIf="user.gravatarImage" class="inputs-group-row" rte="bE">
+                    <img [src]="user.gravatarImage" rte="bF" />
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <ng-container *ngIf="realUser && user.isSystemTester">
+        <div class="inputs-group-row" rte="bL">
+            <label for="realFirstName" class="inputs-group-row-name" rte="bM">Real first name:</label>
+            <div class="inputs-group-row-value" rte="bN">
+                <input pInputText id="realFirstName" name="realFirstName" [(ngModel)]="realUser.firstName" required
+                    maxlength="100" rte="bO" />
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="bH">
+            <label for="realLastName" class="inputs-group-row-name" rte="bI">Real last name:</label>
+            <div class="inputs-group-row-value" rte="bJ">
+                <input pInputText id="realLastName" name="realLastName" [(ngModel)]="realUser.lastName" required
+                    maxlength="100" rte="bK" />
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="bP">
+            <label for="realEmail" class="inputs-group-row-name" rte="bQ">Real email:</label>
+            <div class="inputs-group-row-value" rte="bR">
+                <input pInputText id="realEmail" name="realEmail" email [(ngModel)]="realUser.email" required
+                    maxlength="100" rte="bS" />
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="buttons-panel buttons-panel-left-alignment" rte="bT">
+        <button *ngIf="user.accountStatus === _accountStatusEnum.Active" pButton type="button" label="Password reset"
+            (click)="sendPasswordResetMail()" [disabled]="user.ssoProvider" rte="bU">
+        </button>
+    </div>
+
+    <div class="buttons-panel" rte="bV">
+        <button type="submit" pButton label="Save" [disabled]="!form.valid" rte="bW"></button>
+    </div>
+</form>

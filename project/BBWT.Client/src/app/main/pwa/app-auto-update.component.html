@@ -1,0 +1,18 @@
+<p-sidebar [(visible)]="isUpdateAvailable"
+           appendTo="body"
+           position="top"
+           [modal]="false"
+           [baseZIndex]="200"
+           styleClass="pwa-sidebar" rte="gM">
+    <div class="pwa-banner-content" rte="gN">
+        <p class="pwa-text" rte="gO">
+            New version of the app is available. Please save your changes and reload the page, otherwise the application will be reloaded automatically in {{ autoUpdateReloadSeconds }} seconds
+        </p>
+        <button pButton
+                type="button"
+                icon="pi pi-refresh"
+                label="Reload the app"
+                (click)="onAppReload()" rte="gP">
+        </button>
+    </div>
+</p-sidebar>

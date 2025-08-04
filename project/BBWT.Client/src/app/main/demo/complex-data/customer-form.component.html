@@ -1,0 +1,33 @@
+<div class="inputs-group" rte="1q2">
+    <div class="inputs-group-row" rte="1q3">
+        <label class="inputs-group-row-name" rte="1q4"> Code: </label>
+        <div class="inputs-group-row-value" rte="1q5">
+            <input
+                type="text"
+                pInputText
+                [formControl]="code"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(code) }"
+                (blur)="onTouched()"
+             rte="1q6"/>
+            <div class="p-error" *ngIf="invalid(code)" rte="1q7">
+                <small *ngIf="code.errors.required" rte="1q8">Code is required.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="inputs-group-row" rte="1q9">
+        <label class="inputs-group-row-name" rte="1qa">Company Name:</label>
+        <div class="inputs-group-row-value" rte="1qb">
+            <input
+                type="text"
+                pInputText
+                [formControl]="companyName"
+                [ngClass]="{ 'ng-invalid ng-dirty': invalid(companyName) }"
+                (blur)="onTouched()"
+             rte="1qc"/>
+            <div class="p-error" *ngIf="invalid(companyName)" rte="1qd">
+                <small *ngIf="companyName.errors.required" rte="1qe">Company name is required.</small>
+            </div>
+        </div>
+    </div>
+</div>

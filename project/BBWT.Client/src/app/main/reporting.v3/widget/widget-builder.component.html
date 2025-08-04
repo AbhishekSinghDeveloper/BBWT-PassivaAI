@@ -1,0 +1,225 @@
+<div class="widget-builder-container" *ngIf="!!widgetSource">
+    <ng-template #widgetBuilder>
+        <form #widgetSourceForm="ngForm" class="reporting-form">
+            <div class="tab-content-top-padding tab-content-sides-padding reporting-form-body darker-panel">
+                <div class="form-section" *ngIf="!standalone">
+                    <div class="widget-source-options card">
+                        <div class="widget-source-settings" *ngIf="!!widgetSourceId">
+                            <i class="material-icons fill">extension</i>
+                            <label *ngIf="!!widgetSource.name?.length">
+                                You are using widget <b>{{ widgetSource.name }}</b>
+                            </label>
+                            <label *ngIf="!widgetSource.name?.length">
+                                You are using a <b>local widget</b>
+                            </label>
+                        </div>
+
+                        <div class="widget-source-settings" *ngIf="!widgetSourceId">
+                            <i class="material-icons fill">extension</i>
+                            <label>You are creating a new local widget.</label>
+                        </div>
+
+                        <label class="widget-source-label" (click)="changeWidgetEditionMode()">
+                            {{ !widgetSource.name?.length ? "Create named widget" : "Detach widget" }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-section" *ngIf="!!standalone">
+                    <span class="form-section-name">Name</span>
+                    <div class="form-section-input-group">
+                        <label class="form-input-label">Widget name:</label>
+                        <div class="form-input-control-wrapper">
+                            <input pInputText name="widgetName"
+                                   class="form-input-control"
+                                   [(ngModel)]="widgetSource.name"
+                                   [disabled]="disabled"
+                                   [maxLength]="500"
+                                   required notEmpty/>
+                            <div class="p-error">
+                                <small *ngIf="!widgetSource.name">Name is required.</small>
+                            </div>
+                            <div class="p-error">
+                                <small *ngIf="widgetSource.name?.length === 500">
+                                    Maximum length of 500 characters reached.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <span class="form-section-name">Title</span>
+                    <div class="form-section-input-group">
+                        <label class="form-input-label">Widget title:</label>
+                        <div class="form-input-control-wrapper">
+                            <input pInputText name="widgetTitle"
+                                   class="form-input-control"
+                                   [(ngModel)]="widgetSource.title"
+                                   [disabled]="disabled"
+                                   [maxLength]="500"
+                                   (focus)="onWidgetTitleFocus()"/>
+                            <div class="p-error">
+                                <small *ngIf="widgetSource.title?.length === 500">
+                                    Maximum length of 500 characters reached.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <span class="form-section-name">Visibility</span>
+                    <div class="form-section-input-group">
+                        <label class="form-input-label">Show the widget:</label>
+                        <div class="form-input-control-wrapper">
+                            <p-radioButton [(ngModel)]="widgetSourceDisplayRuleSet"
+                                           label="Always"
+                                           [value]="false"
+                                           [disabled]="disabled"
+                                           name="widgetSourceDisplayRuleSet"
+                                           (ngModelChange)="onWidgetSourceDisplayRuleSetChange()">
+                            </p-radioButton>
+                        </div>
+                        <div class="form-input-control-wrapper">
+                            <p-radioButton [(ngModel)]="widgetSourceDisplayRuleSet"
+                                           label="If the following condition is satisfied:"
+                                           [value]="true"
+                                           [disabled]="disabled"
+                                           name="widgetSourceDisplayRuleSet"
+                                           class="form-input-control"
+                                           (ngModelChange)="onWidgetSourceDisplayRuleSetChange()">
+                            </p-radioButton>
+                            <div class="form-sub-group">
+                                <div class="reporting-inputs-row-group">
+                                    <div class="reporting-inputs-row-group-controls">
+                                        <p-inputGroup class="form-input-control">
+                                            <input pInputText
+                                                   [(ngModel)]="widgetSourceDisplayRule.variableName"
+                                                   [disabled]="displayRuleEditorDisabled"
+                                                   [required]="widgetSourceDisplayRuleSet"
+                                                   [maxLength]="128"
+                                                   placeholder="Variable"
+                                                   name="displayRuleVariableName"/>
+                                            <p-inputGroupAddon>
+                                                <p-button [text]="true" [plain]="true"
+                                                          [label]="!!variableOptions && !variableOptions.length ? '' : '#'"
+                                                          [loading]="!!variableOptions && !variableOptions.length"
+                                                          [disabled]="displayRuleEditorDisabled"
+                                                          loadingIcon="pi pi-spin pi-spinner"
+                                                          styleClass="justify-content-center"
+                                                          (onClick)="showVariableOptions($event)"></p-button>
+                                            </p-inputGroupAddon>
+                                        </p-inputGroup>
+                                        <p-dropdown [(ngModel)]="widgetSourceDisplayRule.operator"
+                                                    [options]="expressionOperatorOptions"
+                                                    [disabled]="displayRuleEditorDisabled"
+                                                    [required]="widgetSourceDisplayRuleSet"
+                                                    name="displayRuleOperator"
+                                                    placeholder="Operator"
+                                                    appendTo="body"
+                                                    class="operation-selector">
+                                        </p-dropdown>
+                                        <input pInputText
+                                               [(ngModel)]="widgetSourceDisplayRule.operand"
+                                               [disabled]="displayRuleOperandDisabled"
+                                               [required]="widgetSourceDisplayRuleSet"
+                                               [maxLength]="500"
+                                               name="displayRuleOperand"
+                                               placeholder="Value"
+                                               class="form-input-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section no-bottom-border">
+                    <div class="form-section-input-group">
+                        <div class="form-input-control-wrapper">
+                            <div class="hint-icon-container">
+                                <label class="form-input-label">Widget code:</label>
+                                <i class="material-icons hint-icon" [pTooltip]="widgetCodeTooltip"
+                                   tooltipEvent="focus" appendTo="body" tabindex="0">help_outlined</i>
+                            </div>
+                            <input pInputText [(ngModel)]="widgetSource.code" [maxLength]="200"
+                                   name="widgetCode" class="form-input-control"
+                                   [disabled]="disabled"
+                                   (focus)="onWidgetCodeFocus()"/>
+                            <div class="p-error">
+                                <small *ngIf="widgetSource.code?.length === 200">
+                                    Maximum length of 200 characters reached.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-container *ngIf="!!widgetType" [ngSwitch]="widgetType">
+        <div class="widget-builder {{disabled ? 'builder-disabled' : ''}}">
+            <ng-container *ngSwitchCase="'table'">
+                <widget-grid-builder widgetSourceId="{{widgetSourceId}}"
+                                     (widgetSourceChange)="refreshWidgetSource($event)">
+                    <ng-container *ngTemplateOutlet="widgetBuilder"></ng-container>
+                </widget-grid-builder>
+            </ng-container>
+            <ng-container *ngSwitchCase="'chart'">
+                <widget-chart-builder widgetSourceId="{{widgetSourceId}}"
+                                      (widgetSourceChange)="refreshWidgetSource($event)">
+                    <ng-container *ngTemplateOutlet="widgetBuilder"></ng-container>
+                </widget-chart-builder>
+            </ng-container>
+            <ng-container *ngSwitchCase="'control-set'">
+                <widget-control-set-builder widgetSourceId="{{widgetSourceId}}"
+                                            (widgetSourceChange)="refreshWidgetSource($event)">
+                    <ng-container *ngTemplateOutlet="widgetBuilder"></ng-container>
+                </widget-control-set-builder>
+            </ng-container>
+            <ng-container *ngSwitchCase="'html'">
+                <widget-html-builder widgetSourceId="{{widgetSourceId}}"
+                                     (widgetSourceChange)="refreshWidgetSource($event)">
+                    <ng-container *ngTemplateOutlet="widgetBuilder"></ng-container>
+                </widget-html-builder>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>
+
+<p-dialog styleClass="widget-creation-dialog" [(visible)]="widgetCreationDialogVisible"
+          header="Create Named Widget" [modal]="true" (onHide)="cancelWidgetCreation()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="name" class="inputs-group-row-name">Name:</label>
+            <div class="inputs-group-row-value">
+                <input pInputText id="name" #name
+                       [ngModel]="widgetSource.name"
+                       [pattern]="widgetNameValidation"
+                       [maxLength]="500"
+                       required notEmpty>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Organization:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="organizations"
+                               [options]="organizationOptions"
+                               dataKey="id"
+                               appendTo="body"
+                               id="organizations"
+                               name="organizations"
+                               placeholder="Select organization">
+                </p-multiSelect>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <p-button label="Cancel" styleClass="p-button-outlined" (onClick)="cancelWidgetCreation()"></p-button>
+        <p-button label="Save" [disabled]="!name.value?.length" (onClick)="createNamedWidget(name.value)"></p-button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-menu [model]="variableOptions" [popup]="true"
+        styleClass="p-0 max-h-25rem overflow-y-auto"
+        appendTo="body"></p-menu>

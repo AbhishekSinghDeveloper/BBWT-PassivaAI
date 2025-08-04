@@ -1,0 +1,51 @@
+﻿:host::ng-deep {
+    .widget-builder-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .p-button .pi {
+            font-size: 1.5rem;
+        }
+
+        .p-button.p-button-text {
+            color: black;
+        }
+
+        .publish-button {
+            display: flex;
+            height: 40px;
+            padding: 0 12px;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            gap: 8px;
+
+            border-radius: 6px;
+
+            .p-button-label {
+                font-size: 15px;
+            }
+        }
+    }
+
+    .widget-builder {
+        .p-tabview-nav {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .widget-builder-container {
+            border-top-left-radius: 9px;
+            border-top-right-radius: 9px;
+        }
+    }
+
+    .widget-toolbar {
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+}

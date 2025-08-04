@@ -1,0 +1,32 @@
+<div class="query-table-selector darker-panel" *ngIf="tableSet">
+    <div class="folder-selector">
+        <p-dropdown [options]="folderOptions"
+                    [ngModel]="tableSet.folderId"
+                    (onChange)="onSelectedFolderChanged($event)"
+                    appendTo="body"></p-dropdown>
+    </div>
+    <div class="table-selector">
+        <div class="table-selector-body" *ngIf="!!folderTrees[tableSet.folderId]">
+            <p-treeTable class="tables-tree"
+                         [value]="[folderTrees[tableSet.folderId]]"
+                         [scrollable]="true"
+                         [autoLayout]="true"
+                         dataKey="id"
+                         sortField="label"
+                         scrollHeight="flex"
+                         (onNodeExpand)="onNodeExpand($event)">
+                <ng-template pTemplate="body" let-rowNode>
+                    <tr class="tree-row" [ttRow]="rowNode" *ngIf="nodeVisible(rowNode.node)">
+                        <td [class]="getNodeClass(rowNode.node)"
+                            (click)="onNodeClick($event, rowNode.node)">
+                            <p-treeTableToggler [rowNode]="rowNode" *ngIf="supportsNesting(rowNode.node, rowNode.level)">
+                            </p-treeTableToggler>
+                            <i *ngIf="getNodeIconClass(rowNode.node)" class="material-icons">{{ getNodeIconClass(rowNode.node) }}</i>
+                            <label>{{ rowNode.node.label }}</label>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treeTable>
+        </div>
+    </div>
+</div>

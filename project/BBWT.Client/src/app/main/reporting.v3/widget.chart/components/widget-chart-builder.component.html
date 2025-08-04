@@ -1,0 +1,344 @@
+<div class="widget-builder-container">
+    <p-tabView [(activeIndex)]="activeIndex" class="reporting-tabview">
+
+        <p-tabPanel header="Tab0" class="p-0 {{activeIndex === 0 ? 'w-12' : ''}}">
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">edit_note</i>
+                <span>General</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <ng-content></ng-content>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel header="Tab0" class="p-0 {{activeIndex === 1 ? 'w-12' : ''}}">
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">drive_file_rename_outline</i>
+                <span>Query builder</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="query-setup">
+                    <query-builder [(querySourceId)]="querySourceId"></query-builder>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel header="Tab1" class="p-0 flex {{activeIndex === 2 ? 'w-6' : ''}}">
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">pie_chart_outlined</i>
+                <span>Chart Setup</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="chart-settings reporting-form">
+                    <div class="settings-options reporting-form-body tab-content-top-padding
+                                tab-content-sides-padding no-bottom-border darker-panel">
+
+                        <!-- Chart type selection dropdown !-->
+                        <div class="form-section pb-3">
+                            <span class="form-section-name">CHART TYPE</span>
+                            <div class="reporting-inputs-row-group-controls">
+                                <p-dropdown [(ngModel)]="type"
+                                            [options]="typeOptions"
+                                            (onChange)="refreshChart(Refresh.Data, Refresh.Settings)"
+                                            styleClass="chart-input" appendTo="body">
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <!-- Series type selection button !-->
+                        <div class="form-section pb-3" *ngIf="multipleSourceChart">
+                            <span class="form-section-name">DATA SOURCE</span>
+                            <div class="reporting-inputs-row-group-controls">
+                                <p-selectButton [options]="dataSourceOptions" [(ngModel)]="dataSource"
+                                                (onChange)="refreshChart(Refresh.Data, Refresh.Settings)"
+                                                styleClass="series-selectbutton"
+                                                unselectable="false"></p-selectButton>
+                            </div>
+                        </div>
+
+                        <!-- Series column selection dropdown !-->
+                        <div #series class="form-section {{multipleSource ? ' show-series': ' hide-series'}} pb-3" *ngIf="multipleSourceChart">
+                            <div class="reporting-inputs-row-group-controls form-section-input-group">
+                                <label class="form-input-label">Series column:</label>
+                                <div class="series-dropdown" *ngIf="multipleSource || series.clientHeight !== 0">
+                                    <p-dropdown [(ngModel)]="seriesAlias"
+                                                [options]="columnOptions"
+                                                (onChange)="refreshChart(Refresh.Data, Refresh.Settings)"
+                                                styleClass="chart-input" appendTo="body">
+                                    </p-dropdown>
+                                    <div class="values-found">
+                                        <label class="chart-label">Found:</label>
+                                        <p-chip *ngFor="let item of chipData.slice(0, 3)"
+                                                [label]="item"></p-chip>
+                                        <p-chip *ngIf="chipData.length > 3">
+                                            <i class="material-icons fill">more_horiz</i>
+                                        </p-chip>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column aliases selection dropdowns !-->
+                        <div class="form-section pb-3">
+                            <div class="reporting-inputs-row-group-controls">
+                                <div class="two-items-setting">
+                                    <div class="settings-item">
+                                        <label>{{ categoryChart ? "Label/Category" : "X-axis" }} column:</label>
+                                        <p-dropdown [(ngModel)]="axisXAlias"
+                                                    [options]="columnOptions"
+                                                    (onChange)="refreshChart(Refresh.Data, Refresh.Settings)"
+                                                    styleClass="chart-input" appendTo="body">
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="settings-item">
+                                        <label>{{ categoryChart ? "Value" : "Y-axis" }} column:</label>
+                                        <p-dropdown [(ngModel)]="axisYAlias"
+                                                    [options]="columnOptions"
+                                                    (onChange)="refreshChart(Refresh.Data, Refresh.Settings)"
+                                                    styleClass="chart-input" appendTo="body">
+                                        </p-dropdown>
+                                        <div class="settings-secondary-item">
+                                            <i class="material-icons mr-2 fill">add</i>
+                                            <label>Secondary y-axis</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bubble size column alias selection dropdown !-->
+                        <div class="form-section pb-3" *ngIf="type === ChartTypeEnum.Bubble">
+                            <div class="reporting-inputs-row-group-controls form-section-input-group">
+                                <label class="form-input-label">Bubble size column:</label>
+                                <p-dropdown [(ngModel)]="bubbleAlias"
+                                            [options]="columnOptions"
+                                            (onChange)="refreshChart(Refresh.Data, Refresh.Settings)"
+                                            styleClass="chart-input" appendTo="body">
+                                </p-dropdown>
+                            </div>
+                        </div>
+
+                        <!-- Hovering enabler checkbox !-->
+                        <div class="form-section pb-3">
+                            <span class="form-section-name">HOVER INFORMATION</span>
+                            <div class="reporting-inputs-row-group-controls">
+                                <p-checkbox [(ngModel)]="displayTooltip" [binary]="true"
+                                            (onChange)="refreshChart(Refresh.Settings)"
+                                            label="When hovering over a data point,
+                                                   display additional information in an overlay">
+                                </p-checkbox>
+                            </div>
+                        </div>
+
+                        <!-- Hovering columns selection table !-->
+                        <div class="form-section no-bottom-border pb-3">
+                            <span class="form-section-name">Choose the columns to display in the overlay:</span>
+                            <p-table class="hover-columns-table" dataKey="queryAlias"
+                                     [value]="columns" [(selection)]="columnsOnTooltip"
+                                     (selectionChange)="displayTooltip ? refreshChart(Refresh.Settings) : null"
+                                     (selectAllChange)="displayTooltip ? refreshChart(Refresh.Settings) : null">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th pSortableColumn="queryAlias">
+                                            Column name
+                                            <p-sortIcon field="queryAlias"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="chartAlias">
+                                            Displayed name
+                                            <p-sortIcon field="chartAlias"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row>
+                                    <tr>
+                                        <td>
+                                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                                        </td>
+                                        <td>{{ row["queryAlias"] }}</td>
+                                        <td>
+                                            <input [(ngModel)]="row['chartAlias']" pInputText
+                                                   (blur)="refreshChart(Refresh.Settings)">
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel header="Tab2" class="p-0 flex {{activeIndex === 3 ? 'w-6' : ''}}">
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">tune</i>
+                <span>Settings</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="chart-settings reporting-form">
+                    <div class="settings-options reporting-form-body tab-content-top-padding
+                                tab-content-sides-padding no-bottom-border darker-panel">
+
+                        <!-- Settings menu type buttons !-->
+                        <div class="form-section no-bottom-border pb-3">
+                            <div class="setting-buttons-container">
+                                <label
+                                    [class]="'setting-label' + (basicSettings ? ' setting-label-highlighted' : '')"
+                                    (click)="basicSettings = true">Basic</label>
+                                <label
+                                    [class]="'setting-label' + (basicSettings ? '' : ' setting-label-highlighted')"
+                                    (click)="basicSettings = false">Advanced</label>
+                            </div>
+                        </div>
+
+                        <div class="settings-view" *ngIf="basicSettings">
+
+                            <!-- Section header !-->
+                            <div class="form-section pt-2 pb-0">
+                                <span class="form-section-name mb-0">CHART STYLE</span>
+                            </div>
+
+                            <!-- Background color picker input !-->
+                            <div class="form-section pb-3">
+                                <div class="reporting-inputs-row-group-controls form-section-input-group">
+                                    <label class="form-input-label">Background colour:</label>
+                                    <div class="input-color">
+                                        <input [(ngModel)]="backgroundColor" pInputText
+                                               (blur)="refreshChart(Refresh.Data, Refresh.Settings)">
+                                        <p-colorPicker [(ngModel)]="backgroundColor" format="hex"
+                                                       (onHide)="refreshChart(Refresh.Data, Refresh.Settings)">
+                                        </p-colorPicker>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Smooth lines checkbox !-->
+                            <div class="form-section pb-3" *ngIf="type === ChartTypeEnum.Line">
+                                <div class="reporting-inputs-row-group-controls">
+                                    <p-checkbox [(ngModel)]="showSmoothLines" [binary]="true"
+                                                (onChange)="refreshChart(Refresh.Settings)"
+                                                label="Make lines smooth">
+                                    </p-checkbox>
+                                </div>
+                            </div>
+
+                            <!-- Legend checkbox !-->
+                            <div class="form-section pb-3">
+                                <div class="reporting-inputs-row-group-controls mb-2" *ngIf="legendChart">
+                                    <p-checkbox [(ngModel)]="showLegend" [binary]="true"
+                                                (onChange)="refreshChart(Refresh.Settings)"
+                                                label="Show legend"></p-checkbox>
+                                </div>
+                                <div class="reporting-inputs-row-group-controls" *ngIf="gridChart || radialChart">
+                                    <p-checkbox [(ngModel)]="showGridLines" [binary]="true"
+                                                (onChange)="refreshChart(Refresh.Settings)"
+                                                label="Show {{ gridChart ? 'grid' : 'radial' }} lines"></p-checkbox>
+                                </div>
+                            </div>
+
+                            <!-- Axis configuration inputs !-->
+                            <div class="settings-view" *ngIf="gridChart">
+                                <ng-container *ngFor="let axis of [ChartAxis.X, ChartAxis.Y]; let i = index">
+
+                                    <div class="form-section pt-3 pb-3">
+                                        <span class="form-section-name">{{ axisSettings.get(axis).label }}</span>
+                                        <div class="reporting-inputs-row-group-controls">
+                                            <div class="two-items-setting">
+                                                <div class="settings-item">
+                                                    <label>Label:</label>
+                                                    <input pInputText [(ngModel)]="axisSettings.get(axis).name"
+                                                           (blur)="refreshChart(Refresh.Settings)" class="chart-input">
+                                                </div>
+                                                <div class="settings-item">
+                                                    <label>Unit:</label>
+                                                    <p-dropdown [(ngModel)]="axisSettings.get(axis).unit"
+                                                                [options]="unitOptions" [resetFilterOnHide]="true"
+                                                                [group]="true" [filter]="true" [showClear]="true"
+                                                                (onChange)="refreshChart(Refresh.Settings)"
+                                                                filterBy="label,title" styleClass="chart-input" appendTo="body">
+                                                    </p-dropdown>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-section pt-3 pb-3" *ngIf="axisSettings.get(axis).numeric()">
+                                        <div class="reporting-inputs-row-group-controls form-section-input-group">
+                                            <label class="form-input-label">Scaling:</label>
+                                            <div class="form-input-control mb-2">
+                                                <p-radioButton [(ngModel)]="axisSettings.get(axis).required"
+                                                               [value]="false"
+                                                               (onClick)="refreshChart(Refresh.Settings)"
+                                                               label="Automatic" name="axisXRange"></p-radioButton>
+                                            </div>
+                                            <div class="form-input-control mb-2">
+                                                <p-radioButton [(ngModel)]="axisSettings.get(axis).required"
+                                                               [value]="true" (onClick)="refreshChart(Refresh.Settings)"
+                                                               label="Define range" name="axisXRange"></p-radioButton>
+                                            </div>
+                                            <div class="two-items-setting">
+                                                <div class="settings-item range-inputnumber">
+                                                    <p-inputNumber [(ngModel)]="axisSettings.get(axis).min"
+                                                                   [disabled]="!axisSettings.get(axis).required"
+                                                                   [showClear]="true" [showButtons]="true"
+                                                                   (onClear)="refreshChart(Refresh.Settings)"
+                                                                   (onBlur)="refreshChart(Refresh.Settings)"></p-inputNumber>
+                                                </div>
+                                                <div class="settings-item range-inputnumber">
+                                                    <p-inputNumber [(ngModel)]="axisSettings.get(axis).max"
+                                                                   [disabled]="!axisSettings.get(axis).required"
+                                                                   [showClear]="true" [showButtons]="true"
+                                                                   (onClear)="refreshChart(Refresh.Settings)"
+                                                                   (onBlur)="refreshChart(Refresh.Settings)"></p-inputNumber>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="settings-view" *ngIf="!basicSettings">
+
+                            <!-- Section header !-->
+                            <div class="settings-header">
+                                <label class="settings-label">
+                                    Edit the JSON content below to customise the chart.
+                                </label>
+                                <div class="flex gap-2">
+                                    <div class="editor-buttons">
+                                        <button (click)="json.back()">
+                                            <i class="material-icons mr-2">undo</i>
+                                        </button>
+                                        <button (click)="json.next()">
+                                            <i class="material-icons mr-2">redo</i>
+                                        </button>
+                                    </div>
+                                    <p-button label="Update preview" styleClass="p-button-outlined"
+                                              (onClick)="refreshChart(Refresh.Options, Refresh.Data, Refresh.Settings)">
+                                    </p-button>
+                                </div>
+                            </div>
+
+                            <!-- Json editor input !-->
+                            <json-editor #json [(ngModel)]="customSettings"></json-editor>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+
+        <div class="chart-preview tab-content-top-padding tab-content-sides-padding w-6
+             {{activeIndex > 1 ? 'flex' : 'hidden'}}">
+            <h4>Preview</h4>
+            <widget-chart [chartView]="chartPreview"
+                          [dataRows]="dataRows"
+                          [widgetVisible]="activeIndex > 1"
+                          [ignoreDisplayRule]="true">
+            </widget-chart>
+        </div>
+    </p-tabView>
+</div>

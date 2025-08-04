@@ -1,0 +1,53 @@
+<p-table [autoLayout]="true" [value]="invalidEntriesWrappers" [resizableColumns]="true" [tableStyle]="{'table-layout':' auto'}" rte="wW">
+    <ng-template pTemplate="header">
+        <tr rte="wY">
+            <th pResizableColumn rte="wZ">#</th>
+            <th pResizableColumn rte="x0">Error</th>
+            <th pResizableColumn *ngFor="let col of columns" rte="x1">{{ col.header }}</th>
+            <th pResizableColumn rte="x2"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr rte="x4">
+            <td rte="x5">{{item.lineNumber}}</td>
+            <td rte="x6">{{item.error}}</td>
+            <td *ngFor="let col of columns" rte="x7">{{ item[col.field] }}</td>
+            <td rte="x8">
+                <button type="button" pButton (click)="showDetails(item.entry)" label="Details" rte="x9">
+                    <i class="material-icons" rte="xa">info</i>
+                </button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<p-dialog [(visible)]="dialogIsVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Details"
+          (onHide)="onDetailsHide()" rte="xb">
+    <div class="p-g" style="margin-bottom:25px;" rte="xc">
+        <p-table [autoLayout]="true" [value]="cellsForDetails" [resizableColumns]="true" [tableStyle]="{'table-layout':' auto'}" rte="xd">
+            <ng-template pTemplate="header" let-columns>
+                <tr rte="xf">
+                    <th pResizableColumn [style]="{'width':'150px'}" rte="xg">Order Number</th>
+                    <th pResizableColumn [style]="{'width':'150px'}" rte="xh">Field</th>
+                    <th pResizableColumn rte="xi">Value</th>
+                    <th pResizableColumn rte="xj">Message</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr rte="xl">
+                    <td rte="xm">{{item.orderNumber}}</td>
+                    <td rte="xn">{{item.targetFieldName}}</td>
+                    <td rte="xo">{{item.value}}</td>
+                    <td rte="xp">
+                        <span style="color:red;" class="error-message" rte="xq">{{item.errorMessage}}</span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-dialog>

@@ -1,0 +1,39 @@
+<div class="card--hidden" rte="Fa">
+    <h1 rte="Fb">S3 File Manager</h1>
+    <span class="page-sub-header" rte="Fc">Files list from S3</span>
+
+    <grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        rte="1jv"
+    ></grid>
+</div>
+
+<p-dialog
+    [(visible)]="displayDialog"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    header="Presigned URL"
+    rte="Fe"
+>
+    <a
+        target="_blank"
+        href="{{ preSignedURL }}"
+        class="presigned-url"
+        rte="Ff"
+        >{{ preSignedURL }}</a
+    >
+
+    <p-footer rte="Fg">
+        <button
+            pButton
+            type="button"
+            label="Close"
+            (click)="displayDialog = false"
+            rte="Fh"
+        >
+            <i class="material-icons" rte="Fi">clear</i>
+        </button>
+    </p-footer>
+</p-dialog>

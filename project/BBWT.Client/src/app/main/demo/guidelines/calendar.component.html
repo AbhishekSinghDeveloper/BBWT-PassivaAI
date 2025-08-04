@@ -1,0 +1,128 @@
+<div class="card--hidden" rte="Ji">
+    <h1 rte="Jj">Calendar</h1>
+
+    <p rte="Jk">Date Time</p>
+    <div class="p-g" rte="Jl">
+        <div class="fixed-label" rte="Jm">
+            <label for="calendar" rte="Jn">Label</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="Jo">
+            <p-calendar
+                id="calendar"
+                [(ngModel)]="calendarDate"
+                [showIcon]="true"
+                [DateTimeValidator]="true"
+                [showTime]="true"
+                (onInput)="dateTimeChange($event)"
+                rte="Jp"
+            >
+            </p-calendar>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Jq">
+            &lt;div class=&quot;p-g&quot;&gt;
+                &lt;div class=&quot;fixed-label&quot;&gt;
+                    &lt;label for=&quot;calendar&quot;&gt;Label&lt;/label&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+                    &lt;p-calendar id=&quot;calendar&quot; [(ngModel)]=&quot;calendarDate&quot; [DateTimeValidator]=&quot;true&quot;  showIcon=&quot;true&quot; showTime=&quot;true&quot; dateFormat=&quot;dd/mm/yy&quot; (onInput)=&quot;dateTimeChange($event)&quot;&gt;&lt;/p-calendar&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="Jr">Only Date</p>
+    <div class="p-g" rte="Js">
+        <div class="fixed-label" rte="Jt">
+            <label for="onlyDate" rte="Ju">Label</label>
+        </div>
+
+        <div class="p-g-12 p-md-4" rte="Jv">
+            <p-calendar
+                id="onlyDate"
+                [(ngModel)]="onlyDate"
+                [showIcon]="true"
+                [DateValidator]="true"
+                rte="Jw"
+            >
+            </p-calendar>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Jx">
+            &lt;div class=&quot;p-g&quot;&gt;
+                &lt;div class=&quot;fixed-label&quot;&gt;
+                    &lt;label for=&quot;onlyDate&quot;&gt;Label&lt;/label&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;p-g-12 p-md-4&quot;&gt;
+                    &lt;p-calendar id=&quot;onlyDate&quot; [(ngModel)]=&quot;onlyDate&quot; [DateValidator]=&quot;true&quot; showIcon=&quot;true&quot; dateFormat=&quot;dd/mm/yy&quot; (onInput)=&quot;dateChange($event)&quot;&gt;&lt;/p-calendar&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="Jy">Only Time</p>
+    <div class="p-g" rte="Jz">
+        <div class="fixed-label" rte="JA">
+            <label for="timeCalendar" rte="JB">Label</label>
+        </div>
+        <div class="p-g-12 p-md-4" rte="JC">
+            <p-calendar
+                id="timeCalendar"
+                [(ngModel)]="onlyTime"
+                [showIcon]="true"
+                [TimeValidator]="true"
+                [timeOnly]="true"
+                icon="p-icon-access-time"
+                (onInput)="timeChange($event)"
+                rte="JD"
+            >
+            </p-calendar>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="JE">
+            &lt;div class=&quot;p-g&quot;&gt;
+                &lt;div class=&quot;p-g-12&quot;&gt;
+                    &lt;label for=&quot;calendar&quot;&gt;Label&lt;/label&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;p-g-12&quot;&gt;
+                    &lt;p-calendar id=&quot;timeCalendar&quot; [(ngModel)]=&quot;timeCalendar&quot; [TimeValidator]=&quot;true&quot; showIcon=&quot;true&quot; [timeOnly]=&quot;true&quot; (onInput)=&quot;timeChange($event)&quot;&gt;&lt;/p-calendar&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="JF">Inline calendar</p>
+
+    <div class="p-g" rte="JG">
+        <div class="p-g-12" rte="JH">
+            <p-calendar
+                id="calendar"
+                [(ngModel)]="calendarDate"
+                [inline]="true"
+                [showTime]="true"
+                rte="JI"
+            >
+            </p-calendar>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="JJ">
+                &lt;div class=&quot;p-g&quot;&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-calendar id=&quot;calendar&quot; [(ngModel)]=&quot;calendarDate&quot; inline=&quot;true&quot; showTime=&quot;true&quot; dateFormat=&quot;dd/mm/yy&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+</div>

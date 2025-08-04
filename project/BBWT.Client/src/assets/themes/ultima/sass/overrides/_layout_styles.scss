@@ -1,0 +1,274 @@
+/* Use this file to apply themes-specific rules to new project components. */
+
+@import "layout_variables";
+@import "../../../../sass/screenMixins";
+
+
+/* Global banner */
+.global-info-banner {
+    background-color: $bodyBgColor;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+/* Account pages */
+.account-container {
+    background-color: $primaryColor;
+}
+
+
+.layout-container {
+    /* Topbar */
+    .topbar {
+        background-color: #fff;
+        @include shadow(4px 0px 5px 0px #0000001F);
+
+        .topbar-left {
+            /* Logo adaptation */
+            .logo {
+                width: 100%;
+                height: 100%;
+                background-size: contain;
+            }
+        }
+
+        /* Reworking to unlock ability for adding more items */
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+
+            #menu-button {
+                color: $textSecondaryColor;
+                top: 0;
+                margin-right: -11px;
+            }
+            .right-side {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                width: 100%;
+                height: 100%;
+
+                @media (max-width: 1024px) {
+                    #topbar-menu-button {
+                        margin-top: 0;
+                        height: 25px;
+                    }
+                }
+                @media (max-width: 385px) {
+                    #topbar-menu-button {
+                        right: unset;
+                        margin-right: 0;
+                        position: relative;
+                        top: unset;
+                    }
+                }
+
+                @media (min-width: 1025px) {
+                    .topbar-items {
+                        padding: 0;
+                        display: flex;
+                        align-items: center;
+                        float: none;
+
+                        > li {
+                            float: none;
+                            margin-top: 0;
+
+                            /* Fix badges position */
+                            > a .topbar-badge {
+                                right: -10px;
+                                top: -10px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* Side menu */
+    .layout-menu {
+        @include shadow(4px 0px 5px 0px #0000001F);
+
+        &.layout-menu-dark {
+            ul.ultima-menu {
+                li {
+                    &.active-menuitem {
+                        > a {
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+        }
+
+        .profile {
+            .profile-name {
+                color: $textSecondaryColor;
+            }
+
+            i {
+                color: $textSecondaryColor;
+            }
+        }
+
+        .ultima-menu {
+            > li {
+                padding: 2px; /* Fix for focused elements */
+
+                a {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-radius: 6px;
+
+                    span i {
+                        float: none;
+                        margin-top: 0;
+                        vertical-align: bottom;
+                        margin-right: .5em;
+                    }
+                }
+
+
+                /* Chevron position fix for child items */
+                ul li a {
+                    padding: .5em 1em .5em 2em;
+                }
+            }
+        }
+    }
+
+    /* Content block */
+    .layout-main {
+        padding-bottom: $footer-height;
+
+        .layout-content {
+            position:relative;
+        }
+    }
+
+    /* Footer */
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: $footer-height;
+        background-color: #333;
+        border-bottom: 3px solid #6b6b6b;
+
+        @media (min-width: 1025px) {
+            z-index: 100;
+        }
+
+        .p-menubar {
+            border: none;
+            padding-top: 0;
+            padding-bottom: 0;
+            height: 100%;
+
+            .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+                &:hover .p-menuitem-text, .p-menuitem-text {
+                    color: #6b6b6b;
+                }
+                &:hover .p-menuitem-text {
+                    text-decoration: underline;
+                }
+            }
+        }
+        .tablet-footer-container {
+            .footer-menu-trigger {
+                color: #6b6b6b;
+            }
+        }
+        .copyright {
+            color: #6b6b6b;
+        }
+    }
+
+    .ultima-menu {
+        li {
+            a {
+                margin: 2px 0;
+            }
+
+            &.active-menuitem {
+                > a {
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1025px) {
+    .layout-container {
+        .topbar-items {
+            color: $textSecondaryColor;
+
+            > li {
+                color: $textSecondaryColor;
+
+                .topbar-icon {
+                    font-size: 30px;
+                    color: $textSecondaryColor;
+
+                    &:hover {
+                        color: rgba($textSecondaryColor, .8);
+                    }
+                }
+
+                &.profile-item {
+                    color: $textSecondaryColor;
+
+                    .profile-image {
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+
+        &.menu-layout-horizontal {
+            .layout-menu {
+                @include shadow(4px 0px 5px 0px #0000001F);
+            }
+        }
+
+        &.menu-layout-slim {
+            .layout-menu {
+                .profile {
+                    > a {
+                        .profile-name {
+                            display: inline-block;
+                        }
+                        i {
+                            display: initial;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .layout-container {
+        .topbar {
+            .topbar-right {
+                .topbar-items {
+                    > li {
+                        &.profile-item {
+                            .profile-image {
+                                border-radius: 50%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

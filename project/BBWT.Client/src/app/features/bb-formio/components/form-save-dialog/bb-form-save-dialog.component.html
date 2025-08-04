@@ -1,0 +1,93 @@
+<div [ngSwitch]="state()">
+    <div *ngSwitchCase="dialogState.SaveFormOnNoBreakingChanges" class="flex flex-column gap-3">
+        <h3>Is this a breaking change?</h3>
+        <div class="flex gap-3">
+            <p-button
+                class="p-button-secondary"
+                icon="pi pi-times"
+                (onClick)="saveFormOnNoBreakingChanges()"
+                label="No">
+            </p-button>
+    
+            <p-button
+                [outlined]="true"
+                icon="pi pi-check"
+                (onClick)="showDiscardChangesOptionHandler()"
+                label="Yes">
+            </p-button>
+        </div>
+    </div>
+    <div *ngSwitchCase="dialogState.DiscardChanges" class="flex flex-column gap-3">
+        <h3>Do you want to discard the changes?</h3>
+        <div class="flex gap-3">
+            <p-button
+                class="p-button-secondary"
+                icon="pi pi-times"
+                (onClick)="onNoDiscardChangesHandler()"
+                label="No">
+            </p-button>
+    
+            <p-button
+                [outlined]="true"
+                icon="pi pi-check"
+                (onClick)="onYesDiscardChangesHandler()"
+                label="Yes">
+            </p-button>
+        </div>
+    </div>
+    <div *ngSwitchCase="dialogState.SaveANewMajorVersion" class="flex flex-column gap-3">
+        <h3>Select an option:</h3>
+        
+        <div class="flex flex-row border rounded p-2">
+            <div class="mr-3 justify-content-center align-content-center">
+                <p-radioButton
+                    inputId="newMajorVersion"
+                    name="newMajorVersion"
+                    [value]="0"
+                    [(ngModel)]="saveOptionType">
+                </p-radioButton>
+            </div>
+            <div>
+                <label for="newMajorVersion" class="font-weight-bold">Save as a new Major Version</label>
+                <p class="text-muted">This option will create a new major version of the form.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-row border rounded p-2">
+            <div class="mr-3 justify-content-center align-content-center">
+                <p-radioButton
+                    inputId="newDesign"
+                    name="newDesign"
+                    [value]="1"
+                    [(ngModel)]="saveOptionType">
+                </p-radioButton>
+            </div>
+            <div>
+                <label for="newDesign" class="font-weight-bold">Save as a new Design</label>
+                <p class="text-muted">This option will create a new design.</p>
+                <span *ngIf="saveOptionType === 1" class="p-float-label">
+                    <input
+                        pInputText
+                        id="designName"
+                        [(ngModel)]="designName"
+                        class="width-auto"
+                        label="Design Name"
+                         />
+                    <label for="designName">Design Name</label>
+
+                </span>
+            </div>
+        </div>
+
+        <div class="flex justify-content-end">
+            <p-button
+                [disabled]="isSaveButtonDisabled"
+                (onClick)="save()"
+                label="Save">
+            </p-button>
+        </div>
+    </div>
+    <div *ngSwitchDefault>
+        <p-progressSpinner class="flex justify-content-center" ariaLabel="loading"></p-progressSpinner>
+    </div>
+</div>

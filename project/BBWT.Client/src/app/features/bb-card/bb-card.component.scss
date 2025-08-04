@@ -1,0 +1,9 @@
+::ng-deep body bb-card .p-card {
+    /* #182-706 Add extra padding under subtitle and title */
+    .p-card-subtitle {
+        margin-bottom: .5em;
+    }
+    .p-card-content {
+        padding-top: 1em;
+    }
+}

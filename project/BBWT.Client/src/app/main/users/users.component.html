@@ -1,0 +1,271 @@
+<div class="card--hidden" rte="18G">
+    <h1 rte="18H">Users</h1>
+    <filter
+        #filter
+        [settings]="filterSettings"
+        class="fix-dropdown-for-filter"
+        rte="ft"
+    ></filter>
+    <grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        [filter]="filter"
+        rte="1gv"
+    ></grid>
+</div>
+
+<p-dialog
+    [(visible)]="displayInviteUserDialog"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    header="Invite User"
+    rte="fv"
+>
+    <form
+        [formGroup]="inviteUserForm"
+        autocomplete="off"
+        class="inputs-group"
+        rte="fw"
+    >
+        <div class="inputs-group-row" rte="fx">
+            <label
+                for="email"
+                class="inputs-group-row-name asterisk-mark"
+                rte="fy"
+                >Email:</label
+            >
+            <div class="inputs-group-row-value" rte="fz">
+                <input formControlName="email" pInputText id="email" rte="fA" />
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="fB">
+            <label
+                for="firstName"
+                class="inputs-group-row-name asterisk-mark"
+                rte="fC"
+                >First name:</label
+            >
+            <div class="inputs-group-row-value" rte="fD">
+                <input
+                    formControlName="firstName"
+                    pInputText
+                    id="firstName"
+                    rte="fE"
+                />
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="fF">
+            <label
+                for="lastName"
+                class="inputs-group-row-name asterisk-mark"
+                rte="fG"
+                >Last name:</label
+            >
+            <div class="inputs-group-row-value" rte="fH">
+                <input
+                    formControlName="lastName"
+                    pInputText
+                    id="lastName"
+                    rte="fI"
+                />
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="fJ">
+            <label for="organization" class="inputs-group-row-name" rte="fK"
+                >Organization:</label
+            >
+            <div class="inputs-group-row-value" rte="fL">
+                <p-dropdown
+                    formControlName="organizationId"
+                    [options]="organizationsOptions"
+                    [showClear]="true"
+                    appendTo="body"
+                    id="organization"
+                    name="organization"
+                    placeholder="Select organization"
+                    rte="fM"
+                >
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="fN">
+            <label for="role" class="inputs-group-row-name" rte="fO"
+                >Role:</label
+            >
+            <div class="inputs-group-row-value" rte="fP">
+                <p-multiSelect
+                    formControlName="roles"
+                    [options]="rolesOptions"
+                    defaultLabel="Select roles"
+                    dataKey="id"
+                    appendTo="body"
+                    id="role"
+                    name="role"
+                    rte="fQ"
+                >
+                </p-multiSelect>
+            </div>
+        </div>
+    </form>
+
+    <p-footer rte="fR">
+        <button
+            pButton
+            label="Invite"
+            [disabled]="inviteUserForm.invalid"
+            (click)="invite(inviteUserForm.value)"
+            rte="fS"
+        >
+            <i class="material-icons" rte="fT">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog
+    [(visible)]="displayReplaceRolesDialog"
+    header="Replace Roles"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    (onHide)="onReplaceRolesDialogHide()"
+    rte="fU"
+>
+    <form autocomplete="off" class="inputs-group" rte="fV">
+        <div class="inputs-group-row" rte="fW">
+            <label for="rolesToAdd" class="inputs-group-row-name" rte="fX"
+                >Roles to add:</label
+            >
+            <div class="inputs-group-row-value" rte="fY">
+                <p-multiSelect
+                    id="rolesToAdd"
+                    name="rolesToAdd"
+                    [(ngModel)]="rolesToAdd"
+                    [options]="rolesOptions"
+                    defaultLabel="Select roles"
+                    dataKey="id"
+                    appendTo="body"
+                    rte="fZ"
+                >
+                </p-multiSelect>
+            </div>
+        </div>
+        <div
+            *ngIf="rolesToRemoveOptions && rolesToRemoveOptions.length"
+            class="inputs-group-row"
+            rte="g0"
+        >
+            <label for="rolesToRemove" class="inputs-group-row-name" rte="g1"
+                >Roles to remove:</label
+            >
+            <div class="inputs-group-row-value" rte="g2">
+                <p-multiSelect
+                    id="rolesToRemove"
+                    name="rolesToRemove"
+                    [(ngModel)]="rolesToRemove"
+                    [options]="rolesToRemoveOptions"
+                    defaultLabel="Select roles"
+                    dataKey="id"
+                    appendTo="body"
+                    rte="g3"
+                >
+                </p-multiSelect>
+            </div>
+        </div>
+    </form>
+
+    <p-footer rte="g4">
+        <button
+            pButton
+            type="button"
+            label="Cancel"
+            class="p-button-secondary"
+            (click)="displayReplaceRolesDialog = false"
+            rte="g5"
+        >
+            <i class="material-icons" rte="g6">clear</i>
+        </button>
+        <button
+            pButton
+            type="button"
+            label="Save"
+            (click)="replaceRoles()"
+            rte="g7"
+        >
+            <i class="material-icons" rte="g8">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog
+    [(visible)]="displayReplaceGroupsDialog"
+    header="Replace Groups"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    (onHide)="onReplaceGroupsDialogHide()"
+    rte="g9"
+>
+    <form class="inputs-group" rte="ga">
+        <div class="inputs-group-row" rte="gb">
+            <label for="groupsToAdd" class="inputs-group-row-name" rte="gc"
+                >Groups to add:</label
+            >
+            <div class="inputs-group-row-value" rte="gd">
+                <p-multiSelect
+                    id="groupsToAdd"
+                    name="groupsToAdd"
+                    [(ngModel)]="groupsIdsToAdd"
+                    [options]="groupsOptions"
+                    defaultLabel="Select groups"
+                    appendTo="body"
+                    rte="ge"
+                >
+                </p-multiSelect>
+            </div>
+        </div>
+        <div
+            *ngIf="groupsToRemoveOptions && groupsToRemoveOptions.length"
+            class="inputs-group-row"
+            rte="gf"
+        >
+            <label for="groupsToRemove" class="inputs-group-row-name" rte="gg"
+                >Groups to remove:</label
+            >
+            <div class="inputs-group-row-value" rte="gh">
+                <p-multiSelect
+                    id="groupsToRemove"
+                    name="groupsToRemove"
+                    [(ngModel)]="groupsIdsToRemove"
+                    [options]="groupsToRemoveOptions"
+                    defaultLabel="Select groups"
+                    appendTo="body"
+                    rte="gi"
+                >
+                </p-multiSelect>
+            </div>
+        </div>
+    </form>
+
+    <p-footer rte="gj">
+        <button
+            pButton
+            type="button"
+            label="Cancel"
+            class="p-button-secondary"
+            (click)="displayReplaceGroupsDialog = false"
+            rte="gk"
+        >
+            <i class="material-icons" rte="gl">clear</i>
+        </button>
+        <button
+            pButton
+            type="button"
+            label="Save"
+            (click)="replaceGroups()"
+            rte="gm"
+        >
+            <i class="material-icons" rte="gn">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

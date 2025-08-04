@@ -1,0 +1,52 @@
+<div class="component-container">
+    <div class="text-danger mobile-only" *ngIf="!mobileFriendly">
+        <h5>This form isn’t for mobile use</h5>
+    </div>
+    <div class="text-info mobile-only" *ngIf="isMultiUserForm">
+        <h5>This is a Multi-User form</h5>
+    </div>
+    <div #formioFormParent *ngIf="!dataSubmitted && !dataFilledAlready" class="card bg-light p-3">
+        <formio #formioForm [form]=formJson [submission]="formDataJson" [readOnly]="readOnlyForm"
+                [refresh]="refreshForm" [options]="formOptions" (change)="onChange($event)">
+        </formio>
+    </div>
+    <div *ngIf="invalidParameters" class="text-info card bg-light p-3">
+        <h3>Invalid parameters.</h3>
+    </div>
+    <div *ngIf="dataFilledAlready" class="text-info card bg-light p-3">
+        <h3>This form has already been filled.</h3>
+    </div>
+    <div *ngIf="dataSubmitted" class="text-danger card bg-light p-3">
+        <h3>{{ onDataSubmittedMessage() }} </h3>
+    </div>
+    <div *ngIf="readOnlyForm" class="card bg-light p-3 justify-content-end flex-row">
+        <p-button [label]="generatePdfButtonLabel" severity="primary" (onClick)="generatePDF()" [loading]="loading"></p-button>
+    </div>
+    <div>
+        <p-dialog [(visible)]="showLoadDraftQuestion" [style]="{'max-width': '400px', width: '100%'}"
+                  header="Form data draft" [modal]="true" [closable]="false" [responsive]="true">
+
+            <div>
+                <p> We saved a draft of this form data on
+                    {{ this.formDraftFromServer?.createdOn.toLocaleString() }}.
+                </p>
+                <p>Would you like to return to the draft or discard it?</p>
+            </div>
+            <p-footer>
+                <button pButton type="button" label="Apply" (click)="applyDraft()">
+                    <i class="material-icons">approval</i>
+                </button>
+                <button pButton type="button" label="Discard" (click)="discardDraft()">
+                    <i class="material-icons">delete</i>
+                </button>
+            </p-footer>
+        </p-dialog>
+        <p-dialog [(visible)]="showImageUploadDialog" header="Form Image Uploader" [modal]="true" [closable]="true"
+                  [responsive]="true" (onHide)="discardImageUploaded(false)">
+            <bb-image-uploader
+                (uploadHandler)="imageUploading($event)"
+                [maxSizePx]="maxSizePx">
+            </bb-image-uploader>
+        </p-dialog>
+    </div>
+</div>

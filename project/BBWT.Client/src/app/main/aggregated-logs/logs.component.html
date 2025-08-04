@@ -1,0 +1,23 @@
+<div class="card--hidden" rte="1wS">
+    <h1 class="my-class" rte="1wT">Logs</h1>
+    <div class="page-content" rte="1wU">
+        <filter #filter [settings]="filterSettings" rte="1wV"></filter>
+        <div class="log-data" rte="1wW">
+            <div class="log-grid" rte="1wX">
+                <grid
+                    [tableSettings]="tableSettings"
+                    [gridSettings]="gridSettings"
+                    [filter]="filter"
+                    rte="1wY"
+                ></grid>
+            </div>
+            <div class="log-description right-panel" rte="1wZ">
+                <log-detail
+                    *ngIf="detailsVisible"
+                    [log]="shownLog"
+                    rte="1x0"
+                ></log-detail>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="card--hidden" rte="h8">
+    <h1 rte="h9">{{ getTitle() }}</h1>
+    <form
+        #form="ngForm"
+        autocomplete="off"
+        class="inputs-group"
+        (ngSubmit)="save()"
+        rte="ha"
+    >
+        <div class="inputs-group-row" rte="hb">
+            <div class="inputs-group-row-name" rte="hc">
+                <label for="alias" class="asterisk-mark" rte="hd"
+                    >URL slug:</label
+                >
+                <bb-tooltip
+                    message="The last part of the full URL referencing to this record"
+                    rte="he"
+                ></bb-tooltip>
+            </div>
+            <div class="inputs-group-row-value" rte="hf">
+                <input
+                    [(ngModel)]="staticPage.alias"
+                    pInputText
+                    id="alias"
+                    name="alias"
+                    required
+                    (ngModelChange)="onAliasChange($event)"
+                    rte="hg"
+                />
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="hh">
+            <label
+                for="heading"
+                class="inputs-group-row-name asterisk-mark"
+                rte="hi"
+                >Heading:</label
+            >
+            <div class="inputs-group-row-value" rte="hj">
+                <input
+                    [(ngModel)]="staticPage.heading"
+                    pInputText
+                    required
+                    id="heading"
+                    name="heading"
+                    rte="hk"
+                />
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="hl">
+            <label for="contents" class="inputs-group-row-name" rte="hm"
+                >Contents:</label
+            >
+            <div class="inputs-group-row-value" rte="hn">
+                <p-editor
+                    [(ngModel)]="staticPage.contents"
+                    ngDefaultControl
+                    id="contents"
+                    name="contents"
+                    [style]="{ height: '320px' }"
+                    (onTextChange)="onTextChange($event)"
+                    rte="ho"
+                >
+                </p-editor>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="hp">
+            <label for="contentPreview" class="inputs-group-row-name" rte="hq"
+                >Content preview:</label
+            >
+            <div class="inputs-group-row-value" rte="hr">
+                <input
+                    [value]="staticPage.contentPreview || ''"
+                    id="contentPreview"
+                    name="contentPreview"
+                    pInputText
+                    readonly
+                    rte="hs"
+                />
+            </div>
+        </div>
+
+        <div class="buttons-panel" rte="ht">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="returnToListStaticPages()"
+                rte="hu"
+            ></button>
+            <button
+                pButton
+                type="submit"
+                label="Save"
+                [disabled]="form.invalid"
+                rte="hv"
+            ></button>
+        </div>
+    </form>
+</div>

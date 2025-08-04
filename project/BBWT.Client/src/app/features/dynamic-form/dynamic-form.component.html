@@ -1,0 +1,58 @@
+<!-- Content supplied within the component elements - has access to the component
+scope and useful for showing messages or debug data -->
+<ng-content></ng-content>
+
+<form [formGroup]="formGroup" (ngSubmit)="submit()" rte="1f">
+    <ng-container *ngFor="let group of formControls | groupBy: 'group'">
+        <!--Group Title-->
+        <div class="p-g group-title" *ngIf="group.key?.length" rte="1h">{{group.key}}</div>
+        <ng-container *ngFor="let control of group.value">
+            <div class="p-g" *ngIf="shouldShowRow(control)" rte="1j">
+                <!-- Prompt - if left \of control -->
+                <div class="p-g-12 p-md-4" *ngIf="leftPrompt(control)" rte="1k">
+                    <label [for]="control.name" rte="1l">{{ getFormattedPrompt(control) }}</label>
+                </div>
+
+                <!-- Input - switch based on type -->
+                <div class="p-g-12 p-md-8" [ngClass]="{'p-md-offset-4': !leftPrompt(control) && !subform, 'p-g-nopad': paddingIsNotNeeded(control)}"
+                     [ngSwitch]="getControlType(control)" rte="1m">
+                    <!-- Text -->
+                    <input *ngSwitchCase="'text'" pInputText [formControlName]="control.name" [name]="control.name" rte="1n">
+
+                    <!-- Number -->
+                    <input *ngSwitchCase="'number'" type="number" pInputText [formControlName]="control.name" [name]="control.name" rte="1o">
+
+                    <!-- Checkbox -->
+                    <p-checkbox *ngSwitchCase="'checkbox'" type="checkbox" [binary]="isBinary(control)" [formControlName]="control.name" [name]="control.name" rte="1p"></p-checkbox>
+
+                    <!-- Radio - custom layout here because of behaviour of radio options and model object -->
+                    <ng-container *ngSwitchCase="'radio'">
+                        <div class="p-g" *ngFor="let option of getRadioOptions(control)" rte="1r">
+                            <div class="p-g-12" rte="1s">
+                                <p-radioButton [formControlName]="control.name" [name]="control.name" [value]="option.value" [label]="option.prompt" rte="1t"></p-radioButton>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!-- Select -->
+                    <!--<select *ngSwitchCase="'select'" type="select" [formControlName]="control.name" [name]="control.name">
+                      <option *ngFor="let option of getOptions(control)" [value]="option.value">{{ option.text }}</option>
+                    </select>-->
+
+                    <p-dropdown *ngSwitchCase="'select'" [formControlName]="control.name" [options]="getOptions(control)" rte="1u"></p-dropdown>
+
+                    <!-- Textarea -->
+                    <textarea *ngSwitchCase="'textarea'" [formControlName]="control.name" rte="1v"></textarea>
+
+                    <!-- Sub-form, re-render as dynamic -->
+                    <app-dynamic-form *ngSwitchCase="'group'" [formGroup]="control" [formData]="formData" [subform]="true" rte="1w">{{ getDescription(control) }}</app-dynamic-form>
+
+                    <!-- Prompt - if right of control -->
+                    <label *ngIf="!leftPrompt(control)" [for]="control.name" class="rightPrompt" rte="1x">{{ getFormattedPrompt(control) }}</label>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <input *ngIf="shouldShowSubmit()" type="submit" value="Submit form" rte="1y">
+</form>

@@ -1,0 +1,16 @@
+<ul class="ultima-menu ultima-main-menu clearfix" rte="14z">
+    <ng-container *ngIf="!isMenuBlocked; else twoFactorRequiredBlock">
+        <ng-container *ngFor="let item of app.menuModel; let i = index;">
+            <li *ngIf="!item.hidden"
+            ultima-menu-item
+            [item]="item"
+            [index]="i"
+            [root]="true" rte="14B">
+            </li>
+        </ng-container>
+    </ng-container>
+
+    <ng-template  #twoFactorRequiredBlock>
+        <p class="two-factor-disabled-message" rte="1dw">You don't have 2-Factor authentication enabled to access this features</p>
+    </ng-template>
+</ul>

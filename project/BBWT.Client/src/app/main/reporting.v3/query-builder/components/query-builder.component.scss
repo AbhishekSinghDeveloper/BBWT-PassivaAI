@@ -1,0 +1,292 @@
+﻿:host::ng-deep {
+    .query-builder {
+        width: 100%;
+        height: 600px;
+        padding: 16px 0;
+        display: flex;
+        overflow-y: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 6px;
+        gap: 10px;
+
+        .query-source-options {
+            height: 42px;
+            max-height: 42px;
+            flex: 1 0 0;
+            display: flex;
+            align-self: stretch;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            border-radius: 12px;
+            padding: 6px;
+            margin: 0 20px 5px 20px;
+            box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+
+            .query-source-settings {
+                margin-left: 20px;
+                flex: 1 0 0;
+                display: flex;
+                align-self: stretch;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+
+                > input.p-inputtext {
+                    padding-top: 7px !important;
+                    padding-bottom: 7px !important;
+                    margin-left: 7px !important;
+                    margin-right: 7px !important;
+                    height: 30px !important;
+                    width: 300px !important;
+                }
+
+                > input.p-inputtext.ng-invalid {
+                    border-color: #c42436 !important;
+                }
+
+                > i {
+                    color: #777777;
+                }
+
+                > label {
+                    position: relative;
+                    font-feature-settings: 'clig' off, 'liga' off;
+
+                    font-family: Roboto, sans-serif;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    letter-spacing: 0.15px;
+                }
+            }
+
+            .query-source-label {
+                color: #3F51B5;
+                margin-right: 20px;
+                font-feature-settings: 'clig' off, 'liga' off;
+
+                font-family: Roboto, sans-serif;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 120%;
+            }
+        }
+
+        .query-editor-container {
+            width: 100%;
+            height: calc(100% - 60px);
+            display: flex;
+
+            sql-editor {
+                width: calc(100% - 40px);
+                height: 100%;
+
+                .sql-editor {
+                    width: 100%;
+                    height: 100%;
+
+                    query-table-selector .query-table-selector {
+                        border-left: 0;
+                        border-radius: 0;
+                        border-color: rgba(0, 0, 0, 0.12);
+                    }
+
+                    code-editor .ql-container {
+                        border-right: 0;
+                        border-radius: 0;
+                        padding-right: 0;
+                        border-color: rgba(0, 0, 0, 0.12);
+
+                        .ql-editor {
+                            border-radius: 0 !important;
+                        }
+                    }
+                }
+            }
+
+            .query-editor-utils {
+                width: 50px;
+                height: 100%;
+                padding: 10px 10px 10px 0;
+                background: white;
+                border-top: 1px solid;
+                border-bottom: 1px solid;
+                border-color: rgba(0, 0, 0, 0.12);
+
+                p-selectbutton {
+                    height: 100%;
+                    display: block;
+
+                    .p-selectbutton {
+                        gap: 4px;
+                        height: 100%;
+                        padding: 3px;
+                        display: flex;
+                        border-radius: 0 3px 3px 0;
+                        flex-direction: column;
+                        background-color: #F5F5F5;
+                        border: 1px solid rgba(0, 0, 0, 0.12);
+
+                        .p-button {
+                            padding: 2px;
+                            height: 30px;
+                            display: flex;
+                            max-width: 100%;
+                            min-width: unset;
+                            min-height: unset;
+                            border-radius: 3px;
+                            justify-content: center;
+                            box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
+
+                            > i {
+                                padding: 0;
+                                height: 20px;
+                                color: #646464;
+                            }
+                        }
+
+                        .p-button:not(:focus).p-highlight > i {
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+
+        .query-editor-container:has(+ .query-preview-container) {
+            height: 70% !important;
+        }
+
+        .query-preview-container {
+            width: 100%;
+            height: 100%;
+
+            h3 {
+                height: 30px;
+                margin: 0 0 0 20px !important;
+            }
+
+            query-preview > .query-preview {
+                width: 100%;
+                padding: 14px;
+                height: calc(100% - 30px) !important;
+            }
+        }
+    }
+
+    .query-creation-dialog.p-dialog {
+        width: 100%;
+        max-width: 450px;
+
+        .p-dialog-content {
+            padding-bottom: 3px;
+
+            .inputs-group-row {
+
+                .inputs-group-row-name {
+                    width: 100px;
+                }
+
+                .inputs-group-row-name + .inputs-group-row-value {
+                    width: calc(100% - 100px);
+                }
+            }
+        }
+
+        .p-dialog-footer {
+            padding-top: 3px;
+        }
+    }
+
+    .query-options-dialog.p-dialog {
+        width: 400px;
+        height: 426px;
+        display: flex;
+        flex-shrink: 0;
+        flex-direction: column;
+        align-items: flex-start;
+
+        border-radius: 12px;
+        background: #FFF;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.25);
+
+        .p-dialog-header {
+            .query-options-dialog-header {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                align-self: stretch;
+
+                .query-options-dialog-header-text {
+                    margin-bottom: 0 !important;
+                }
+
+                .query-options-dialog-subheader-text {
+                    width: 316px;
+                    color: rgba(0, 0, 0, 0.38);
+                    font-feature-settings: 'clig' off, 'liga' off;
+
+                    font-family: Roboto, sans-serif;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 130%;
+                }
+            }
+        }
+
+        .p-dialog-content {
+            display: flex;
+            padding: 8px 24px 8px 12px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1px;
+            flex: 1 0 0;
+            align-self: stretch;
+            background: #F5F5F5;
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+            .query-option {
+                display: flex;
+                height: 34.7px;
+                padding: 10px 10px 10px 15px;
+                align-items: center;
+                gap: 9px;
+                align-self: stretch;
+                border-radius: 6px;
+
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: Roboto, sans-serif;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                letter-spacing: 0.15px;
+            }
+
+            .query-option-selected,
+            .query-option:hover {
+                background: rgba(63, 81, 181, 0.12);
+            }
+
+            .query-option-selected {
+                color: #3F51B5;
+                font-weight: 500;
+            }
+        }
+
+        .p-dialog-footer {
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    }
+}

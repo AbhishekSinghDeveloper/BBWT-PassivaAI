@@ -1,0 +1,49 @@
+:host ::ng-deep {
+    .btnBadge {
+        max-width: 3rem;
+    }
+
+    .main-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .p-inputtext {
+        height: 100%;
+    }
+
+    .p-inputnumber-input {
+        padding-bottom: 0.9rem !important;
+    }
+
+    .p-button.p-button-rounded {
+        border-radius: 50%;
+        height: 3rem !important;
+      }
+
+    .p-button.p-button-icon-only {
+        width: 2.25rem;
+        padding: 0.65rem 0.75rem;
+    }
+
+    .container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 3rem;
+        max-width: unset !important;
+    }
+
+    .responsive-iframe {
+        position: relative;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 1rem;
+    }
+}

@@ -1,0 +1,54 @@
+<div class="card--hidden" rte="1jB">
+    <h1 rte="1jC">History</h1>
+
+    <p-tabView
+        (onChange)="
+            storeLastActiveTab($event.originalEvent.currentTarget.textContent)
+        "
+        rte="1jD"
+    >
+        <p-tabPanel
+            header="{{ tabs.Processing }}"
+            [selected]="activeTab === tabs.Processing || !activeTab"
+            *role="[systemAdmin, superAdmin]"
+            rte="1jE"
+        >
+            <bbwt-aws-event-bridge-history-processing
+                rte="1jF"
+            ></bbwt-aws-event-bridge-history-processing>
+        </p-tabPanel>
+
+        <p-tabPanel
+            header="{{ tabs.Succeed }}"
+            [selected]="activeTab === tabs.Succeed"
+            *role="[systemAdmin, superAdmin]"
+            rte="1jG"
+        >
+            <bbwt-aws-event-bridge-history-succeed
+                rte="1jH"
+            ></bbwt-aws-event-bridge-history-succeed>
+        </p-tabPanel>
+
+        <p-tabPanel
+            header="{{ tabs.Failed }}"
+            [selected]="activeTab === tabs.Failed"
+            *role="[systemAdmin, superAdmin]"
+            rte="1jI"
+        >
+            <bbwt-aws-event-bridge-history-failed
+                rte="1jJ"
+            ></bbwt-aws-event-bridge-history-failed>
+        </p-tabPanel>
+
+        <p-tabPanel
+            header="{{ tabs.Canceled }}"
+            [selected]="activeTab === tabs.Canceled"
+            *role="[systemAdmin, superAdmin]"
+            rte="1jK"
+        >
+            <bbwt-aws-event-bridge-history-canceled
+                rte="1jL"
+            ></bbwt-aws-event-bridge-history-canceled>
+        </p-tabPanel>
+    </p-tabView>
+</div>

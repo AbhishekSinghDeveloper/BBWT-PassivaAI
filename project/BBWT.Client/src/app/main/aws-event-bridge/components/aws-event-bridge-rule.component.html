@@ -1,0 +1,15 @@
+<grid #eventBridgeRuleGrid [tableSettings]="tableSettings" [gridSettings]="gridSettings" rte="1jM"></grid>
+
+<bbwt-aws-event-bridge-create-edit-rule *ngIf="createDialogVisible"
+                                        [jobsInfo]="jobsInfo"
+                                        (save)="createEBRule($event)"
+                                        (cancel)="createDialogVisible = false" rte="1jN">
+    <ng-container header>Add Job</ng-container>
+</bbwt-aws-event-bridge-create-edit-rule>
+<bbwt-aws-event-bridge-create-edit-rule *ngIf="editDialogVisible"
+                                        [rule]="editingRule"
+                                        [jobsInfo]="jobsInfo"
+                                        (save)="updateRow($event)"
+                                        (cancel)="editDialogVisible = false" rte="1jO">
+    <ng-container header>Edit Job</ng-container>
+</bbwt-aws-event-bridge-create-edit-rule>

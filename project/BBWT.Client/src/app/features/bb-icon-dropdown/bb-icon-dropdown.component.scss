@@ -1,0 +1,10 @@
+:host ::ng-deep {
+    .p-dropdown-label, .p-dropdown-item {
+        display: flex;
+        align-items: center;
+
+        .icon-label {
+            padding-left: 5px;
+        }
+    }
+}

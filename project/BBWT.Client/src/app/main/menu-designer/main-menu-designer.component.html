@@ -1,0 +1,62 @@
+<div class="main-menu-content" rte="ij">
+    <div class="tree-container" rte="ik">
+        <p-fieldset legend="Main Menu" rte="il" [disabled]="true">
+            <div class="tree-panel" rte="im">
+                <p-tree
+                    #menuTree
+                    [value]="rootNodes"
+                    [draggableNodes]="true"
+                    [droppableNodes]="true"
+                    [(selection)]="selectedNode"
+                    [loading]="loadingMenu"
+                    [validateDrop]="false"
+                    [metaKeySelection]="false"
+                    draggableScope="self"
+                    droppableScope="self"
+                    selectionMode="single"
+                    title="Main Menu"
+                    scrollHeight="flex"
+                    (onNodeDrop)="onDropNode($event)"
+                 rte="1wf">
+                    <ng-template let-node pTemplate="default">
+                        <div class="tree-item" title="{{ node.data.routerLink }}" rte="ip">
+                            <i class="material-icons" rte="iq">{{ node.data.icon }}</i>
+                            <span class="treeNodeLabel" rte="ir">{{ node.data.label }}</span>
+                        </div>
+                    </ng-template>
+                </p-tree>
+            </div>
+
+            <div class="buttons-panel" rte="is">
+                <button
+                    pButton
+                    [disabled]="!selectedNode?.data || isNewItemSelected"
+                    label="Delete"
+                    icon="pi pi-trash"
+                    (click)="deleteMainMenuItem()"
+                    rte="it"
+                ></button>
+
+                <button
+                    pButton
+                    [disabled]="isNewItemEditorMode"
+                    label="Add"
+                    (click)="addNewMainMenuItem()"
+                    icon="pi pi-plus"
+                    rte="iu"
+                ></button>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="form-container" *ngIf="selectedNode?.data" rte="iv">
+        <p-fieldset legend="Menu Item" rte="1bl">
+            <main-menu-item-edit
+                [(menuItem)]="selectedNode.data"
+                (cancelNewItem)="cancelNewMainMenuItem()"
+                (saveMenuItem)="saveMenuItem($event)"
+                rte="1bI"
+            >
+            </main-menu-item-edit>
+        </p-fieldset>
+    </div>
+</div>

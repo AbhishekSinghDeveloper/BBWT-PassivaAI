@@ -1,0 +1,7 @@
+:host ::ng-deep {
+    .data-tree {
+        max-width: 90% !important;
+        display: block !important;
+        flex-direction: unset !important;
+    }
+}

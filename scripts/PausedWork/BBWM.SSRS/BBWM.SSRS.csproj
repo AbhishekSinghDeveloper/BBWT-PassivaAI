@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.18" />
+    <PackageReference Include="HangFire" Version="1.7.25" />
+    <PackageReference Include="Hangfire.MySqlStorage" Version="2.0.0" />
+    <ProjectReference Include="..\BBWM.Core\BBWM.Core.csproj" />
+    <ProjectReference Include="..\BBWM.JWT\BBWM.JWT.csproj" />
+  </ItemGroup>
+</Project>

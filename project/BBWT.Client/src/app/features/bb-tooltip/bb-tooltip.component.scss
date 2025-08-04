@@ -1,0 +1,16 @@
+:host {
+    display: inline-block;
+    height: 1.5em;
+    width: 1.5em;
+
+    .tooltip-icon {
+        font-size: 1.5em;
+        cursor: help;
+        transition: color 300ms ease;
+        color: #b1b1b1;
+
+        &:hover {
+            color: #555;
+        }
+    }
+}

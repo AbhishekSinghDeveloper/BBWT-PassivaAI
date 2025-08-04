@@ -1,0 +1,340 @@
+<div class="card--hidden" rte="1qf">
+    <h1 rte="1qg">Complex Test</h1>
+
+    <span class="page-sub-header" rte="1qh">
+        This is a form for some complex data to test form layout and usability.
+    </span>
+    <div class="p-g" rte="1qi">
+        <div class="p-g-12" rte="1qj">
+            <form [formGroup]="orderForm" (ngSubmit)="save()" rte="1qk">
+                <p-tabView rte="1ql">
+                    <p-tabPanel rte="1qm">
+                        <ng-template pTemplate="header">
+                            <tab-warning
+                                [display]="orderDataTabInvalid"
+                                rte="1qn"
+                            ></tab-warning>
+                            Order Data
+                        </ng-template>
+
+                        <p-tabView
+                            [(activeIndex)]="orderDataActiveTab"
+                            (onChange)="addOrderDetail($event.index)"
+                            (onClose)="deleteOrderDetail($event.index)"
+                            rte="1qo"
+                        >
+                            <p-tabPanel
+                                [selected]="orderDataActiveTab === 0"
+                                rte="1qp"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tab-warning
+                                        [display]="orderTabInvalid"
+                                        rte="1qq"
+                                    ></tab-warning>
+                                    Order
+                                </ng-template>
+                                <div class="inputs-group" rte="1qr">
+                                    <div class="inputs-group-row" rte="1qs">
+                                        <label
+                                            class="inputs-group-row-name"
+                                            rte="1qt"
+                                            >Order Date:</label
+                                        >
+                                        <div
+                                            class="inputs-group-row-value"
+                                            rte="1qu"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                [showTime]="true"
+                                                [showIcon]="true"
+                                                [formControl]="orderDate"
+                                                [ngClass]="{
+                                                    'ng-invalid ng-dirty':
+                                                        invalid(orderDate)
+                                                }"
+                                                rte="1qv"
+                                            >
+                                            </p-calendar>
+                                            <div
+                                                class="p-error"
+                                                *ngIf="invalid(orderDate)"
+                                                rte="1qw"
+                                            >
+                                                <small
+                                                    *ngIf="
+                                                        orderDate.errors
+                                                            .required
+                                                    "
+                                                    rte="1qx"
+                                                >
+                                                    Order date is required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="inputs-group-row" rte="1qy">
+                                        <label
+                                            class="inputs-group-row-name"
+                                            rte="1qz"
+                                            >Required Date:</label
+                                        >
+                                        <div
+                                            class="inputs-group-row-value"
+                                            rte="1qA"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                [showTime]="true"
+                                                [showIcon]="true"
+                                                [formControl]="requiredDate"
+                                                [ngClass]="{
+                                                    'ng-invalid ng-dirty':
+                                                        invalid(requiredDate)
+                                                }"
+                                                rte="1qB"
+                                            >
+                                            </p-calendar>
+                                            <div
+                                                class="p-error"
+                                                *ngIf="invalid(requiredDate)"
+                                                rte="1qC"
+                                            >
+                                                <small
+                                                    *ngIf="
+                                                        requiredDate.errors
+                                                            .required
+                                                    "
+                                                    rte="1qD"
+                                                >
+                                                    Required date is required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="inputs-group-row" rte="1qE">
+                                        <label
+                                            class="inputs-group-row-name"
+                                            rte="1qF"
+                                            >Shipped Date:</label
+                                        >
+                                        <div
+                                            class="inputs-group-row-value"
+                                            rte="1qG"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                [showTime]="true"
+                                                [showIcon]="true"
+                                                [formControl]="shippedDate"
+                                                [ngClass]="{
+                                                    'ng-invalid ng-dirty':
+                                                        invalid(shippedDate)
+                                                }"
+                                                rte="1qH"
+                                            >
+                                            </p-calendar>
+                                            <div
+                                                class="p-error"
+                                                *ngIf="invalid(shippedDate)"
+                                                rte="1qI"
+                                            >
+                                                <small
+                                                    *ngIf="
+                                                        shippedDate.errors
+                                                            .required
+                                                    "
+                                                    rte="1qJ"
+                                                >
+                                                    Shipped date is required.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="inputs-group-row" rte="1qK">
+                                        <label
+                                            class="inputs-group-row-name"
+                                            rte="1qL"
+                                            >Is Paid:
+                                        </label>
+                                        <div
+                                            class="inputs-group-row-value"
+                                            rte="1qM"
+                                        >
+                                            <p-checkbox
+                                                [formControl]="isPaid"
+                                                [binary]="true"
+                                                rte="1qN"
+                                            ></p-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+
+                            <ng-container formArrayName="orderDetails">
+                                <p-tabPanel
+                                    *ngFor="
+                                        let control of orderDetails.controls;
+                                        let idx = index;
+                                        let cnt = count
+                                    "
+                                    [closable]="cnt > 1"
+                                    [selected]="orderDataActiveTab === idx + 1"
+                                    rte="1qO"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <tab-warning
+                                            [display]="control.invalid"
+                                            rte="1qP"
+                                        ></tab-warning>
+                                        <span rte="1qQ"
+                                            >Order Detail {{ idx + 1 }}</span
+                                        >
+                                    </ng-template>
+
+                                    <order-details-input
+                                        [formControl]="control"
+                                        rte="1qR"
+                                    ></order-details-input>
+                                </p-tabPanel>
+
+                                <p-tabPanel #addOrderDetailTab rte="1qS">
+                                    <ng-template pTemplate="header">
+                                        <i class="material-icons" rte="1qT"
+                                            >add</i
+                                        >
+                                    </ng-template>
+                                </p-tabPanel>
+                            </ng-container>
+
+                            <ng-template pTemplate="header"> </ng-template>
+                        </p-tabView>
+                    </p-tabPanel>
+
+                    <p-tabPanel rte="1qU">
+                        <ng-template pTemplate="header">
+                            <tab-warning
+                                [display]="customer.invalid"
+                                rte="1qV"
+                            ></tab-warning>
+                            Customer Details
+                        </ng-template>
+                        <div class="inputs-group" rte="1qW">
+                            <div class="inputs-group-row" rte="1qX">
+                                <label class="inputs-group-row-name" rte="1qY"
+                                    >Search Customer:
+                                </label>
+                                <div class="inputs-group-row-value" rte="1qZ">
+                                    <p-autoComplete
+                                        [suggestions]="customerSuggestions"
+                                        (completeMethod)="
+                                            searchCustomers($event.query)
+                                        "
+                                        [forceSelection]="true"
+                                        placeholder="Enter customer code..."
+                                        field="code"
+                                        [minLength]="1"
+                                        (onSelect)="customerSelected($event)"
+                                        (onClear)="customerCleared()"
+                                        [style]="{ width: '100%' }"
+                                        [dropdown]="true"
+                                        rte="1r0"
+                                    >
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <customer-input
+                            [formControl]="customer"
+                            rte="1r1"
+                        ></customer-input>
+                    </p-tabPanel>
+
+                    <p-tabPanel rte="1r2">
+                        <ng-template pTemplate="header">
+                            <tab-warning
+                                [display]="employee.invalid"
+                                rte="1r3"
+                            ></tab-warning>
+                            Employee Details
+                        </ng-template>
+                        <div class="inputs-group" rte="1r4">
+                            <div class="inputs-group-row" rte="1r5">
+                                <label class="inputs-group-row-name" rte="1r6"
+                                    >Search Employee:
+                                </label>
+                                <div class="inputs-group-row-value" rte="1r7">
+                                    <p-autoComplete
+                                        [suggestions]="employeeSuggestions"
+                                        (completeMethod)="
+                                            searchEmployees($event.query)
+                                        "
+                                        [forceSelection]="true"
+                                        placeholder="Enter employee name..."
+                                        field="name"
+                                        [minLength]="1"
+                                        (onSelect)="employeeSelected($event)"
+                                        (onClear)="employeeCleared()"
+                                        [style]="{ width: '100%' }"
+                                        [dropdown]="true"
+                                        rte="1r8"
+                                    >
+                                    </p-autoComplete>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <employee-input
+                            [formControl]="employee"
+                            rte="1r9"
+                        ></employee-input>
+                    </p-tabPanel>
+                </p-tabView>
+
+                <div class="p-g-12 buttons-panel" rte="1ra">
+                    <div class="left" rte="1rb">
+                        <button
+                            pButton
+                            type="button"
+                            label="Cancel"
+                            class="p-button-secondary"
+                            (click)="router.navigateByUrl('/')"
+                            rte="1rc"
+                        >
+                            <i class="material-icons" rte="1rd">clear</i>
+                        </button>
+                        <button
+                            pButton
+                            type="submit"
+                            label="Save"
+                            [disabled]="orderForm.invalid || creatingOrder"
+                            rte="1re"
+                        >
+                            <p-progressSpinner
+                                *ngIf="creatingOrder"
+                                [style]="{
+                                    width: '15px',
+                                    height: '15px',
+                                    'vertical-align': 'middle',
+                                    'margin-right': '5px'
+                                }"
+                                rte="1rf"
+                            ></p-progressSpinner>
+                            <i
+                                class="material-icons"
+                                *ngIf="!creatingOrder"
+                                rte="1rg"
+                                >check</i
+                            >
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

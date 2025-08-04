@@ -1,0 +1,11 @@
+@use 'sass:math';
+
+//bb-input-number-range
+$inputNumberRangeFloatingLabelLeft:3rem;
+
+/* Add your variable customizations of theme here */
+
+@function calculateRem($size) {
+    $remSize: math.div($size, 16px);
+    @return $remSize;
+}

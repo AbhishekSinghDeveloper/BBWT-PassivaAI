@@ -1,0 +1,53 @@
+<div *ngIf="settings" class="p-g" rte="Sx">
+    <div class="inputs-group no-labels-padding p-g-12" rte="Sy">
+        <div class="inputs-group-row" rte="Sz">
+            <div class="inputs-group-row-name" rte="SA">SMTP:</div>
+            <div class="inputs-group-row-value" rte="SB">{{settings.smtp}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SC">
+            <div class="inputs-group-row-name" rte="SD">Port:</div>
+            <div class="inputs-group-row-value" rte="SE">{{settings.port}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SF">
+            <div class="inputs-group-row-name" rte="SG">User name:</div>
+            <div class="inputs-group-row-value" rte="SH">{{settings.userName}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SI">
+            <div class="inputs-group-row-name" rte="SJ">Enable SSL:</div>
+            <div class="inputs-group-row-value" rte="SK">{{settings.enableSsl}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SL">
+            <div class="inputs-group-row-name" rte="SM">Admin address:</div>
+            <div class="inputs-group-row-value" rte="SN">{{settings.adminAddress}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SO">
+            <div class="inputs-group-row-name" rte="SP">From address:</div>
+            <div class="inputs-group-row-value" rte="SQ">{{settings.fromAddress}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SR">
+            <div class="inputs-group-row-name" rte="SS">Use default credentials:</div>
+            <div class="inputs-group-row-value" rte="ST">{{settings.useDefaultCredentials}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SU">
+            <div class="inputs-group-row-name" rte="SV">Use test address for outgoing emails:</div>
+            <div class="inputs-group-row-value" rte="SW">{{settings.useTestAddressForOutgoingEmails}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="SX">
+            <div class="inputs-group-row-name" rte="SY">Test email address:</div>
+            <div class="inputs-group-row-value" rte="SZ">{{settings.testEmailAddress}}</div>
+        </div>
+
+
+        <div class="buttons-panel buttons-panel-left-alignment" rte="T0">
+            <button pButton type="button" label="Test Email" (click)="testEmail()" rte="T1"></button>
+        </div>
+    </div>
+</div>

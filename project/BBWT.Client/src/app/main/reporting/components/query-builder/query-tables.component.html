@@ -1,0 +1,377 @@
+<div class="query-tables-panel">
+    <div class="tables-selectors-container">
+        <p-dropdown [(ngModel)]="_selectedFolderId"
+                    [options]="_folderOptions"
+                    class="folder-selector"
+                    appendTo="body"
+                    [disabled]="queryBuilderComponent.query?.queryTables?.length || loading || _cbc.controllerLoading"
+                    (onChange)="_onSelectedFolderChanged()">
+        </p-dropdown>
+
+        <button pButton
+                type="button"
+                icon="pi pi-plus"
+                title="Add table from source"
+                class="source-table-selector p-button-secondary p-button-outlined"
+                (click)="_onShowSourceTablesDialogClick()"></button>
+    </div>
+
+    <p-treeTable #tablesTree
+                 [loading]="loading || _cbc.queryTreeLoading || _cbc.controllerLoading"
+                 [value]="_nodes"
+                 [scrollable]="true"
+                 [(selection)]="_selectedNodes"
+                 dataKey="id"
+                 selectionMode="checkbox"
+                 (onNodeSelect)="_onSelectNode($event)"
+                 (onNodeUnselect)="_onUnselectNode($event)"
+                 (onNodeExpand)="_onNodeExpand($event)"
+                 scrollHeight="flex">
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode">
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                    <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+                    <i *ngIf="_getNodeClass(rowData)" class="material-icons">{{ _getNodeClass(rowData) }}</i>
+                    {{ rowData.label }}<ng-container *ngIf="rowData.alias"> as <span class="table-alias">{{rowData.alias}}</span></ng-container>
+                </td>
+                <td class="tables-tree-buttons-column">
+                    <div class="tables-tree-buttons-container">
+                        <button *ngIf="rowData.itemType === 'table' && rowData.queryTable"
+                                type="button"
+                                pButton
+                                title="Duplicate table with new alias"
+                                icon="pi pi-copy"
+                                (click)="_onDuplicateQueryTableClick(rowNode)">
+                        </button>
+                        <button *ngIf="rowData.itemType === 'table' && rowData.queryTable"
+                                type="button"
+                                pButton
+                                title="Edit table joins"
+                                icon="pi pi-link"
+                                (click)="_onEditQueryTableJoinsClick(rowNode)">
+                        </button>
+                    </div>
+                </td>
+                <!--TODO: recover-->
+                <!--<div [class.disabled]="node.selectable === false"
+                     [pTooltip]="node.styleClass === 'selected-hidden-node' ? 'This column is marked as hidden in DB Documenting feature and therefore cannot be selected again' : null"
+                     class="tree-item" (mouseenter)="onMouse(node,$event)">
+                    <i class="material-icons">{{ _getNodeClass(node) }}</i>
+                    <span class="tree-item-label">{{ node.label }}</span>
+                </div>-->
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>
+
+
+<p-dialog [(visible)]="_tableJoinsEditingDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '1000px', width: '100%'}"
+          header="Edit Table JOINs"
+          appendTo="body"
+          (onHide)="_onTableJoinsEditingDialogHide()">
+    <div *ngIf="_editingQueryTableJoinRelations && _editingJoinsQueryTable" class="joins-editing-form">
+        <div class="inputs-group">
+            <div class="inputs-group-row no-label-padding source-query-table-row">
+                <label class="inputs-group-row-name">Source table:</label>
+                <div class="inputs-group-row-value" [ngSwitch]="_editingJoinsQueryTable.sourceCode">
+                    <ng-container *ngSwitchCase="'form'">
+                        {{_editingJoinsQueryTable.sourceTableId}}
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        {{_getTableName(_editingJoinsQueryTable.sourceTableId)}}
+                        <ng-container *ngIf="_editingJoinsQueryTable.alias"> as <span class="joins-source-table-alias">{{_editingJoinsQueryTable.alias}}</span></ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="table-joins">
+            <div *ngFor="let joinItem of _editingQueryTableJoinRelations" class="join-item">
+                <ng-container *ngIf="joinItem.queryTableJoinId !== _activeEditingJoin?.queryTableJoinId; else joinEditing">
+                    <div class="join-params">
+                        <div class="join-param-item">
+                            <span class="join-param-label">From column</span>
+                            <span class="join-param-value">{{_cbc.queryColumnsMetadataMap[joinItem.sourceQueryTableColumnId]?.staticData?.columnName}}</span>
+                        </div>
+                        <div class="join-param-item">
+                            <span class="join-param-label">To table</span>
+                            <span class="join-param-value" [ngSwitch]="joinItem.destinationQueryTable.sourceCode">
+                                <ng-container *ngSwitchCase="'form'">
+                                    {{joinItem.destinationQueryTable.sourceTableId}}
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{_cbc.queryTablesMetadataMap[joinItem.destinationQueryTableId]?.staticData?.tableName}}
+                                    <ng-container *ngIf="joinItem.destinationQueryTable?.alias"> as <span class="table-alias">{{joinItem.destinationQueryTable?.alias}}</span></ng-container>
+                                </ng-container>
+                            </span>
+                        </div>
+                        <div class="join-param-item">
+                            <span class="join-param-label">To column</span>
+                            <span class="join-param-value">{{_cbc.queryColumnsMetadataMap[joinItem.destinationQueryTableColumnId]?.staticData?.columnName}}</span>
+                        </div>
+                    </div>
+                    <div class="join-item-buttons">
+                        <button type="button"
+                                pButton
+                                icon="pi pi-times"
+                                class="p-button-danger"
+                                (click)="_startJoinDeleting(joinItem)">
+                        </button>
+                        <button type="button"
+                                pButton
+                                icon="pi pi-pencil"
+                                (click)="_startJoinEditing(joinItem)">
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+            <div *ngIf="!!_activeEditingJoin && !_activeEditingJoin.queryTableJoinId" class="join-item">
+                <ng-container *ngTemplateOutlet="joinEditing"></ng-container>
+            </div>
+        </div>
+        <div class="buttons-panel-left-alignment">
+            <button *ngIf="!_activeEditingJoin || _activeEditingJoin.queryTableJoinId"
+                    type="button"
+                    pButton
+                    label="Create new JOIN"
+                    icon="pi pi-plus"
+                    (click)="_startJoinEditing()">
+            </button>
+        </div>
+    </div>
+
+    <p-footer>
+        <button pButton
+                label="Close"
+                class="p-button-secondary"
+                (click)="_tableJoinsEditingDialogVisible = false">
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="_duplicateCreationDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Create Table Duplicate"
+          appendTo="body"
+          (onHide)="_onDuplicateCreationDialogHide()">
+    <div *ngIf="_duplicateCreationJoin" class="duplicate-creation-form">
+        <div class="inputs-group">
+            <div class="inputs-group-row no-label-padding source-query-table-row">
+                <label class="inputs-group-row-name">Source table:</label>
+                <div class="inputs-group-row-value">
+                    {{_getTableName(_duplicateCreationSourceTable.sourceTableId)}}
+                    <ng-container *ngIf="_duplicateCreationSourceTable.alias">
+                        as <span class="duplicate-creation-form-source-table-alias">{{_duplicateCreationSourceTable.alias}}</span>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">From column:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="_duplicateCreationJoin.fromDbDocColumnId"
+                                [options]="_duplicateCreationColumnOptions"
+                                appendTo="body"
+                                placeholder="Select column"
+                                (onChange)="_onDuplicateCreationFromColumnChange()">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">To column:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="_duplicateCreationJoin.toDbDocColumnId"
+                                [options]="_duplicateCreationColumnOptions"
+                                appendTo="body"
+                                placeholder="Select column"
+                                (onChange)="_onDuplicateCreationToColumnChange()">
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-footer *ngIf="_duplicateCreationJoin">
+        <button pButton
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="_duplicateCreationDialogVisible = false">
+        </button>
+        <button pButton
+                label="Add"
+                [disabled]="!_duplicateCreationJoin.fromDbDocColumnId || !_duplicateCreationJoin.toDbDocColumnId"
+                (click)="_createDuplicateQueryTable()">
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="_sourceTablesDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%', 'height': '600px'}"
+          header="Add Table From Source">
+    <div class="source-tables-tree">
+        <p-treeTable #sourceTablesTree
+                     [value]="_sourceNodes"
+                     [scrollable]="true"
+                     [(selection)]="_selectedSourceNodes"
+                     selectionMode="checkbox">
+            <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                <tr [ttRow]="rowNode">
+                    <td>
+                        <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                        <p-treeTableCheckbox *ngIf="rowData.itemType === 'table' || rowData.itemType === 'source'" [value]="rowNode"></p-treeTableCheckbox>
+                        <i *ngIf="_getNodeClass(rowData)" class="material-icons">{{ _getNodeClass(rowData) }}</i>
+                        {{ rowData.label }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-treeTable>
+    </div>
+    <p-footer>
+        <button pButton
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="_sourceTablesDialogVisible = false">
+        </button>
+        <button pButton
+                label="Add"
+                (click)="_onAddSourceTablesClick()">
+        </button>
+    </p-footer>
+</p-dialog>
+
+
+<ng-template #joinEditing>
+    <ng-container *ngIf="_activeEditingJoin">
+        <div class="join-params-editing">
+            <div class="join-params-group">
+                <span class="join-params-group-label">From:</span>
+                <div class="join-params-group-inputs">
+                    <div class="join-params-group-row">
+                        <div class="join-params-group-selector">
+                            <p-radioButton *ngIf="_activeEditingJoinFromSourceColumnOptions?.length"
+                                           [(ngModel)]="_activeEditingJoinFromSideExistingQueryTableColumn"
+                                           name="activeEditingJoinFromSideExistingQueryTableColumn"
+                                           label="Existing table column"
+                                           [value]="true"
+                                           (onClick)="_onActiveEditingJoinFromSideExistingQueryTableColumnChanged()">
+                            </p-radioButton>
+                            <p-dropdown [(ngModel)]="_activeEditingJoin.sourceQueryTableColumnId"
+                                        [options]="_activeEditingJoinFromQueryTableColumnOptions"
+                                        [disabled]="!_activeEditingJoinFromSideExistingQueryTableColumn"
+                                        appendTo="body"
+                                        placeholder="Select column">
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="_activeEditingJoinFromSourceColumnOptions?.length" class="join-params-group-selector">
+                            <p-radioButton [(ngModel)]="_activeEditingJoinFromSideExistingQueryTableColumn"
+                                           name="activeEditingJoinFromSideExistingQueryTableColumn"
+                                           label="New table column"
+                                           [value]="false"
+                                           (onClick)="_onActiveEditingJoinFromSideExistingQueryTableColumnChanged()">
+                            </p-radioButton>
+                            <p-dropdown [(ngModel)]="_activeEditingJoin.sourceDbDocColumnId"
+                                        [options]="_activeEditingJoinFromSourceColumnOptions"
+                                        [disabled]="_activeEditingJoinFromSideExistingQueryTableColumn"
+                                        appendTo="body"
+                                        placeholder="Select column source">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="join-params-group">
+                <span class="join-params-group-label">To:</span>
+                <div class="join-params-group-inputs">
+                    <div class="join-params-group-row">
+                        <div class="join-params-group-selector">
+                            <p-radioButton [(ngModel)]="_activeEditingJoinToSideExistingQueryTable"
+                                           name="activeEditingJoinToSideExistingQueryTable"
+                                           label="Existing table"
+                                           [value]="true"
+                                           (onClick)="_onActiveEditingJoinToSideExistingQueryTableChanged()">
+                            </p-radioButton>
+                            <p-dropdown [(ngModel)]="_activeEditingJoin.destinationQueryTableId"
+                                        [options]="_activeEditingJoinToQueryTableOptions"
+                                        [disabled]="!_activeEditingJoinToSideExistingQueryTable"
+                                        appendTo="body"
+                                        placeholder="Select table"
+                                        (onChange)="_onToQueryTableChange()">
+                            </p-dropdown>
+                        </div>
+                        <div class="join-params-group-selector">
+                            <p-radioButton [(ngModel)]="_activeEditingJoinToSideExistingQueryTable"
+                                           name="activeEditingJoinToSideExistingQueryTable"
+                                           label="New table"
+                                           [value]="false"
+                                           (onClick)="_onActiveEditingJoinToSideExistingQueryTableChanged()">
+                            </p-radioButton>
+                            <p-dropdown [(ngModel)]="_activeEditingJoin.destinationDbDocTableId"
+                                        [options]="_activeEditingJoinToSourceTableOptions"
+                                        [disabled]="_activeEditingJoinToSideExistingQueryTable"
+                                        appendTo="body"
+                                        placeholder="Select table source"
+                                        (onChange)="_onToSourceDbDocTableChange()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="join-params-group-row">
+                        <div class="join-params-group-selector">
+                            <p-radioButton *ngIf="_activeEditingJoinToQueryTableColumnOptions?.length && _activeEditingJoinToSourceColumnOptions?.length"
+                                           [(ngModel)]="_activeEditingJoinToSideExistingQueryTableColumn"
+                                           name="activeEditingJoinFromSideExistingQueryTableColumn"
+                                           label="Existing table column"
+                                           [value]="true"
+                                           (onClick)="_onActiveEditingJoinToSideExistingQueryTableColumnChanged()">
+                            </p-radioButton>
+                            <p-dropdown [(ngModel)]="_activeEditingJoin.destinationQueryTableColumnId"
+                                        [options]="_activeEditingJoinToQueryTableColumnOptions"
+                                        [disabled]="!_activeEditingJoin.destinationQueryTableId && !_activeEditingJoin.destinationDbDocTableId ||
+                                                    !_activeEditingJoinToQueryTableColumnOptions?.length || !_activeEditingJoinToSideExistingQueryTableColumn"
+                                        appendTo="body"
+                                        placeholder="Select column">
+                            </p-dropdown>
+                        </div>
+                        <div class="join-params-group-selector">
+                            <p-radioButton *ngIf="_activeEditingJoinToQueryTableColumnOptions?.length && _activeEditingJoinToSourceColumnOptions?.length"
+                                           [(ngModel)]="_activeEditingJoinToSideExistingQueryTableColumn"
+                                           name="activeEditingJoinFromSideExistingQueryTableColumn"
+                                           label="New table column"
+                                           [value]="false"
+                                           (onClick)="_onActiveEditingJoinToSideExistingQueryTableColumnChanged()">
+                            </p-radioButton>
+                            <p-dropdown [(ngModel)]="_activeEditingJoin.destinationDbDocColumnId"
+                                        [options]="_activeEditingJoinToSourceColumnOptions"
+                                        [disabled]="!_activeEditingJoin.destinationQueryTableId && !_activeEditingJoin.destinationDbDocTableId ||
+                                                    !_activeEditingJoinToSourceColumnOptions?.length || _activeEditingJoinToSideExistingQueryTableColumn"
+                                        appendTo="body"
+                                        placeholder="Select column source">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="join-item-buttons">
+            <button type="button"
+                    pButton
+                    icon="pi pi-times"
+                    class="p-button-secondary"
+                    (click)="_activeEditingJoin = null">
+            </button>
+            <button type="button"
+                    pButton
+                    icon="pi pi-check"
+                    [disabled]="!_activeEditingJoin.sourceQueryTableColumnId && !_activeEditingJoin.sourceDbDocColumnId ||
+                                !_activeEditingJoin.destinationQueryTableId && !_activeEditingJoin.destinationDbDocTableId ||
+                                !_activeEditingJoin.destinationQueryTableColumnId && !_activeEditingJoin.destinationDbDocColumnId"
+                    (click)="_saveActiveEditingJoin()">
+            </button>
+        </div>
+    </ng-container>
+</ng-template>

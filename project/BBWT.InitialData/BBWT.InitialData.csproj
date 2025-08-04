@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\modules\BBWM.Core.Web.CookieAuth\BBWM.Core.Web.CookieAuth.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.Core\BBWM.Core.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.DbDoc\BBWM.DbDoc.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.Feedback\BBWM.Feedback.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.FileStorage\BBWM.FileStorage.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.LoadingTime\BBWM.LoadingTime.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.Maintenance\BBWM.Maintenance.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.Menu\BBWM.Menu.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.Messages.Templates\BBWM.Messages.Templates.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.Core.Membership\BBWM.Core.Membership.csproj" />
+        <ProjectReference Include="..\..\modules\BBWM.StaticPages\BBWM.StaticPages.csproj" />
+        <ProjectReference Include="..\BBWT.Data\BBWT.Data.csproj" />
+        <ProjectReference Include="..\BBWT.Services\BBWT.Services.csproj" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,71 @@
+﻿:host::ng-deep {
+    .query-preview {
+        grid {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow: hidden;
+
+            p-table {
+                width: 100%;
+                height: 100%;
+
+                .p-datatable {
+                    height: 100%;
+
+                    .p-datatable-wrapper {
+                        max-height: calc(100% - 70px) !important;
+                    }
+
+                    .p-datatable-wrapper > table > thead {
+                        top: 0 !important;
+                        z-index: 10 !important;
+                        position: sticky !important;
+                    }
+
+                    .p-datatable-wrapper > table > thead > tr > th {
+                        padding-left: 7px !important;
+                        padding-right: 7px !important;
+                        border: 1px solid rgb(226, 226, 226) !important;
+                    }
+
+                    .p-datatable-wrapper > table > thead > tr > th:hover {
+                        background: rgb(240, 240, 240) !important;
+                        border: 1px solid rgb(240, 240, 240) !important;
+                    }
+
+                    .p-datatable-wrapper > table > thead > tr > th.p-sortable-column.p-highlight {
+                        background: rgb(240, 240, 240) !important;
+                        border: 1px solid rgb(240, 240, 240) !important;
+                    }
+
+                    .p-datatable-wrapper > table > tbody > tr > td {
+                        padding: 7px !important;
+                    }
+
+                    .p-datatable-wrapper > table > tbody > tr > td:first-child {
+                        border-left: 1px solid rgb(0, 0, 0, 0.12) !important;
+                    }
+
+                    .p-datatable-wrapper > table > tbody > tr > td:last-child {
+                        border-right: 1px solid rgb(0, 0, 0, 0.12) !important;
+                    }
+                }
+
+
+                .p-paginator-bottom {
+                    height: 60px !important;
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                }
+
+                .p-datatable-footer {
+                    padding: 0 !important;
+                    height: 10px !important;
+                    border-bottom-left-radius: 6px !important;
+                    border-bottom-right-radius: 6px !important;
+                }
+            }
+        }
+    }
+}

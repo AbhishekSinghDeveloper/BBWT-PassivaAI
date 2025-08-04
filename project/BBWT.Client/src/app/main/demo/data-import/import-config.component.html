@@ -1,0 +1,249 @@
+<div class="tools-panel tools-panel-top" rte="vo">
+    <div class="tools-panel-full" rte="vp">
+        <div class="tools-panel-item" rte="vq">
+            <label for="firstRow" rte="vr">First row:</label>
+            <p-inputNumber id="firstRow" [(ngModel)]="firstRow" [showButtons]="true" [min]="0" rte="vs"></p-inputNumber>
+        </div>
+        <div class="tools-panel-item" rte="vt">
+            <label for="maxErrorsCount" rte="vu">Max errors count:</label>
+            <p-inputNumber id="maxErrorsCount" [(ngModel)]="maxErrorsCount" [showButtons]="true" [min]="0" rte="vv"></p-inputNumber>
+        </div>
+    </div>
+</div>
+
+<p-table [autoLayout]="true" [value]="columnDefinitions" [lazy]="false" [paginator]="true" [rows]="25" [rowsPerPageOptions]="[10, 25, 50]"
+         selectionMode="single" [(selection)]="selectedDef" [tableStyle]="{'table-layout':' auto'}" rte="vw">
+    <ng-template pTemplate="header">
+        <tr rte="vy">
+            <th [style]="{'width': '10%'}" pResizableColumn rte="vz">Order Number</th>
+            <th [style]="{'width': '10%'}" pResizableColumn rte="vA">Position</th>
+            <th pResizableColumn rte="vB">Target field name</th>
+            <th pResizableColumn rte="vC">Type</th>
+            <th pResizableColumn rte="vD">Allow Null</th>
+            <th pResizableColumn rte="vE">Default Value</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr rte="vG">
+            <td rte="vH">{{item.orderNumber}}</td>
+            <td rte="vI">{{item.position}}</td>
+            <td rte="vJ">{{item.targetFieldName}}</td>
+            <td rte="vK">{{getCellDataTypeName(item.type)}}</td>
+            <td rte="vL">{{item.isAllowNulls}}</td>
+            <td rte="vM">{{item.defaultValue}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<div class="tools-panel tools-panel-bottom" rte="vN">
+    <div class="tools-panel-left" rte="vO">
+        <button pButton
+                type="button"
+                label="Add"
+                icon="pi pi-plus"
+                class="tools-panel-item"
+                (click)="addDef()" rte="vP">
+        </button>
+        <button pButton
+                type="button"
+                label="Edit"
+                [disabled]="!selectedDef"
+                icon="pi pi-pencil"
+                class="tools-panel-item"
+                (click)="editDef(selectedDef)" rte="vQ">
+        </button>
+        <button pButton
+                type="button"
+                label="Delete"
+                [disabled]="!selectedDef"
+                icon="pi pi-trash"
+                class="tools-panel-item"
+                (click)="deleteDef(selectedDef)" rte="vR">
+        </button>
+    </div>
+    <div class="tools-panel-right" rte="vS">
+        <div class="tools-panel-item" rte="vT">
+            <label for="selectedXls" rte="vU">Sample files:</label>
+            <p-dropdown id="selectedXls" [options]="SampleXls" placeholder="Choose the data" [(ngModel)]="selectedXls" rte="vV"></p-dropdown>
+        </div>
+        <div class="tools-panel-item" rte="vW">
+            <button pButton type="button" label="Download" [disabled]="!selectedXls" (click)="downloadSample()" rte="vX">
+                <i class="material-icons" rte="vY">get_app</i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="dialogIsVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          [header]="editingMode === 'add' ? 'Add Column Definition' : 'Edit Column Definition [' + originalDef?.orderNumber + ']'"
+          (onHide)="finishEdit()" rte="vZ">
+    <form *ngIf="editingDef" [formGroup]="dialogForm" class="inputs-group" rte="w0">
+        <div class="inputs-group-row" rte="w1">
+            <div class="inputs-group-row-name" rte="w2">
+                <label for="orderNumber" rte="w3">Order number:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="w4">
+                <p-inputNumber [(ngModel)]="editingDef.orderNumber"
+                           formControlName="orderNumber"
+                           id="orderNumber"
+                           name="orderNumber"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="columnDefinitions.length + (editingMode === 'add' ? 1 : 0)" rte="w5">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="w6">
+            <div class="inputs-group-row-name" rte="w7">
+                <label for="position" rte="w8">Position:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="w9">
+                <p-inputNumber [(ngModel)]="editingDef.position"
+                           formControlName="position"
+                           id="position"
+                           name="position"
+                           [showButtons]="true"
+                           [min]="1" rte="wa">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="wb">
+            <div class="inputs-group-row-name" rte="wc">
+                <label for="targetFieldName" rte="wd">Target field name:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="we">
+                <input pInputText
+                       [(ngModel)]="editingDef.targetFieldName"
+                       formControlName="targetFieldName"
+                       id="targetFieldName"
+                       name="targetFieldName"  rte="wf"/>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="wg">
+            <div class="inputs-group-row-name" rte="wh">
+                <label for="type" rte="wi">Type:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="wj">
+                <p-dropdown [(ngModel)]="editingDef.type"
+                            formControlName="dataType"
+                            [options]="dataTypes"
+                            appendTo="body"
+                            id="type"
+                            name="dataTypes"
+                            (onChange)="changeDataType($event)" rte="wk">
+                </p-dropdown>
+            </div>
+        </div>
+        <ng-container *ngIf="editingDef.type === 1">
+            <div class="inputs-group-row" rte="wm">
+                <div class="inputs-group-row-name" rte="wn">
+                    <label for="typeInfoMin" rte="wo">Min:</label>
+                </div>
+                <div class="inputs-group-row-value" rte="wp">
+                    <p-inputNumber [(ngModel)]="editingDef.typeInfo.min"
+                               formControlName="typeInfo_min"
+                               [showButtons]="true"
+                               [min]="0"
+                               [max]="editingDef.typeInfo.max - 0.01"
+                               step="0.01"
+                               id="typeInfoMin"
+                               name="typeInfo_min"
+                               (onChange)="changTypeInfo_min($event)" rte="wq">
+                    </p-inputNumber>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="wr">
+                <div class="inputs-group-row-name" rte="ws">
+                    <label for="typeInfo_max" rte="wt">Max:</label>
+                </div>
+                <div class="inputs-group-row-value" rte="wu">
+                    <p-inputNumber [(ngModel)]="editingDef.typeInfo.max"
+                               formControlName="typeInfo_max"
+                               [showButtons]="true"
+                               [min]="editingDef.typeInfo.min + 0.01"
+                               [max]="100"
+                               step="0.01"
+                               id="typeInfo_max"
+                               name="typeInfo_max"
+                               (onChange)="changTypeInfo_max($event)" rte="wv">
+                    </p-inputNumber>
+                </div>
+            </div>
+        </ng-container>
+        <div *ngIf="editingDef.type === 2 || editingDef.type === 6" class="inputs-group-row" rte="ww">
+            <div class="inputs-group-row-name" rte="wx">
+                <label for="typeInfo_dateFormats" rte="wy">Date formats:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="wz">
+                <input pInputText
+                       [(ngModel)]="editingDef.typeInfo.dateFormats"
+                       formControlName="typeInfo_dateFormats"
+                       id="typeInfo_dateFormats"
+                       name="typeInfo_dateFormats"  rte="wA"/>
+            </div>
+        </div>
+        <div *ngIf="editingDef.type === 5" class="inputs-group-row" rte="wB">
+            <div class="inputs-group-row-name" rte="wC">
+                <label for="typeInfo_customValidation" rte="wD">Custom validation:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="wE">
+                <p-dropdown [(ngModel)]="editingDef.typeInfo.customValidation"
+                            formControlName="customValidationTypes"
+                            id="typeInfo_customValidation"
+                            name="customValidationTypes"
+                            [options]="customValidationTypes"
+                            appendTo="body" rte="wF">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="wG">
+            <div class="inputs-group-row-name" rte="wH">
+                <label for="isAllowNulls" rte="wI">Is allow nulls:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="wJ">
+                <p-checkbox [(ngModel)]="editingDef.isAllowNulls"
+                            formControlName="isAllowNulls"
+                            id="isAllowNulls"
+                            name="isAllowNulls"
+                            label="Allow null"
+                            [binary]="true" rte="wK">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="wL">
+            <div class="inputs-group-row-name" rte="wM">
+                <label for="defaultValue" rte="wN">Default value:</label>
+            </div>
+            <div class="inputs-group-row-value" rte="wO">
+                <input pInputText
+                       [(ngModel)]="editingDef.defaultValue"
+                       formControlName="defaultValue"
+                       id="defaultValue"
+                       name="defaultValue"  rte="wP"/>
+                <div *ngIf="!dialogForm.controls['defaultValue'].valid &&
+                             dialogForm.controls['defaultValue'].dirty &&
+                             dialogForm.controls['defaultValue'].errors &&
+                             dialogForm.controls['defaultValue'].errors.error"
+                     class="p-message p-messages-error p-corner-all" rte="wQ">
+                    {{dialogForm.controls['defaultValue'].errors.error}}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <p-footer rte="wR">
+        <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="dialogIsVisible = false" rte="wS">
+            <i class="material-icons" rte="wT">clear</i>
+        </button>
+        <button pButton
+                type="button"
+                [label]="editingMode === 'add' ? 'Add' : 'Save'"
+                [disabled]="dialogForm && dialogForm.invalid"
+                (click)="commitEdit()" rte="wU">
+            <i class="material-icons" rte="wV">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

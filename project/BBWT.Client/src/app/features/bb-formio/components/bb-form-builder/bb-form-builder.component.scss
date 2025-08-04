@@ -1,0 +1,40 @@
+.component-container {
+    margin: 0.25rem;
+    padding: 1rem;
+    border: 1px solid lightgray;
+}
+
+.text-error {
+    color: darkred;
+}
+
+.form-check {
+    @media screen and (max-width: 1024px) {
+        margin-left: 15px !important;
+        margin-bottom: 3px;
+        width: 100%;
+    }
+    width: 11%;
+    margin-top: 0.4rem;
+    :is(label, input) {
+        cursor: pointer !important;
+    }
+    label {
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+    }
+}
+
+.form-dd {
+    @media screen and (max-width: 1024px) {
+        margin-left: 15px !important;
+        margin-right: 15px !important;
+        margin-bottom: 3px;
+        width: 100%;
+    }
+    width: 28%;
+    p-dropdown div {
+        display: flex !important;
+    }
+}

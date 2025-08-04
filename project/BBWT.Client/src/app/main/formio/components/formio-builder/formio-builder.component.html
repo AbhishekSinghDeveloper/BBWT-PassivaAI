@@ -1,0 +1,8 @@
+<div class="card main-container">
+    <bb-form-builder [formDefId]="formId" [formRevisionId]="formRevisionId"
+                     [isNewRevision]="isNewRevision" [categories]="categories"></bb-form-builder>
+    <div class="close-tab d-flex justify-content-around">
+        <button type="button" class="btn btn-primary mr-2" (click)="confirm()">Close tab</button>
+    </div>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+</div>

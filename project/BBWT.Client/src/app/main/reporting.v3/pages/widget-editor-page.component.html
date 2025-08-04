@@ -1,0 +1,22 @@
+<div class="widget-builder-header pl-4 pr-4">
+    <div class="flex justify-content-between align-items-center">
+        <p-button icon="pi pi-arrow-left" styleClass="p-button-text mr-2" (onClick)="cancel()"></p-button>
+        <h2>{{ !widgetSourceId ? 'Create' : 'Edit' }} Widget</h2>
+    </div>
+    <div class="widget-toolbar">
+        <p-button *ngIf="queryBuilderTabActive"
+                  label="Save query"
+                  icon="pi pi-check"
+                  [disabled]="queryBuilderDisabled || !queryBuilderDirty"
+                  (onClick)="saveQuery()"></p-button>
+        <p-button label="Save"
+                  [icon]="queryBuilderDirty ? 'pi pi-exclamation-triangle' : 'pi pi-check'"
+                  [pTooltip]="queryBuilderDirty ? widgetSaveButtonTooltip : ''"
+                  [disabled]="!valid"
+                  (onClick)="save()">
+        </p-button>
+    </div>
+</div>
+<reporting-widget-builder [(widgetSourceId)]="widgetSourceId"
+                          [widgetType]="widgetType" [standalone]="true">
+</reporting-widget-builder>

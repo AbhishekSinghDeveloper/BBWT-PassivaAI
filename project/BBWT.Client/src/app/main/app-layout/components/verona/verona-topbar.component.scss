@@ -1,0 +1,12 @@
+:host ::ng-deep {
+    .right-side {
+        .offline-indicator {
+            height: 20px;
+            margin-right: 1em;
+
+            @media (max-width: 360px) {
+                margin-right: 5px;
+            }
+        }
+    }
+}

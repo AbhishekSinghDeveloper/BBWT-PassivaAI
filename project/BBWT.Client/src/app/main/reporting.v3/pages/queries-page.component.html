@@ -1,0 +1,91 @@
+<h1>Named Queries</h1>
+<filter #mainFilter [settings]="filterSettings"></filter>
+<grid [tableSettings]="tableSettings"
+      [gridSettings]="gridSettings"
+      [filter]="mainFilter"
+      class="grid-container reporting-table">
+</grid>
+
+<p-dialog [(visible)]="displayPreviewQuery"
+          [modal]="false"
+          [maximizable]="true"
+          [header]="previewQuery.name"
+          [resizable]="true"
+          [draggable]="true"
+          styleClass="query-preview-dialog">
+    <ng-template pTemplate="content">
+        <query-preview [querySourceId]="previewQuery.id"></query-preview>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="displayQueryBuilder"
+          [header]="editQueryDialogHeader"
+          [modal]="true"
+          [maximizable]="true"
+          [resizable]="true"
+          [draggable]="true"
+          styleClass="query-builder-dialog">
+    <ng-template pTemplate="content">
+        <query-builder [querySourceId]="querySourceEditing?.id" [standalone]="true"></query-builder>
+    </ng-template>
+    <p-footer>
+        <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary"
+                  (onClick)="onSqlBuilderCancel()"></p-button>
+        <p-button label="Update Preview" icon="pi pi-eye"
+                  (onClick)="onSqlBuilderUpdatePreview()" [disabled]="queryPreviewDisabled"></p-button>
+        <p-button label="Save" icon="pi pi-check"
+                  (onClick)="onSqlBuilderSave()" [disabled]="queryBuilderDisabled"></p-button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="displayPublishingDialog"
+          [modal]="true"
+          header="Query Publishing"
+          styleClass="administration-dialog"
+          (onHide)="cancelPublish()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Organization:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="organizations"
+                               [options]="organizationOptions"
+                               dataKey="id"
+                               appendTo="body"
+                               id="organizations"
+                               name="organizations"
+                               placeholder="Select organization">
+                </p-multiSelect>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button pButton label="Cancel" class="p-button-secondary" (click)="cancelPublish()"></button>
+        <button pButton label="Publish" (click)="publish()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="displayOwnershipDialog"
+          [modal]="true"
+          header="Change Query Ownership"
+          styleClass="administration-dialog"
+          (onHide)="cancelOwnershipChange()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="changeOwnerEdit" class="inputs-group-row-name">Users:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="owner"
+                            [options]="ownerOptions"
+                            dataKey="id"
+                            appendTo="body"
+                            id="changeOwnerEdit"
+                            name="changeOwnerEdit"
+                            placeholder="Select a user">
+                </p-dropdown>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button pButton label="Cancel" class="p-button-secondary" (click)="cancelOwnershipChange()"></button>
+        <button pButton label="Change owner" (click)="changeOwnership()"></button>
+    </p-footer>
+</p-dialog>

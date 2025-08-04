@@ -1,0 +1,50 @@
+:host::ng-deep {
+    .preview-dialog.p-dialog {
+        min-width: 50%;
+    }
+
+    .administration-dialog.p-dialog {
+        width: 100%;
+        max-width: 450px;
+
+        .p-dialog-content {
+            padding-bottom: 3px;
+
+            .inputs-group-row {
+
+                .inputs-group-row-name {
+                    width: 100px;
+                }
+
+                .inputs-group-row-name + .inputs-group-row-value {
+                    width: calc(100% - 100px);
+                }
+            }
+        }
+
+        .p-dialog-footer {
+            padding-top: 3px;
+        }
+    }
+
+    .p-splitbutton {
+        button:first-child {
+            flex: 1 1 auto;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: 0 none;
+        }
+
+        button {
+            margin: 0;
+        }
+    }
+
+    .p-datatable-table td {
+        background: #FFFFFF !important;
+    }
+
+    .actions-column-cell {
+        width: 390px !important;
+    }
+}

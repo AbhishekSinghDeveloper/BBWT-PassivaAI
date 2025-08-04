@@ -1,0 +1,98 @@
+<form #form="ngForm" class="inputs-group" (ngSubmit)="save()" rte="17S">
+    <div class="inputs-group-row" rte="13n">
+        <label class="inputs-group-row-name" rte="13p">Name:</label>
+        <div class="inputs-group-row-value" rte="1rQ">
+            <input [(ngModel)]="_folder.name"
+                   pInputText
+                   trim
+                   notEmpty
+                   name="name"
+                   [readOnly]="_folder.protected"
+                   rte="1rR">
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="13t">
+        <label class="inputs-group-row-name" rte="13u">Description:</label>
+        <div class="inputs-group-row-value" rte="1rS">
+            <textarea [(ngModel)]="_folder.description"
+                      pInputTextarea
+                      [rows]="5"
+                      style="resize: none;"
+                      name="description"
+                      rte="1rT">
+            </textarea>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="1dO">
+        <label class="inputs-group-row-name" rte="1dP">Owners:</label>
+        <div class="inputs-group-row-value" rte="1dQ">
+            <p-multiSelect *ngIf="folderOwnerTypes"
+                           [(ngModel)]="_folder.owners"
+                           [options]="folderOwnerTypeItems"
+                           appendTo="body"
+                           name="owners"
+                           defaultLabel="Choose owners"
+                           selectedItemsLabel="{0} owner(s) selected" rte="1dR">
+            </p-multiSelect>
+        </div>
+    </div>
+
+    <div class="buttons-panel" rte="1rU">
+        <button type="submit" pButton [disabled]="!!form.invalid" label="Save" rte="1rV"></button>
+    </div>
+</form>
+
+<div *ngIf="_folder.databaseSource" class="folder-database-details inputs-group ">
+    <h4>Database Details</h4>
+    <div class="inputs-group-row no-label-padding" rte="1dO">
+        <label class="inputs-group-row-name" rte="1dP">Database name:</label>
+        <div class="inputs-group-row-value" rte="1dQ">{{ _folder.databaseSource.databaseName}}</div>
+    </div>
+    <div class="inputs-group-row no-label-padding" rte="1dO">
+        <label class="inputs-group-row-name" rte="1dP">Database type:</label>
+        <div class="inputs-group-row-value" rte="1dQ">{{toDbTypeName(_folder.databaseSource.databaseType)}}</div>
+    </div>
+    <div class="inputs-group-row no-label-padding" rte="1dO">
+        <label class="inputs-group-row-name" rte="1dP">Database unique ID:</label>
+        <div class="inputs-group-row-value" rte="1dQ">{{ _folder.databaseSource.schemaCode}}</div>
+    </div>
+</div>
+
+<!--TODO: temporarily disabled this code in development-->
+<!--<div *ngIf="dbPathMacros && dbPathMacros.length" class="table-paths-macros">
+    <h4>Table Paths Macros</h4>
+    <div *ngFor="let macro of dbPathMacros" style="margin-bottom:20px">
+        <div class="inputs-group no-labels-padding">
+            <div class="inputs-group-row">
+                <div class="inputs-group-row-name">Alias:</div>
+                <div class="inputs-group-row-value" style="font-weight:bold">&#64;{{macro.definition.alias}}</div>
+            </div>
+        </div>
+        <div class="inputs-group no-labels-padding">
+            <div class="inputs-group-row">
+                <div class="inputs-group-row-name">Description:</div>
+                <div class="inputs-group-row-value">{{macro.definition.description}}</div>
+            </div>
+        </div>
+        <div class="inputs-group no-labels-padding">
+            <div class="inputs-group-row">
+                <div class="inputs-group-row-name">Source → target:</div>
+                <div class="inputs-group-row-value">{{macro.definition.sourceTable}} → {{macro.definition.targetTable}}</div>
+            </div>
+        </div>
+        <div class="inputs-group no-labels-padding">
+            <div class="inputs-group-row">
+                <div class="inputs-group-row-name">Path:</div>
+                <div class="inputs-group-row-value">
+                    <ng-container *ngIf="macro.path.length; else noPath ">
+                        <span *ngFor="let node of macro.path; index as i">
+                            {{node.tableName}}.{{node.columnName}}
+                            <span *ngIf="i < macro.path.length-1">→</span>
+                        </span>
+                    </ng-container>
+                    <ng-template #noPath>not found</ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->

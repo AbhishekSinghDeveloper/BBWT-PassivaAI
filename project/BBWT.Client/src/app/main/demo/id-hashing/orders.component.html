@@ -1,0 +1,120 @@
+<div class="card--hidden" rte="yO">
+    <h1 rte="yP">ID Hashing</h1>
+
+    <p rte="yQ">This page demonstrates:</p>
+    <ul rte="yR">
+        <li rte="yS">
+            ID Hashing options:
+            <ul rte="yT">
+                <li rte="yU">
+                    By default ID hashing is turned on for all entities of the
+                    application, excepting AuditLogin, MenuItem, FooterMenuItem,
+                    and entities defined in Demo module.
+                </li>
+                <li rte="yV">
+                    Custom ID hashing on the server-side for Orders/Customers
+                </li>
+                <li rte="yW">
+                    Filtering by Customer Code, Order Date, Shipped Date and
+                    Paid orders
+                </li>
+                <li rte="yX">
+                    Usage of [IdBinder] for parameters of controller actions
+                </li>
+            </ul>
+        </li>
+        <li rte="yY">
+            Grid component options:
+            <ul rte="yZ">
+                <li rte="z0">Grid's custom actions</li>
+                <li rte="1iV">Inline editing</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="p-g" rte="z2">
+        <div rte="z3">
+            <h2 rte="z4">Complex View</h2>
+            <grid
+                [tableSettings]="tableSettings"
+                [gridSettings]="gridSettings"
+                rte="1iW"
+            ></grid>
+        </div>
+        <div class="simple-view-grid-container" rte="z7">
+            <h2 rte="z8">Simple View</h2>
+            <grid
+                [tableSettings]="simpleTableSettings"
+                [gridSettings]="simpleGridSettings"
+                rte="1iX"
+            ></grid>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    [(visible)]="showDialog"
+    [modal]="true"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    header="Order Information"
+    rte="za"
+>
+    <div *ngIf="info" class="inputs-group no-labels-padding" rte="1iY">
+        <div class="inputs-group-row" rte="1iZ">
+            <label class="inputs-group-row-name" rte="1j0">ID:</label>
+            <label class="inputs-group-row-value" rte="1j1">{{
+                info.id
+            }}</label>
+        </div>
+
+        <div class="inputs-group-row" rte="1j2">
+            <label class="inputs-group-row-name" rte="1j3"
+                >Customer Code:</label
+            >
+            <label class="inputs-group-row-value" rte="1j4">{{
+                info.customerCode
+            }}</label>
+        </div>
+
+        <div class="inputs-group-row" rte="1j5">
+            <label class="inputs-group-row-name" rte="1j6">Order Date:</label>
+            <label class="inputs-group-row-value" rte="1j7">{{
+                info.orderDate | date : "dd/MM/yyyy"
+            }}</label>
+        </div>
+
+        <div class="inputs-group-row" rte="1j8">
+            <label class="inputs-group-row-name" rte="1j9"
+                >Required Date:</label
+            >
+            <label class="inputs-group-row-value" rte="1ja">{{
+                info.requiredDate | date : "dd/MM/yyyy"
+            }}</label>
+        </div>
+
+        <div class="inputs-group-row" rte="1jb">
+            <label class="inputs-group-row-name" rte="1jc">Shipped Date:</label>
+            <label class="inputs-group-row-value" rte="1jd">{{
+                info.shippedDate | date : "dd/MM/yyyy"
+            }}</label>
+        </div>
+
+        <div class="inputs-group-row" rte="1je">
+            <label class="inputs-group-row-name" rte="1jf">Is Paid:</label>
+            <label class="inputs-group-row-value" rte="1jg">{{
+                info.isPaid ? "Yes" : "No"
+            }}</label>
+        </div>
+    </div>
+
+    <p-footer rte="ze">
+        <button
+            pButton
+            type="button"
+            (click)="showDialog = false"
+            label="Ok"
+            rte="zf"
+        >
+            <i class="material-icons" rte="zg">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

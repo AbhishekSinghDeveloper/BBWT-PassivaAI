@@ -1,0 +1,125 @@
+<div class="query-builder darker-panel">
+    <div class="query-source-options card" *ngIf="!standalone">
+        <div class="query-source-settings" *ngIf="!!querySourceId">
+            <i class="material-icons fill">extension</i>
+            <label *ngIf="!!querySource.name?.length">
+                You are using query <b (click)="openQuerySelectionDialog()">{{ querySource.name }}</b>
+            </label>
+            <label *ngIf="!querySource.name?.length">
+                You are using a <b (click)="openQuerySelectionDialog()">local query</b>
+            </label>
+        </div>
+
+        <div class="query-source-settings" *ngIf="!querySourceId">
+            <i class="material-icons fill">extension</i>
+            <label>You are creating a new local query.</label>
+        </div>
+
+        <label class="query-source-label" (click)="changeQueryEditionMode()">
+            {{ !querySource.name?.length ? "Create named query" : "Detach query" }}
+        </label>
+        <label class="query-source-label" (click)="openQuerySelectionDialog()">
+            {{ !querySourceId ? "Use an existing query" : "Use a different query" }}
+        </label>
+    </div>
+
+    <div class="query-source-options card" *ngIf="standalone">
+        <div class="query-source-settings">
+            <i class="material-icons fill">extension</i>
+            <label>Query name:</label>
+            <input pInputText
+                   [(ngModel)]="querySource.name"
+                   [pattern]="queryNameValidation"
+                   [maxLength]="500"
+                   required notEmpty>
+            <div class="p-error">
+                <small *ngIf="!querySource.name?.length">Name is required.</small>
+            </div>
+            <div class="p-error">
+                <small *ngIf="querySource.name?.length === 500">
+                    Maximum length of 500 characters reached.
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="query-editor-container">
+        <sql-editor [querySourceId]="querySourceId" (querySourceChange)="refreshQuerySource($event)"
+                    [disabled]="!standalone && !!querySource.name"></sql-editor>
+        <div class="query-editor-utils" *ngIf="!!queryEditor">
+            <p-selectButton
+                [options]="queryFilterModeOptions"
+                [(ngModel)]="querySource.filterMode"
+                optionLabel="icon"
+                optionValue="value">
+                <ng-template let-item pTemplate>
+                    <i class="material-icons" [pTooltip]="item.label">{{ item.icon }}</i>
+                </ng-template>
+            </p-selectButton>
+        </div>
+    </div>
+
+    <div class="query-preview-container" *ngIf="!!querySourceId">
+        <h3>Query preview</h3>
+        <query-preview [querySourceId]="querySourceId" [standalone]="true"></query-preview>
+    </div>
+</div>
+
+<p-dialog styleClass="query-creation-dialog" [(visible)]="queryCreationDialogVisible"
+          header="Create Named Query" [modal]="true" (onHide)="cancelQueryCreation()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="name" class="inputs-group-row-name">Name:</label>
+            <div class="inputs-group-row-value">
+                <input pInputText id="name" #name
+                       [ngModel]="querySource.name"
+                       [pattern]="queryNameValidation"
+                       [maxLength]="500"
+                       required notEmpty>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Organization:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="organizations"
+                               [options]="organizationOptions"
+                               dataKey="id"
+                               appendTo="body"
+                               id="organizations"
+                               name="organizations"
+                               placeholder="Select organization">
+                </p-multiSelect>
+            </div>
+        </div>
+    </div>
+
+    <p-footer>
+        <p-button label="Cancel" styleClass="p-button-outlined" (onClick)="cancelQueryCreation()"></p-button>
+        <p-button label="Save" [disabled]="!name.value?.length" (onClick)="createNamedQuery(name.value)"></p-button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog styleClass="query-options-dialog" [(visible)]="querySourceDialogVisible"
+          [modal]="true" (onHide)="cancelQuerySelection()">
+    <ng-template pTemplate="header">
+        <div class="query-options-dialog-header">
+            <h4 class="query-options-dialog-header-text">
+                Use Existing Query
+            </h4>
+            <label class="query-options-dialog-subheader-text">
+                Select an existing local query from the list below.
+            </label>
+        </div>
+    </ng-template>
+
+    <ng-container *ngFor="let option of querySourceOptions">
+        <div class="query-option {{option.value === querySourceOptionSelected ? 'query-option-selected' : ''}}"
+             (click)="querySourceOptionSelected = option.value">{{ option.label }}
+        </div>
+    </ng-container>
+
+    <p-footer>
+        <p-button label="Cancel" styleClass="p-button-outlined" (onClick)="cancelQuerySelection()"></p-button>
+        <p-button label="Use Query" (onClick)="useSelectedQuery()"></p-button>
+    </p-footer>
+</p-dialog>

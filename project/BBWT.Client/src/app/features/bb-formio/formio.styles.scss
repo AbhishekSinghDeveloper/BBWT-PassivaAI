@@ -1,0 +1,14 @@
+.card {
+    margin: unset;
+    padding: unset;
+
+    .card-header {
+        display: unset;
+    }
+}
+
+@import "bootswatch/dist/cosmo/_variables.scss";
+@import "bootstrap/scss/bootstrap.scss";
+@import "bootswatch/dist/cosmo/_bootswatch.scss";
+$fa-font-path: '~font-awesome/fonts';
+@import 'font-awesome/scss/font-awesome';

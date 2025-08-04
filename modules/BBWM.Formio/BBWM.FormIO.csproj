@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\features\reporting.v3\Reporting.Core\Reporting.Core.csproj" />
+    <ProjectReference Include="..\BBWM.Core.Membership\BBWM.Core.Membership.csproj" />
+    <ProjectReference Include="..\BBWM.Core\BBWM.Core.csproj" />
+    <ProjectReference Include="..\BBWM.DataProcessing\BBWM.DataProcessing.csproj" />
+    <ProjectReference Include="..\BBWM.DbDoc\BBWM.DbDoc.csproj" />
+    <ProjectReference Include="..\BBWM.Reporting\BBWM.Reporting.csproj" />
+  </ItemGroup>
+
+</Project>

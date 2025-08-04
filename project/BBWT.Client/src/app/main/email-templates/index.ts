@@ -1,0 +1,1 @@
+export { EmailTemplatesModule } from "./email-templates.module";

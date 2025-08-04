@@ -1,0 +1,54 @@
+:host ::ng-deep {
+
+    .rounded-5 {
+        border-radius: 5px !important;
+    }
+
+    .p-button {
+        height: 16px;
+    }
+
+    .table {
+        width: 100%;
+    }
+
+    #l-signature {
+        display: none;
+    }
+
+    .signature-buttons tr{
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .formio-component-signature > [ref="element"]{
+        width: 420px;
+        height: 150px;
+    }
+
+    @media screen and (max-width: 599px) {
+        .signature-buttons tr .p-button{
+            padding: 0.65rem 0.45rem;
+        }
+        .formio-component-signature > [ref="element"]{
+            width: 280px;
+            height: 100px;
+        }
+        .formio-component-signature .signature-pad-body{
+            height: 100px !important;
+        }
+    }
+
+    @media screen and (max-width: 449px) {
+        .formio-component-signature > [ref="element"]{
+            width: 196px;
+            height: 70px;
+        }
+        .formio-component-signature .signature-pad-body{
+            height: 70px !important;
+        }
+    }
+
+ 
+}

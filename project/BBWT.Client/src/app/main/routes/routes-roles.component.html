@@ -1,0 +1,20 @@
+<div class="card--hidden" rte="hw">
+    <h1 rte="hx">Routes Access</h1>
+    <p-tabView rte="hy">
+        <p-tabPanel header="API Routes" rte="hC">
+            <grid
+            #apiGrid
+            [tableSettings]="apiTableSettings"
+            [gridSettings]="apiGridSettings"
+            rte="1gy"
+            ></grid>
+        </p-tabPanel>
+        <p-tabPanel header="Pages" rte="hz">
+            <grid
+                [tableSettings]="pagesTableSettings"
+                [gridSettings]="pagesGridSettings"
+                rte="1gx"
+            ></grid>
+        </p-tabPanel>
+    </p-tabView>
+</div>

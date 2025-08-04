@@ -1,0 +1,21 @@
+:host ::ng-deep{
+    .log-data{
+        display: flex;
+        flex-wrap: wrap;
+
+        .log-grid{
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            max-width:700px;
+        }
+        .log-description{
+            width: 520px;
+            padding-left: 50px;
+            word-wrap: break-word;
+        }
+    }
+    .details-header{
+        color:rgb(74, 110, 176);
+    }
+}

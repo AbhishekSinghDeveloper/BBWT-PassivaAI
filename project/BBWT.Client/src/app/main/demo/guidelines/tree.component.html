@@ -1,0 +1,338 @@
+<div class="card--hidden" rte="I9">
+    <h1 rte="Ia">Tree</h1>
+    <div class="p-g" rte="Ib">
+        <div class="p-g-12" rte="Ic">
+            <label for="tree" rte="Id">Label</label>
+        </div>
+        <div class="p-g-12" rte="Ie">
+            <button
+                type="button"
+                pButton
+                (click)="root()"
+                class="btn-standard-size"
+                label="Root"
+                rte="If"
+            >
+                <i class="material-icons" rte="Ig">folder</i>
+            </button>
+            <p-tree
+                id="tree"
+                [value]="treeData"
+                selectionMode="single"
+                [(selection)]="selectedFile"
+                (onNodeCollapse)="nodeCollapse($event)"
+                (onNodeExpand)="nodeExpand($event)"
+                rte="Ih"
+            ></p-tree>
+        </div>
+        <div class="p-g-12" rte="Ii">
+            <div style="margin-top: 8px" rte="Ij">
+                Selected Node: {{ selectedFile ? selectedFile.label : "none" }}
+            </div>
+        </div>
+        <div class="p-g-12" rte="Ik">
+            <p-button
+                label="Add"
+                icon="pi pi-plus"
+                class="btn-standard-size"
+                (onClick)="addItem()"
+                rte="Il"
+            ></p-button>
+            <button
+                type="button"
+                pButton
+                (click)="editItem()"
+                class="btn-standard-size"
+                label="Edit"
+                [disabled]="selectedFile === null || selectedFile === undefined"
+                rte="Im"
+            >
+                <i class="material-icons" rte="In">edit</i>
+            </button>
+            <button
+                pButton
+                label="Delete"
+                [disabled]="selectedFile === null || selectedFile === undefined"
+                icon="pi pi-trash"
+                class="btn-standard-size"
+                (click)="deleteItem(selectedFile)"
+                rte="Io"
+            ></button>
+        </div>
+    </div>
+    <div class="p-g" rte="Ip">
+        <div class="p-g-12" rte="Iq">
+            <p rte="Ir">HTML looks like this:</p>
+            <pre class="codeHighlight" rte="Is">
+                &lt;div class=&quot;p-g&quot;&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;label for=&quot;tree&quot;&gt;Label&lt;/label&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;button type=&quot;button&quot; pButton (click)=&quot;root()&quot; class=&quot;btn-standard-size&quot;
+                                   label=&quot;Root&quot;&gt;
+                                &lt;i class=&quot;material-icons&quot;&gt;folder&lt;/i&gt;
+                        &lt;/button&gt;
+                        &lt;p-tree id=&quot;tree&quot; [value]=&quot;treeData&quot; selectionMode=&quot;single&quot;
+                                   [(selection)]=&quot;selectedFile&quot;
+                                   (onNodeCollapse)=&quot;nodeCollapse($event)&quot;
+                                   (onNodeExpand)=&quot;nodeExpand($event)&quot;&gt;&lt;/p-tree&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;div style=&quot;margin-top:8px&quot;&gt;Selected Node: &#123;&#123;selectedFile ? selectedFile.label :
+                            'none' &#125; &#125;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;button type=&quot;button&quot; pButton (click)=&quot;addItem()&quot; class=&quot;btn-standard-size&quot;
+                                   label=&quot;Add&quot;&gt;
+                                    &lt;i class=&quot;material-icons&quot;&gt;add&lt;/i&gt;
+                        &lt;/button&gt;
+                        &lt;button pButton (click)=&quot;editItem()&quot;class=&quot;btn-standard-size&quot;
+                                   label=&quot;Edit&quot; [disabled]=&quot;selectedFile == null&quot;&gt;
+                                    &lt;i class=&quot;material-icons&quot;&gt;edit&lt;/i&gt;
+                        &lt;/button&gt;
+                        &lt;button pButton icon="pi pi-trash" (click)="deleteItem(selectedFile)"
+                                   class=&quot;btn-standard-size&quot; label=&quot;Delete&quot;
+                                   [disabled]=&quot;selectedFile == null&quot;>
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre>
+        </div>
+        <div class="p-g-12" rte="It">
+            <p rte="Iu">Plus data source on your typesctipt component:</p>
+            <pre class="codeHighlight" rte="Iv">
+                export class TreeComponent implements OnInit &#123;
+
+                editingMode: boolean = false;
+                addFormVisible: boolean = false;
+                selectedFile: File = null;
+                newItem: File;
+                treeData: any;
+                itemTypes: Array&lt;SelectItem&gt;;
+                selectedType: number;
+                constructor(private fileSvc: FileService) &#123; &#125;
+
+                ngOnInit() &#123;
+                this.resetForm()
+
+                this.itemTypes = [
+                &#123; label: 'Folder', value: 1 &#125;,
+                &#123; label: 'File', value: 2 &#125;
+                ];
+                this.selectedType = 1
+                this.loadItems()
+                &#125;
+
+                loadItems() &#123;
+                this.fileSvc.getAllFiltered([new IsNullFilter("parentId")])
+                .then((result) => &#123;
+                this.treeData = result;
+                &#125;);
+                &#125;
+
+                addItem() &#123;
+                this.addFormVisible = true;
+                this.editingMode = false;
+                this.selectedType = 1
+                &#125;
+
+                editItem() &#123;
+                this.editingMode = true;
+                this.newItem.data = this.selectedFile.data
+                this.newItem.label = this.selectedFile.label
+
+                this.selectedType = this.selectedFile.type
+                this.addFormVisible = true;
+                &#125;
+
+                deleteItem(item: any) &#123;
+                this.fileSvc.delete(item.id)
+                .then((result) => &#123;
+                this.loadItems()
+                &#125;);
+                this.root()
+                &#125;
+
+                commit() &#123;
+                this.newItem.type = this.selectedType;
+
+                if (!this.editingMode) &#123;
+                if (this.selectedFile != null) &#123;
+                this.newItem.parentId = this.selectedFile.id;
+                if (this.selectedFile.type == 1) &#123;
+                this.fileSvc.create(this.newItem)
+                .then((result) => &#123;
+                this.loadItems()
+                &#125;);
+                &#125; else &#123;
+                this.newItem.parentId = this.selectedFile.parentId;
+                this.fileSvc.create(this.newItem)
+                .then((result) => &#123;
+                this.loadItems()
+                &#125;);
+                &#125;
+                &#125; else &#123;
+                this.fileSvc.create(this.newItem)
+                .then((result) => &#123;
+                this.loadItems()
+                &#125;);
+                &#125;
+                &#125; else &#123;
+                this.newItem.id = this.selectedFile.id
+                this.fileSvc.update(this.newItem)
+                .then((result) => &#123;
+                this.loadItems()
+                &#125;);
+                &#125;
+
+                this.resetForm()
+                this.addFormVisible = false
+                &#125;
+
+                finishEdit() &#123;
+                this.addFormVisible = false;
+                &#125;
+
+                saveNodeState(event) &#123;
+                let item: File
+                item = &#123;
+                id: event.node.id,
+                id_original: event.node.id_original,
+                parentId: &quot;&quot;,
+                parentId_original: 0,
+                parent: null,
+                label: event.node.label,
+                data: event.node.data,
+                type: 0,
+                icon: &quot;&quot;,
+                expandedIcon: &quot;&quot;,
+                collapsedIcon: &quot;&quot;,
+                expanded: !event.node.expanded,
+                children: []
+                &#125;
+
+                this.fileSvc.updateNoMsg(item)
+                .subscribe(data => &#123;
+                &#125;)
+                &#125;
+
+                nodeExpand(event) &#123;
+                this.saveNodeState(event)
+                &#125;
+
+                resetForm() &#123;
+                this.newItem = &#123;
+                id: &quot;&quot;,
+                id_original: 0,
+                parentId: &quot;&quot;,
+                parentId_original: 0,
+                parent: null,
+                label: &quot;&quot;,
+                data: &quot;&quot;,
+                type: 0,
+                icon: &quot;&quot;,
+                expandedIcon: &quot;&quot;,
+                collapsedIcon: &quot;&quot;,
+                expanded: false,
+                children: []
+                &#125;
+                this.selectedFile = null
+                &#125;
+
+                root() &#123;
+                this.selectedFile = null
+                &#125;
+
+                &#125;
+            </pre>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    [(visible)]="addFormVisible"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ 'max-width': '600px', width: '100%' }"
+    [header]="editingMode ? 'Edit Item' : 'Add Item'"
+    (onHide)="finishEdit()"
+    rte="Iw"
+>
+    <div class="p-g" rte="Ix">
+        <form #form="ngForm" rte="Iy">
+            <div class="p-g-12" rte="Iz">
+                <div class="p-g-4" rte="IA">
+                    <label for="label" rte="IB">Label</label>
+                </div>
+                <div class="p-g-8" rte="IC">
+                    <input
+                        id="label"
+                        name="label"
+                        pInputText
+                        [(ngModel)]="newItem.label"
+                        class="filterControl"
+                        required
+                        rte="ID"
+                    />
+                </div>
+            </div>
+            <div class="p-g-12" rte="IE">
+                <div class="p-g-4" rte="IF">
+                    <label for="description" rte="IG">Description</label>
+                </div>
+                <div class="p-g-8" rte="IH">
+                    <input
+                        pInputText
+                        name="description"
+                        id="description"
+                        [(ngModel)]="newItem.data"
+                        class="filterControl"
+                        required
+                        rte="II"
+                    />
+                </div>
+            </div>
+            <div class="p-g-12" [hidden]="editingMode" rte="IJ">
+                <div class="p-g-4" rte="IK">
+                    <label rte="IL">Item type</label>
+                </div>
+                <div class="p-g-8" rte="IM">
+                    <p-dropdown
+                        name="itemTypes"
+                        [options]="itemTypes"
+                        [(ngModel)]="selectedType"
+                        required
+                        appendTo="body"
+                        rte="IN"
+                    ></p-dropdown>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <p-footer rte="IO">
+        <button
+            pButton
+            label="Cancel"
+            class="p-button-secondary"
+            (click)="addFormVisible = false"
+            rte="IP"
+        >
+            <i class="material-icons" rte="IQ">clear</i>
+        </button>
+        <button
+            pButton
+            [label]="editingMode ? 'Save' : 'Add'"
+            [disabled]="form.invalid"
+            (click)="commit()"
+            rte="IR"
+        >
+            <i class="material-icons" rte="IS">{{
+                editingMode ? "save" : "check"
+            }}</i>
+        </button>
+    </p-footer>
+</p-dialog>

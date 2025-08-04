@@ -1,0 +1,35 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "downlevelIteration": true,
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "module": "es2020",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es2021",
+        "paths": {
+            "@angular/*": ["node_modules/@angular/*"],
+            "core-js/es7/reflect": [
+                "node_modules/core-js/proposals/reflect-metadata"
+            ],
+            "@account/*": ["src/app/account/*"],
+            "@bbwt/*": ["src/app/bbwt/*"],
+            "@environments/*": ["src/environments/*"],
+            "@features/*": ["src/app/features/*"],
+            "@main/*": ["src/app/main/*"],
+            "@project/*": ["src/app/project/*"],
+            "@demo/*": ["src/app/main/demo/*"],
+            "@primeng": ["src/app/primeng.module"]
+        },
+        "typeRoots": ["node_modules/@types"],
+        "lib": ["es2019", "dom"]
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true
+    }
+}

@@ -1,0 +1,158 @@
+<p-tabView (onChange)="_onSectionActiveTabChanged($event.index)">
+    <p-tabPanel header="General" [selected]="true">
+        <form #generalForm="ngForm" class="inputs-group report-general-container">
+            <div class="inputs-group-row">
+                <label for="title" class="inputs-group-row-name asterisk-mark">Title:</label>
+                <div class="inputs-group-row-value">
+                    <input #name="ngModel"
+                           [(ngModel)]="section.title"
+                           pInputText
+                           id="title"
+                           name="title"
+                           notEmpty
+                           maxlength="500"
+                           (ngModelChange)="_onSectionTextGeneralDataChange()" />
+                    <span *ngIf="name.hasError('notEmpty')" class="validation-error">The title is required.</span>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label for="showTitle" class="inputs-group-row-name">Show title:</label>
+                <div class="inputs-group-row-value">
+                    <p-checkbox [(ngModel)]="section.showTitle"
+                                [binary]="true"
+                                id="showTitle"
+                                name="showTitle"
+                                (ngModelChange)="_onSectionTextGeneralDataChange()">
+                    </p-checkbox>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Data view:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="section.dataViewType"
+                                [options]="reportEditorComponent.dataViewOptions"
+                                placeholder="Select data view type"
+                                id="dataView"
+                                name="dataView"
+                                (ngModelChange)="_saveSectionGeneral()">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label for="caption" class="inputs-group-row-name">Caption:</label>
+                <div class="inputs-group-row-value">
+                    <p-editor [(ngModel)]="section.description"
+                              ngDefaultControl
+                              id="caption"
+                              name="caption"
+                              [style]="{'height': '320px'}"
+                              (ngModelChange)="_onSectionTextGeneralDataChange()">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <select class="ql-font">
+                                    <option selected>Sans Serif</option>
+                                    <option value="serif">Serif</option>
+                                    <option value="monospace">Monospace</option>
+                                </select>
+                                <select class="ql-size">
+                                    <option value="small">Small</option>
+                                    <option selected>Normal</option>
+                                    <option value="large">Large</option>
+                                    <option value="huge">Huge</option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-bold" aria-label="Bold" type="button"></button>
+                                <button class="ql-italic" aria-label="Italic" type="button"></button>
+                                <button class="ql-underline" aria-label="Underline" type="button"></button>
+                                <button class="ql-strike" aria-label="Strike" type="button"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select class="ql-color"></select>
+                                <select class="ql-background"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-script" value="sub" aria-label="Sub" type="button"></button>
+                                <button class="ql-script" value="super" aria-label="Super" type="button"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-header" value="1" aria-label="Header 1" type="button"></button>
+                                <button class="ql-header" value="2" aria-label="Header 2" type="button"></button>
+                                <button class="ql-blockquote" aria-label="Blockquote" type="button"></button>
+                                <button class="ql-code-block" aria-label="Code Block" type="button"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-align" aria-label="Align Left" type="button"></button>
+                                <button class="ql-align" value="center" aria-label="Align Center" type="button"></button>
+                                <button class="ql-align" value="right" aria-label="Align Right" type="button"></button>
+                                <button class="ql-align" value="justify" aria-label="Align Justify" type="button"></button>
+                                <button class="ql-direction" aria-label="Direction" type="button"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered" aria-label="Ordered List" type="button"></button>
+                                <button class="ql-list" value="bullet" aria-label="Unordered List" type="button"></button>
+                                <button class="ql-indent" value="-1" aria-label="Indent Left" type="button"></button>
+                                <button class="ql-indent" value="+1" aria-label="Indent Right" type="button"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link" aria-label="Insert Link" type="button"></button>
+                                <button class="ql-image" aria-label="Insert Image" type="button"></button>
+                                <button class="ql-video" aria-label="Insert Video" type="button"></button>
+                                <button class="ql-formula" aria-label="Insert Formula" type="button"></button>
+                                <button class="ql-code-block" aria-label="Insert Code Block" type="button"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-clean" aria-label="Remove Styles" type="button"></button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Container type:</label>
+                <div class="inputs-group-row-value">
+                    <div class="wrapper">
+                        <div class="child">
+                            <p-dropdown [(ngModel)]="section.expandBehaviour"
+                                        [options]="_expandBehaviourOptions"
+                                        id="expandBehaviour"
+                                        name="expandBehaviour"
+                                        (ngModelChange)="_saveSectionGeneral()">
+                            </p-dropdown>
+                        </div>
+                        <div class="child">
+                            <div class="inputs-group-row-value" rte="1q5">
+                                <p-checkbox [(ngModel)]="section.autoCollapse"
+                                            [binary]="true"
+                                            label="Auto-collapse when another section expanded"
+                                            id="autoCollapse"
+                                            name="autoCollapse"
+                                            [disabled]="section.expandBehaviour === 'static' || section.expandBehaviour === 'noContainer'"
+                                            (ngModelChange)="_saveSectionGeneral()">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="saving-timer" [class.active]="_sectionGeneralSaveTimeout || _sectionGeneralSaving"><i class="pi pi-spin pi-spinner"></i> Saving in few seconds...</span>
+        </form>
+    </p-tabPanel>
+    <ng-container *ngIf="section.dataViewType !== 'noView'">
+        <p-tabPanel header="Query Builder">
+            <ng-container *ngIf="_builderTabFirstTimeOpened">
+                <query-builder *ngIf="section.query" [query]="section.query"></query-builder>
+                <filter-control-settings *ngIf="section.view?.filters"></filter-control-settings>
+            </ng-container>
+        </p-tabPanel>
+        <p-tabPanel header="View Settings">
+            <ng-container *ngIf="section.view?.gridView">
+                <grid-view-settings [gridView]="section.view.gridView"></grid-view-settings>
+            </ng-container>
+        </p-tabPanel>
+    </ng-container>
+    <p-tabPanel header="Section Preview">
+        <section-view *ngIf="_previewTabFirstOpened && !_generalSavingRequired" [sectionId]="section.id" [forceSectionVisible]="true"></section-view>
+    </p-tabPanel>
+</p-tabView>

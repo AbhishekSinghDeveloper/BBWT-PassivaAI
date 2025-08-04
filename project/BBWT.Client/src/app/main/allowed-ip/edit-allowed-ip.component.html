@@ -1,0 +1,69 @@
+<div class="card--hidden" rte="hW">
+    <h1 rte="hX">Edit Allowed IP</h1>
+
+    <div class="p-g" rte="hY">
+        <div class="p-g-12 inputs-container" rte="hZ">
+            <label for="from" rte="i0">From: </label>
+            <input
+                #fromInput="ngModel"
+                pInputText
+                [(ngModel)]="allowedIp.ipAddressFirst"
+                id="from"
+                name="from"
+                required
+                pattern="\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b"
+                rte="i1"
+            />
+            &nbsp;
+            <label for="last" rte="i2">To: </label>
+            <input
+                #toInput="ngModel"
+                pInputText
+                [(ngModel)]="allowedIp.ipAddressLast"
+                id="last"
+                name="last"
+                required
+                pattern="\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b"
+                rte="i3"
+            />
+        </div>
+
+        <div class="p-g-12" rte="i4">
+            <p-tabView rte="i5">
+                <p-tabPanel header="Users" rte="i6">
+                    <grid
+                        [tableSettings]="usersTableSettings"
+                        [gridSettings]="usersGridSettings"
+                        rte="1gB"
+                    ></grid>
+                </p-tabPanel>
+                <p-tabPanel header="Roles" rte="i9">
+                    <grid
+                        [tableSettings]="rolesTableSettings"
+                        [gridSettings]="rolesGridSettings"
+                        rte="1gC"
+                    ></grid>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+
+        <div class="p-g-12 buttons-panel" rte="ib">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="back()"
+                rte="ic"
+            ></button>
+            <button
+                pButton
+                type="button"
+                label="Save"
+                [disabled]="fromInput.invalid || toInput.invalid"
+                (click)="save()"
+                rte="id"
+            ></button>
+        </div>
+    </div>
+</div>

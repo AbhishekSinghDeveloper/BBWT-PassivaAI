@@ -1,0 +1,29 @@
+<div class="footer clearfix" rte="16f">
+    <p-menubar *ngIf="!veronaMain.isMobile" [model]="app.footerMenuModel" rte="16g">
+        <div class="copyright" rte="16h">
+            <i *ngIf="app.systemDataInfoAvailable"
+               class="material-icons info-icon"
+               (click)="app.showSystemDataInfoDialog()"
+               rte="16i">info</i>
+            <b rte="16j">BB</b>&nbsp;Web Template {{app.versionInfo?.pipeline}}
+        </div>
+    </p-menubar>
+
+    <div *ngIf="veronaMain.isMobile" class="tablet-footer-container" rte="16k">
+        <i class="pi pi-bars footer-menu-trigger" (click)="footerMobileMenu.toggle($event)" rte="16l"></i>
+        <p-menu #footerMobileMenu
+                appendTo="body"
+                [model]="app.footerMenuModel"
+                [popup]="true"
+                [baseZIndex]="10100" rte="16m">
+        </p-menu>
+
+        <div class="copyright" rte="16n">
+            BB Web Template
+            <span *ngIf="app.systemDataInfoAllowed">
+                <i class="material-icons info-icon" (click)="app.showSystemDataInfoDialog()" rte="143">info</i>
+                {{app.versionInfo?.pipeline}}
+            </span>
+        </div>
+    </div>
+</div>

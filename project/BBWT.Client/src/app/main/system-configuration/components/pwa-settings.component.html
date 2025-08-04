@@ -1,0 +1,52 @@
+<div *ngIf="settings" class="p-g" rte="QS">
+    <form #form="ngForm" class="inputs-group p-g-12" (ngSubmit)="save()" rte="QT">
+        <span class="inputs-sub-group-name" rte="QU">Desktop</span>
+        <div class="inputs-group-row" rte="QV">
+            <label for="desktopPromptInstall" class="inputs-group-row-name" rte="QW">Prompt to install application:</label>
+            <div class="inputs-group-row-value" rte="QX">
+                <p-checkbox [(ngModel)]="settings.desktopInstallationEnabled"
+                            [binary]="true"
+                            id="desktopPromptInstall"
+                            name="desktopPromptInstall" rte="QY">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="QZ">
+            <label for="desktopIndicator" class="inputs-group-row-name" rte="R0">Show "offline" indicator:</label>
+            <div class="inputs-group-row-value" rte="R1">
+                <p-checkbox [(ngModel)]="settings.desktopShowIndicator"
+                            [binary]="true"
+                            id="desktopIndicator"
+                            name="desktopIndicator" rte="R2">
+                </p-checkbox>
+            </div>
+        </div>
+
+        <span class="inputs-sub-group-name" rte="R3">Mobile</span>
+        <div class="inputs-group-row" rte="R4">
+            <label for="mobilePromptInstall" class="inputs-group-row-name" rte="R5">Prompt to install application:</label>
+            <div class="inputs-group-row-value" rte="R6">
+                <p-checkbox [(ngModel)]="settings.mobileInstallationEnabled"
+                            [binary]="true"
+                            id="mobilePromptInstall"
+                            name="mobilePromptInstall" rte="R7">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row" rte="R8">
+            <label for="mobileIndicator" class="inputs-group-row-name" rte="R9">Show "offline" indicator:</label>
+            <div class="inputs-group-row-value" rte="Ra">
+                <p-checkbox [(ngModel)]="settings.mobileShowIndicator"
+                            [binary]="true"
+                            id="mobileIndicator"
+                            name="mobileIndicator" rte="Rb">
+                </p-checkbox>
+            </div>
+        </div>
+
+
+        <div class="buttons-panel" rte="Rc">
+            <button pButton type="submit" label="Save" [disabled]="!form.valid" rte="Rd"></button>
+        </div>
+    </form>
+</div>

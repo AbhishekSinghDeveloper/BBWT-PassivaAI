@@ -1,0 +1,30 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=.;Initial Catalog=bbwt3;Integrated Security=true;",
+    "AuditConnection": "Data Source=.;Initial Catalog=bbwt3_logs;Integrated Security=true;",
+    "MySqlConnection": "server=localhost;port=3306;database=bbwt3;Uid=root;Pwd=Password123",
+    "AuditMySqlConnection": "server=localhost;port=3306;database=bbwt3_logs;Uid=root;Pwd=Password123"
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Debug",
+      "Microsoft": "Debug"
+    }
+  },
+  "EmailSettings": {
+    "SMTP": "",
+    "UserName": "",
+    "Password": "",
+    "Port": 25,
+    "FromAddress": "",
+    "EnableSsl": false,
+    "AdminAddress": ""
+  },
+  "Jwt": {
+    "Key": "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING",
+    "Issuer": "http://localhost:5000",
+    "Audience": "http://localhost:5001"
+  }
+}

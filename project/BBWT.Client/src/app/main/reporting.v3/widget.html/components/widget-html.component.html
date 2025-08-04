@@ -1,0 +1,27 @@
+<ng-container *ngIf="widgetVisible && !!htmlView">
+    <div [class]="output === 'web' ? 'widget-html-container' : 'widget-html-pdf-view-container'">
+
+        <div class="widget-html-topbar">
+            <h2 *ngIf="!!widgetTitle?.length">
+                {{ widgetTitle }}
+            </h2>
+            <p-button *ngIf="output === 'web' && exportable"
+                      styleClass="p-button-lg p-button-outlined p-button-text p-button-icon-only"
+                      class="pdf-exporting-button" icon="pi pi-file-pdf" title="Export to PDF" (onClick)="generatePdf()">
+            </p-button>
+        </div>
+
+        <div #htmlContainer class="widget-html-content"></div>
+    </div>
+
+    <div #pdfViewContainer *ngIf="renderPdfViewHidden" class="widget-html-pdf-view-container pdf-view-hidden">
+
+        <div class="widget-html-topbar">
+            <h2 *ngIf="!!widgetTitle?.length">
+                {{ widgetTitle }}
+            </h2>
+        </div>
+
+        <div class="widget-html-content"></div>
+    </div>
+</ng-container>

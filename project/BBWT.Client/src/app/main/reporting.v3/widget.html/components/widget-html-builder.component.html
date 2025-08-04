@@ -1,0 +1,48 @@
+﻿<div class="widget-builder-container">
+    <p-tabView activeIndex="0" class="reporting-tabview">
+
+        <p-tabPanel header="Tab0" class="p-0">
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">edit_note</i>
+                <span>General</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <ng-content></ng-content>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel header="Tab1" class="p-0">
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">drive_file_rename_outline</i>
+                <span>Html Editor</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="html-setup">
+                    <div class="grid">
+                        <div class="col-6">
+                            <div class="html-editor">
+                                <h4>Code</h4>
+                                <code-editor [(ngModel)]="htmlCode"
+                                             (ngModelChange)="refreshHtmlPreview()"
+                                             [language]="language"
+                                             [tokens]="tokens"
+                                             [toolbar]="true"
+                                             format="free"
+                                             cssClass="html"
+                                             export="html"></code-editor>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="html-preview">
+                                <h4>Preview</h4>
+                                <div class="html-content">
+                                    <widget-html [htmlView]="htmlPreview" [ignoreDisplayRule]="true"></widget-html>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+    </p-tabView>
+</div>

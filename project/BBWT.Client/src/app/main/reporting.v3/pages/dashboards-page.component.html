@@ -1,0 +1,83 @@
+<h1>Dashboards</h1>
+<filter #mainFilter [settings]="filterSettings"></filter>
+<grid class="grid-container reporting-table"
+      [gridSettings]="gridSettings"
+      [tableSettings]="tableSettings"
+      [filter]="mainFilter"
+      (create)="onDashboardCreate($event)">
+</grid>
+
+<p-dialog [(visible)]="displayPreviewDashboard"
+          [modal]="false"
+          [maximizable]="true"
+          [header]="previewDashboardDialogHeader"
+          [resizable]="true"
+          [draggable]="true"
+          styleClass="preview-dialog">
+    <ng-template pTemplate="content">
+        <reporting-dashboard [dashboardId]="previewDashboard.id"
+                             [output]="previewDashboardOutput">
+        </reporting-dashboard>
+    </ng-template>
+    <p-footer>
+        <p-splitButton [model]="pdfExportingOptions"
+                       label="Export to PDF"
+                       icon="pi pi-download"
+                       appendTo="body"
+                       [disabled]="!dashboard"
+                       (onClick)="dashboard.generatePdf()">
+        </p-splitButton>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="displayPublishingDialog"
+          [modal]="true"
+          header="Dashboard Publishing"
+          styleClass="administration-dialog"
+          (onHide)="cancelPublish()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Organization:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="organizations"
+                               [options]="organizationOptions"
+                               dataKey="id"
+                               appendTo="body"
+                               id="organizations"
+                               name="organizations"
+                               placeholder="Select organization">
+                </p-multiSelect>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button pButton label="Cancel" class="p-button-secondary" (click)="cancelPublish()"></button>
+        <button pButton label="Publish" (click)="publish()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="displayOwnershipDialog"
+          [modal]="true"
+          header="Change Dashboard Design Ownership"
+          styleClass="administration-dialog"
+          (onHide)="cancelOwnershipChange()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="changeOwnerEdit" class="inputs-group-row-name">Users:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="owner"
+                            [options]="ownerOptions"
+                            dataKey="id"
+                            appendTo="body"
+                            id="changeOwnerEdit"
+                            name="changeOwnerEdit"
+                            placeholder="Select a user">
+                </p-dropdown>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button pButton label="Cancel" class="p-button-secondary" (click)="cancelOwnershipChange()"></button>
+        <button pButton label="Change owner" (click)="changeOwnership()"></button>
+    </p-footer>
+</p-dialog>

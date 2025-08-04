@@ -1,0 +1,88 @@
+<div class="card--hidden" rte="HS">
+    <h1 rte="HT">Dialogs</h1>
+
+    <p rte="HU">
+        Dialog is used as a container and visibility is controlled with visible
+        property.
+    </p>
+
+    <p-dialog
+        header="Title"
+        [(visible)]="display1"
+        modal="true"
+        [style]="{ width: '400px', height: '120px' }"
+        rte="HV"
+    >
+        Content
+    </p-dialog>
+
+    <button
+        type="button"
+        (click)="display1 = true"
+        pButton
+        label="Show 1"
+        rte="HW"
+    ></button>
+    <p rte="HX"></p>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="HY">
+                &lt;p-dialog header=&quot;Title&quot; [(visible)]=&quot;display1&quot; modal=&quot;true&quot; [style]=&quot;&#123;width: '400px', height: '120px'&#125;&quot;&gt;
+                    Content
+                &lt;/p-dialog&gt;
+
+                &lt;button type=&quot;button&quot; (click)=&quot;display1=true&quot; pButton label=&quot;Show 1&quot;&gt;&lt;/button&gt;
+            </pre
+    >
+
+    <p-dialog
+        header="Dialog Header"
+        [(visible)]="display2"
+        [modal]="true"
+        [draggable]="false"
+        [style]="{ width: '400px' }"
+        rte="HZ"
+    >
+        <p rte="I0">The story begins as Don Vito Corleone.</p>
+
+        <p-footer rte="I1">
+            <button
+                pButton
+                label="No"
+                class="p-button-secondary"
+                (click)="display2 = false"
+                rte="I2"
+            >
+                <i class="material-icons" rte="I3">clear</i>
+            </button>
+            <button pButton label="Yes" (click)="display2 = false" rte="I4">
+                <i class="material-icons" rte="I5">check</i>
+            </button>
+        </p-footer>
+    </p-dialog>
+
+    <button
+        type="button"
+        (click)="display2 = true"
+        pButton
+        label="Show 2"
+        rte="I6"
+    ></button>
+    <p rte="I7"></p>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="I8">
+                &lt;p-dialog header=&quot;Dialog Header&quot; [(visible)]=&quot;display2&quot; modal=&quot;modal&quot; [style]=&quot;&#123;width: '400px'&#125;&quot;&gt;
+                    &lt;p&gt;
+                        The story begins as Don Vito Corleone.
+                    &lt;/p&gt;
+                    &lt;p-footer&gt;
+                        &lt;button type=&quot;button&quot; pButton (click)=&quot;display2=false&quot; style=&quot;width:80px&quot; label=&quot;Yes&quot;&gt;
+                            &lt;i class=&quot;material-icons&quot;&gt;check&lt;/i&gt;
+                        &lt;/button&gt;
+                        &lt;button type=&quot;button&quot; pButton (click)=&quot;display2=false&quot; style=&quot;width:80px&quot; label=&quot;No&quot;&gt;
+                            &lt;i class=&quot;material-icons&quot;&gt;clear&lt;/i&gt;
+                        &lt;/button&gt;
+                    &lt;/p-footer&gt;
+                &lt;/p-dialog&gt;
+            </pre
+    >
+</div>

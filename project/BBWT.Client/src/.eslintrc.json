@@ -1,0 +1,38 @@
+{
+  "extends": "..//.eslintrc.json",
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          ".//src//tsconfig.app.json",
+          ".//src//tsconfig.spec.json"
+        ]
+      },
+      "rules": {
+        "@angular-eslint/component-selector": [
+          "off",
+          {
+            "type": "element",
+            "prefix": "bbwt",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "off",
+          {
+            "type": "attribute",
+            "prefix": "bbwt",
+            "style": "camelCase"
+          }
+        ],
+        "eqeqeq": [
+          "off",
+          "always"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>BBWT3</title>
+    <base href="/">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-eval'; img-src * data: 'unsafe-eval'" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link id="icon-link" rel="icon" type="image/x-icon" href="/assets/images/blank.ico">
+    <link rel="manifest" href="manifest.json">
+
+    <script>
+        (function () {
+            const myNav = navigator.userAgent.toLowerCase();
+            const isIE = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+            if (!isIE && !!myNav.match(/trident.*rv\:11\./))
+                isIE = 11;
+
+            const unsupported = isIE && isIE <= 8;
+
+            if (unsupported) {
+                // TODO: Here must be code to display message of unsupported browser
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <noscript>
+        <div style="text-align: center; padding: 1em; font-size: 1em">
+            This Web Application needs JavaScript enabled in order to work.  Please re-enable JavaScript in
+            your browsers settings and reload the site
+        </div>
+    </noscript>
+
+    <bbwt>
+        <div class="splash-screen">
+            <div class="splash-loader-container">
+                <svg class="splash-loader" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="splash-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                </svg>
+            </div>
+            <div class="splash-loader">
+                <div class="splash-cube1"></div>
+                <div class="splash-cube2"></div>
+                <div class="splash-cube4"></div>
+                <div class="splash-cube3"></div>
+            </div>
+        </div>
+    </bbwt>
+
+    <!-- Formio -->
+    <!-- <script src="https://cdn.form.io/formiojs/formio.form.min.js"></script> -->
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+{
+  "lastUpdated": "26/02/2024 04:39:55",
+  "items": [
+    {
+      "id": 1,
+      "name": "Terms \u0026 Conditions",
+      "routerLink": "/app/static/terms-and-conditions",
+      "orderNo": 1
+    },
+    {
+      "id": 2,
+      "name": "Privacy Policy",
+      "routerLink": "/app/static/privacy-policy",
+      "orderNo": 2
+    },
+    {
+      "id": 3,
+      "name": "Contact Us",
+      "routerLink": "/app/static/contact-us",
+      "orderNo": 3
+    },
+    {
+      "id": 4,
+      "name": "Report a Problem",
+      "routerLink": "/app/report-problem",
+      "orderNo": 4
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+<ng-container *ngIf="!_sectionViewLoading && _sectionContentVisible">
+    <div *ngIf="_sectionView?.description" [innerHtml]="_sectionView.description | keepHtml"></div>
+    <ng-container *ngIf="_sectionView?.dataViewType === 'dataGrid'">
+        <div class="section-grid-view-filter-container" [hidden]="!_viewedFilterSettings?.length">
+            <filter #filter [settings]="_viewedFilterSettings"></filter>
+        </div>
+        <grid #grid
+              [tableSettings]="_tableSettings"
+              [gridSettings]="_gridSettings"
+              [filter]="filter"
+              (onRowSelect)="_onGridRowSelect($event)"
+              (onRowUnselect)="_onGridRowUnselect($event)">
+            <ng-template *ngFor="let columnTemplate of _columnTemplates" gridColumnTemplate="displayingRow" [columnName]="columnTemplate.column.field" let-rowData>
+                <div class="custom-output" [innerHTML]="getCustomFormattedCellHtml(columnTemplate.customTemplate, rowData)"></div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr *ngIf="_aggregatedValues" class="footer-row">
+                    <td *ngFor="let column of _tableSettings.columns">
+                        <span class="column-header-text" [style.text-align]="_aggregatedValues[column.field]?.textAlign || 'left'">
+                            {{_aggregatedValues[column.field]?.value}}
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+        </grid>
+    </ng-container>
+</ng-container>

@@ -1,0 +1,512 @@
+<div class="inputs-group table-common-settings" rte="1mw">
+    <div class="inputs-group-row" rte="1mx">
+        <label class="inputs-group-row-name" rte="1my">Allow end-user to hide grid columns:</label>
+        <div class="inputs-group-row-value" rte="1mz">
+            <p-checkbox [(ngModel)]="gridView.showVisibleColumnsSelector"
+                        [ngModelOptions]="{standalone: true}"
+                        [binary]="true"
+                        (onChange)="_onGridViewChanged()" rte="1mA">
+            </p-checkbox>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="1mB">
+        <label class="inputs-group-row-name" rte="1mC">Default sort column: </label>
+        <div class="inputs-group-row-value" rte="1mD">
+            <p-dropdown [(ngModel)]="gridView.defaultSortColumnId"
+                        [ngModelOptions]="{standalone: true}"
+                        [options]="_vbc.queryColumnsOptions"
+                        [showClear]="true"
+                        [filter]="true"
+                        placeholder="Select column"
+                        (onChange)="_onGridViewChanged($event)" rte="1mE">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="1mF">
+        <label class="inputs-group-row-name" rte="1mG">Default sort order: </label>
+        <div class="inputs-group-row-value" rte="1mH">
+            <p-dropdown [(ngModel)]="gridView.defaultSortOrder"
+                        [ngModelOptions]="{standalone: true}"
+                        [options]="_sortOrderOptions"
+                        placeholder="Select sort direction"
+                        (onChange)="_onGridViewChanged()" rte="1mI">
+            </p-dropdown>
+        </div>
+    </div>
+</div>
+<p-table #table
+         [columns]="_tableColumns"
+         dataKey="id"
+         [reorderableColumns]="true"
+         [lazy]="false"
+         [loading]="_loading || _vbc.controllerLoading"
+         [paginator]="false"
+         [responsive]="true"
+         [scrollable]="true"
+         scrollHeight="500px"
+         [value]="gridView.viewColumns"
+         class="columns-settings-table"
+         (onRowReorder)="_onRowReordered($event)" rte="1mJ">
+    <ng-template pTemplate="header">
+        <tr class="header-line-1">
+            <th style="width: 3rem" rte="1mL"></th>
+            <th style="width: 3rem" rte="1mM"></th>
+            <th *ngFor="let column of _tableColumns" rte="1mN">
+                {{column.header}}
+
+            </th>
+            <th [style.width]="'9rem'">Actions</th>
+        </tr>
+        <tr class="header-line-2">
+            <th></th>
+            <th></th>
+            <th *ngFor="let column of _tableColumns" rte="1mN">
+                <p-inputSwitch *ngIf="column.field==='visible'"
+                               [(ngModel)]="_allColumnsVisibleChecked"
+                               (onChange)="_onAllColumnsVisibleSwitcherToggle($event.checked)">
+                </p-inputSwitch>
+                <p-inputSwitch *ngIf="column.field==='sortable'"
+                               [(ngModel)]="_allColumnsSortableChecked"
+                               (onChange)="_onAllColumnsSortableSwitcherToggle($event.checked)">
+                </p-inputSwitch>
+            </th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-gridViewColumn let-index="rowIndex" let-expanded="expanded">
+        <tr [pReorderableRow]="index" rte="1mO" class="reorderable-row">
+            <td rte="1mP">
+                <button pButton
+                        pRipple
+                        [pRowToggler]="gridViewColumn"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                        type="button"
+                        class="p-button-text p-button-rounded p-button-plain" rte="1mQ">
+                </button>
+            </td>
+            <td rte="1mR">
+                <span class="pi pi-bars" pReorderableRowHandle rte="1mS"></span>
+            </td>
+            <td rte="1mT">
+                <span class="p-column-title" rte="1mU">Column Name</span>
+                {{_getColumnName(gridViewColumn)}}
+            </td>
+            <td rte="1mV">
+                <span class="p-column-title" rte="1mW">Header</span>
+                {{gridViewColumn.header}}
+            </td>
+            <td rte="1mX">
+                <span class="p-column-title" rte="1mY">Footer</span>
+                {{_getFooterDisplaying(gridViewColumn.footer)}}
+            </td>
+            <td>
+                <button pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-pencil"
+                        (click)="_onGridViewColumnFooterStartEditing(gridViewColumn)"
+                        class="p-button-rounded p-button-text">
+                </button>
+            </td>
+            <td rte="1mX">
+                <span class="p-column-title" rte="1mY">Visible</span>
+                <p-inputSwitch [(ngModel)]="gridViewColumn.visible"
+                               (ngModelChange)="_onGridViewColumnChanged(gridViewColumn)"
+                               rte="1mZ"></p-inputSwitch>
+            </td>
+            <td rte="1n0">
+                <span class="p-column-title" rte="1n1">Sortable</span>
+                <p-inputSwitch [(ngModel)]="gridViewColumn.sortable"
+                               [ngModelOptions]="{standalone: true}"
+                               (onChange)="_onGridViewColumnChanged(gridViewColumn)"
+                               rte="1n2"></p-inputSwitch>
+            </td>
+            <td>
+                <button pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-pencil"
+                        (click)="_onGridViewColumnStartEditing(gridViewColumn)"
+                        class="p-button-rounded p-button-text">
+                </button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-gridViewColumn>
+        <tr>
+            <td [colSpan]="_tableColumns.length + 3">
+                <div class="inputs-group no-labels-padding">
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Header:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.header}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Footer:</div>
+                        <div class="inputs-group-row-value">{{_getFooterDisplaying(gridViewColumn.footer)}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Footer text alignment:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.footer?.textAlignment}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Left cell label:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.footer?.leftCellLabel}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Left cell label text alignment:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.footer?.leftCellLabelAlignment}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Inherit mask:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.inheritMask ? "Yes" : "No"}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Mask of custom column type:</div>
+                        <div class="inputs-group-row-value">{{_getCustomColumnTypeName(gridViewColumn.customColumnTypeId)}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Mask:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.mask}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Custom format:</div>
+                        <div class="inputs-group-row-value" [innerHTML]="sanitizer.bypassSecurityTrustHtml(gridViewColumn.extraSettings.customFormat || '')"></div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Inherit width:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.inheritWidth ? "Yes" : "No"}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Min width:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.minWidth ? gridViewColumn.extraSettings.minWidth + "px" : ""}}</div>
+                    </div>
+                    <div class="inputs-group-row">
+                        <div class="inputs-group-row-name">Max width:</div>
+                        <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.maxWidth ? gridViewColumn.extraSettings.maxWidth + "px" : ""}}</div>
+                    </div>
+                    <ng-container [ngSwitch]="_vbc.queryColumnsMetadataMap[gridViewColumn.queryTableColumnId]?.staticData.clrTypeGroup">
+                        <ng-container *ngSwitchCase="'bool'">
+                            <div class="inputs-group-row">
+                                <div class="inputs-group-row-name">True value label:</div>
+                                <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.trueValueLabel}}</div>
+                            </div>
+                            <div class="inputs-group-row">
+                                <div class="inputs-group-row-name">False value label:</div>
+                                <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.falseValueLabel}}</div>
+                            </div>
+                            <div class="inputs-group-row">
+                                <div class="inputs-group-row-name">Count "null" as "false":</div>
+                                <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.countNullAsFalse ? "Yes" : "No"}}</div>
+                            </div>
+                        </ng-container>
+                        <div *ngSwitchCase="'date'" class="inputs-group-row">
+                            <div class="inputs-group-row-name">Date display format:</div>
+                            <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.dateMomentFormat}}</div>
+                        </div>
+                        <div *ngSwitchCase="'numeric'" class="inputs-group-row">
+                            <div class="inputs-group-row-name">Decimal places:</div>
+                            <div class="inputs-group-row-value">{{gridViewColumn.extraSettings.decimalPlaces}}</div>
+                        </div>
+                    </ng-container>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog *ngIf="_editViewColumn"
+          [(visible)]="_editGridViewColumnDialogVisible"
+          header="Edit Grid View Column"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          (onHide)="_onGridViewColumnEditingDialogHide()">
+    <form #form="ngForm" class="inputs-group">
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Inherit header:</label>
+            <div class="inputs-group-row-value">
+                <p-checkbox [(ngModel)]="_editViewColumn.inheritHeader"
+                            [binary]="true"
+                            name="inheritHeader"
+                            (onChange)="_onInheritHeaderFromDbDocChanged(_editViewColumn, $event.checked)"></p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Header:</label>
+            <div class="inputs-group-row-value">
+                <input pInputText
+                       [(ngModel)]="_editViewColumn.header"
+                       name="header"
+                       autofocus
+                       [disabled]="_editViewColumn.inheritHeader" />
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Inherit mask:</label>
+            <div class="inputs-group-row-value">
+                <p-checkbox [(ngModel)]="_editViewColumn.extraSettings.inheritMask"
+                            [binary]="true"
+                            name="inheritMask"
+                            (onChange)="_onInheritMaskFromDbDocChanged(_editViewColumn, $event.checked)"></p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Mask of custom column type:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_editViewColumn.customColumnTypeId"
+                            [options]="_vbc.columnTypes"
+                            optionLabel="name"
+                            optionValue="id"
+                            [showClear]="true"
+                            placeholder="Select custom column type"
+                            [disabled]="_editViewColumn.extraSettings.inheritMask"
+                            name="customColumnTypeMask"
+                            (onChange)="_onCustomColumnTypeMaskChanged(_editViewColumn, $event.value)">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Mask:</label>
+            <div class="inputs-group-row-value">
+                <input [(ngModel)]="_editViewColumn.extraSettings.mask"
+                       pInputText
+                       name="mask"
+                       [disabled]="_editViewColumn.extraSettings.inheritMask || _editViewColumn.customColumnTypeId" />
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <div class="inputs-group-row-name">
+                <label>Custom format:</label>
+                <bb-tooltip message="Use '{}' to set cell values inside. The '.' symbol is used as a separator. Example: <a href='{Table1.Field1}' alt='{Table1.Field2}'>{Table2.Field}</a>"></bb-tooltip>
+            </div>
+            <div class="inputs-group-row-value">
+                <p-editor [(ngModel)]="_editViewColumn.extraSettings.customFormat"
+                          name="customFormat"
+                          [style]="{height: '200px'}">
+                </p-editor>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Inherit width:</label>
+            <div class="inputs-group-row-value">
+                <p-checkbox [(ngModel)]="_editViewColumn.extraSettings.inheritWidth"
+                            [binary]="true"
+                            name="inheritWidth"
+                            (onChange)="_onInheritWidthChanged(_editViewColumn, $event.checked)"></p-checkbox>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Min width (px):</label>
+            <div class="inputs-group-row-value">
+                <p-inputNumber [(ngModel)]="_editViewColumn.extraSettings.minWidth"
+                               name="minWidth"
+                               #minWidth="ngModel"
+                               [showButtons]="true"
+                               [min]="0"
+                               [lessThan]="maxWidth"
+                               [disabled]="_editViewColumn.extraSettings.inheritWidth">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Max width (px):</label>
+            <div class="inputs-group-row-value">
+                <p-inputNumber [(ngModel)]="_editViewColumn.extraSettings.maxWidth"
+                               name="maxWidth"
+                               #maxWidth="ngModel"
+                               [showButtons]="true"
+                               [min]="10"
+                               [greaterThan]="minWidth"
+                               [disabled]="_editViewColumn.extraSettings.inheritWidth">
+                </p-inputNumber>
+            </div>
+        </div>
+        <ng-container [ngSwitch]="_vbc.queryColumnsMetadataMap[_editViewColumn.queryTableColumnId]?.staticData.clrTypeGroup">
+            <ng-container *ngSwitchCase="'bool'">
+                <div class="inputs-group-row">
+                    <label class="inputs-group-row-name">True value label:</label>
+                    <div class="inputs-group-row-value">
+                        <input [(ngModel)]="_editViewColumn.extraSettings.trueValueLabel"
+                               pInputText
+                               name="trueValueLabel" />
+                    </div>
+                </div>
+                <div class="inputs-group-row">
+                    <label class="inputs-group-row-name">False value label:</label>
+                    <div class="inputs-group-row-value">
+                        <input [(ngModel)]="_editViewColumn.extraSettings.falseValueLabel"
+                               pInputText
+                               name="falseValueLabel" />
+                    </div>
+                </div>
+                <div class="inputs-group-row">
+                    <label class="inputs-group-row-name">Count "null" as "false":</label>
+                    <div class="inputs-group-row-value">
+                        <p-checkbox [(ngModel)]="_editViewColumn.extraSettings.countNullAsFalse"
+                                    [binary]="true"
+                                    name="countNullAsFalse">
+                        </p-checkbox>
+                    </div>
+                </div>
+            </ng-container>
+            <div *ngSwitchCase="'date'" class="inputs-group-row">
+                <div class="inputs-group-row-name">
+                    <label rte="1nX">Date display format:</label>
+                    <bb-tooltip message="Use values supported by the moment.js"></bb-tooltip>
+                </div>
+                <div class="inputs-group-row-value">
+                    <input [(ngModel)]="_editViewColumn.extraSettings.dateMomentFormat"
+                           pInputText
+                           name="dateMomentFormat" />
+                </div>
+            </div>
+            <ng-container *ngSwitchCase="'numeric'">
+                <div class="inputs-group-row">
+                    <label class="inputs-group-row-name">Decimal places:</label>
+                    <div class="inputs-group-row-value">
+                        <p-inputNumber [(ngModel)]="_editViewColumn.extraSettings.decimalPlaces"
+                                       [showButtons]="true"
+                                       [min]="0"
+                                       [showClear]="true"
+                                       name="decimalPlaces">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </form>
+
+    <p-footer>
+        <button pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="_editGridViewColumnDialogVisible = false">
+            <i class="material-icons">clear</i>
+        </button>
+        <button pButton
+                type="submit"
+                label="Save"
+                [disabled]="form.invalid"
+                (click)="_onGridViewColumnChanged(_editViewColumn)">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog *ngIf="_editViewColumn"
+          [(visible)]="_editGridViewColumnFooterDialogVisible"
+          header="Edit Footer"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          (onHide)="_onGridViewColumnEditingDialogHide()">
+    <form #form="ngForm" class="inputs-group">
+        <div class="inputs-group-row aggregate-scalar-function-inputs-group-row">
+            <label class="inputs-group-row-name">Aggregate function:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [options]="_footerAggregateFunctionOptions"
+                            placeholder="Select a function"
+                            name="footerScalarAggregateFunction"
+                            appendTo="body"
+                            (onChange)="_onFooterAggregateFunctionSelected($event.value)">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row custom-aggregate-expression-inputs-group-row">
+            <div class="inputs-group-row-name">
+                <label>Aggregate expression:</label>
+                <bb-tooltip message="Use '@column' text to embed current column's value into SQL expression, e.g. SUM(@column). Use '@TableName.ColumnName' text for a specific table column, e.g. SUM(@Orders.Total)"></bb-tooltip>
+            </div>
+            <div class="inputs-group-row-value">
+                <input #customAggregateExpressionInput
+                       pInputText
+                       [(ngModel)]="_editAggregateExpression"
+                       placeholder="Aggregate expression"
+                       name="footerCustomAggregateExpression"
+                       (keydown)="_onCustomAggregateExpressionKeyDown($event)" />
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name"></label>
+            <div class="inputs-group-row-value">
+                <div class="aggregate-expressions">
+                    <div *ngFor="let aggregateExpression of _editViewColumn.footer.expressions; let i = index"
+                         class="aggregate-expression-item"
+                         [class.selected]="_selectedAggregateExpressionIndex === i"
+                         (click)="_onAggregateExpressionItemClicked(i)">
+                        <span class="aggregate-expression-item-value">{{"{" + i + "}"}}: {{aggregateExpression}}</span>
+                        <button pButton type="button"
+                                icon="pi pi-times"
+                                class="p-button-rounded p-button-danger p-button-text"
+                                (click)="_onFooterAggregateExpressionRemove(i); $event.stopPropagation();">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <div class="inputs-group-row-name">
+                <label>Value text:</label>
+                <bb-tooltip message="Use {0}, {1} ... identifiers to embed selected expressions into the cell vaule text. See needed identifiers shown on the left of each listed expression ({0}: MIN(...) etc.)"></bb-tooltip>
+            </div>
+            <div class="inputs-group-row-value">
+                <input pInputText [(ngModel)]="_editViewColumn.footer.outputFormat" name="footerOutputFormat" />
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Value align:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_editViewColumn.footer.textAlignment"
+                            [options]="_textAlignOptions"
+                            appendTo="body"
+                            placeholder="Select value align"
+                            name="textAlignment">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Label of cell to the left:</label>
+            <div class="inputs-group-row-value">
+                <input pInputText [(ngModel)]="_editViewColumn.footer.leftCellLabel" name="footerLeftCellLabel" />
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Align of cell to the left:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_editViewColumn.footer.leftCellLabelAlignment"
+                            [options]="_textAlignOptions"
+                            placeholder="Select align"
+                            appendTo="body"
+                            name="footerLeftCellLabelAlignment">
+                </p-dropdown>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <button pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="_editGridViewColumnFooterDialogVisible = false">
+            <i class="material-icons">clear</i>
+        </button>
+        <button pButton
+                type="submit"
+                label="Save"
+                [disabled]="form.invalid"
+                (click)="_onGridViewColumnChanged(_editViewColumn)">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-overlayPanel #overlayPanelColumnOptions styleClass="column-options">
+    <ng-template pTemplate>
+        <p-listbox [listStyle]="{'max-height':'250px'}"
+                   [options]="_footerAggregateQueryColumnOptions"
+                   (onChange)="_onCustomAggregationExpressionColumnSelected($event)">
+        </p-listbox>
+    </ng-template>
+</p-overlayPanel>

@@ -1,0 +1,351 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="BBWT.Tests" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="BBWM.AWS.EventBridge.Test.Api" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="AuthorizeEventBridgeAttributeTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AuthorizeEventBridgeAttributeTests.OnAuthorization_ShouldAuthorize" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AuthorizeEventBridgeAttributeTests.OnAuthorization_ShouldAuthorize" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AuthorizeEventBridgeAttributeTests.OnAuthorization_ShouldNotAuthorize" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AuthorizeEventBridgeAttributeTests.OnAuthorization_ShouldNotAuthorize(headerValue: null)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AuthorizeEventBridgeAttributeTests.OnAuthorization_ShouldNotAuthorize(headerValue: &quot;&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AuthorizeEventBridgeAttributeTests.OnAuthorization_ShouldNotAuthorize(headerValue: &quot;zFDJldfJaRFrUbRiyetWsA==,,,,&quot;)" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="AwsEventBridgeJobControllerTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobControllerTests.GetJobsList_ShouldReturnOk" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobControllerTests.GetJobsList_ShouldReturnOk" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobControllerTests.RestartJobAsync_ShouldRestartJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobControllerTests.RestartJobAsync_ShouldRestartJob" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="AwsEventBridgeJobHistoryControllerTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobHistoryControllerTests.GetCanceledJobsPage_ShouldReturnOk" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobHistoryControllerTests.GetCanceledJobsPage_ShouldReturnOk" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="AwsEventBridgeJobStarterControllerTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobStarterControllerTests.StartJob_ShouldReturnNoContent" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeJobStarterControllerTests.StartJob_ShouldReturnNoContent" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="AwsEventBridgeRuleControllerTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeRuleControllerTests.RuleExists_ShouldReturnOk" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeRuleControllerTests.RuleExists_ShouldReturnOk(ruleExist: True)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Api.AwsEventBridgeRuleControllerTests.RuleExists_ShouldReturnOk(ruleExist: False)" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="BBWM.AWS.EventBridge.Test.Service" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="AwsEventBridgeRuleServiceTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Delete_ShouldDeleteJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Delete_ShouldDeleteJob" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.GetPage_ShouldReturnExtendedJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.GetPage_ShouldReturnExtendedJob" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldFailIfJobNotRegistered" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldFailIfJobNotRegistered(isCreate: True)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldFailIfJobNotRegistered(isCreate: False)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldSaveFirstJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldSaveFirstJob" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldSaveJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldSaveJob(isCreate: True)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldSaveJob(isCreate: False)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowIfInvalidCron" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowIfInvalidCron(isCreate: True)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowIfInvalidCron(isCreate: False)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowInvalidParameter" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowInvalidParameter" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowUnknownError" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowUnknownError(isCreate: True)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.Service.AwsEventBridgeRuleServiceTests.Save_ShouldThrowUnknownError(isCreate: False)" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="BBWM.AWS.EventBridge.Test" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="JobServiceAndWrapperTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeCanceledByUser" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeCanceledByUser(handlerShouldThrow: False)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeCanceledByUser(handlerShouldThrow: True)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeMarkedAsNotRunning" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeMarkedAsNotRunning" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeMarkedAsRunning" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeMarkedAsRunning" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeTracked" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeTracked(shouldFail: False, handlerShouldThrow: False)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeTracked(shouldFail: True, handlerShouldThrow: False)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_JobShouldBeTracked(shouldFail: True, handlerShouldThrow: True)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_ShouldSetLastExecutionTime" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_ShouldSetLastExecutionTime" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_ShouldSetNextExecution" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_ShouldSetNextExecution" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_ShouldShutdown" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobExecutionWrapper_ShouldShutdown" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetAllAsync_ShouldReturnAllJobs" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetAllAsync_ShouldReturnAllJobs" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetAllAsync_ShouldReturnFilteredJobs" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetAllAsync_ShouldReturnFilteredJobs" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobInfo_ShouldReturnJobInfo" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobInfo_ShouldReturnJobInfo" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobInfo_ShouldReturnNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobInfo_ShouldReturnNull(jobId: null)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobInfo_ShouldReturnNull(jobId: &quot;DummyJobId&quot;)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobsListAsync_ShouldHaveOneJobAvailable" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_GetJobsListAsync_ShouldHaveOneJobAvailable" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_IsJobRegistered_ShouldReturnFalse" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_IsJobRegistered_ShouldReturnFalse(jobId: null)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_IsJobRegistered_ShouldReturnFalse(jobId: &quot;DummyJobId&quot;)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_IsJobRegistered_ShouldReturnTrue" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_IsJobRegistered_ShouldReturnTrue" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RegisterJob_JobShouldBeRegistered" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RegisterJob_JobShouldBeRegistered" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RegisterJob_ShouldFailIfParamsRepeated" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RegisterJob_ShouldFailIfParamsRepeated" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RegisterJob_ShouldFailWhenJobAlreadyRegistered" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RegisterJob_ShouldFailWhenJobAlreadyRegistered" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RestartJobAsync_ShouldRestartJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RestartJobAsync_ShouldRestartJob" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RestartJobAsync_ShouldThrow" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_RestartJobAsync_ShouldThrow" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldStartJob" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldStartJob" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldThrowIfJobNotFound" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldThrowIfJobNotFound" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldThrowIfRuleNotFound" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldThrowIfRuleNotFound" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldThrowWhenRuleDisabled" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.JobServiceAndWrapperTests.JobService_StartJobAsync_ShouldThrowWhenRuleDisabled" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+            <Rule Match="All">
+              <Property Name="Namespace" Value="BBWM.AWS.EventBridge.Test.AwsCron" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="AwsCronExpressionTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(1,24,50-55,58 * 25 MAR/4 ? 2020,2021,2023,202&quot;..., shouldBe: &quot;Sat, 25 Jul 2020 00:01:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 * 7,9,11 3,5,7 ? 2021)&quot;, shouldBe: &quot;Sun, 07 Mar 2021 00:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 * 7,9,11 5 ? 2021)&quot;, shouldBe: &quot;Fri, 07 May 2021 00:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 * 7,9,11 5 ? 2020)&quot;, shouldBe: &quot;Sat, 09 May 2020 23:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 7,9,11 5 ? 2020)&quot;, shouldBe: &quot;Mon, 11 May 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 ? 5 MON-WED,FRI 2020)&quot;, shouldBe: &quot;Mon, 11 May 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 ? 5 2-4,6 2020)&quot;, shouldBe: &quot;Mon, 11 May 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(3 2-5 ? 4,6,8,10 TUE,THU,SAT 2020)&quot;, shouldBe: &quot;Tue, 02 Jun 2020 02:03:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 * L 5 ? 2019,2020)&quot;, shouldBe: &quot;Sun, 31 May 2020 00:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(19 4 L 9 ? 2019,2020)&quot;, shouldBe: &quot;Wed, 30 Sep 2020 04:19:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(19 4 3W 9 ? 2019,2020)&quot;, shouldBe: &quot;Thu, 03 Sep 2020 04:19:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(19 4 5W 9 ? 2019,2020)&quot;, shouldBe: &quot;Fri, 04 Sep 2020 04:19:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 ? 8 5#2 2019,2020)&quot;, shouldBe: &quot;Thu, 13 Aug 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 ? 8 5#3 2019,2020)&quot;, shouldBe: &quot;Thu, 20 Aug 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 ? 12 3#1 2019,2020)&quot;, shouldBe: &quot;Tue, 01 Dec 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(9 8-20 ? 12 3#5 2019,2020)&quot;, shouldBe: &quot;Tue, 29 Dec 2020 08:09:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(0 0 1 1 ? *)&quot;, shouldBe: &quot;Fri, 01 Jan 2021 00:00:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(0 1 2 3 ? *)&quot;, shouldBe: &quot;Tue, 02 Mar 2021 01:00:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(7 1 2 3 ? *)&quot;, shouldBe: &quot;Tue, 02 Mar 2021 01:07:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(* * 2 3 ? *)&quot;, shouldBe: &quot;Tue, 02 Mar 2021 00:00:00 GMT&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBe(awsCron: &quot;cron(* * * * ? 2300)&quot;, shouldBe: &quot;Mon, 01 Jan 2300 00:00:00 GMT&quot;)" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull(awsCron: &quot;cron(* * * * ? 2018)&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull(awsCron: &quot;cron(* * * ? */2)&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull(awsCron: &quot;cron(* * * * ?&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull(awsCron: &quot;blah&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull(awsCron: &quot;&quot;)" />
+                        <Property Name="DisplayName" Value="BBWM.AWS.EventBridge.Test.AwsCron.AwsCronExpressionTests.NextOccurrence_ShouldBeNull(awsCron: null)" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>

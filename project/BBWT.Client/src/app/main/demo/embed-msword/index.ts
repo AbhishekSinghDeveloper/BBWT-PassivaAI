@@ -1,0 +1,1 @@
+export { EmbedMSWordComponent } from "./embed-msword.component";

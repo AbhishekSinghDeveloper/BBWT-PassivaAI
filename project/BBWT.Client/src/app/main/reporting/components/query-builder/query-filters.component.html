@@ -1,0 +1,383 @@
+<p-treeTable [loading]="loading || _cbc.filterTreeLoading || _cbc.controllerLoading"
+             [value]="_nodes"
+             [autoLayout]="true"
+             [scrollable]="_nodesCount > 7"
+             scrollHeight="flex">
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+            <td [ngSwitch]="rowNode.node.type" class="treetable-td">
+                <div *ngSwitchCase="'queryFilterSet'" class="filters-table-row filter-set-row">
+                    <div class="condition-buttons">
+                        <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                        <p-selectButton [(ngModel)]="rowData.conditionalOperator"
+                                        [options]="_conditionalOperatorOptions"
+                                        (ngModelChange)="_onQueryFilterSetChanged(rowData)">
+                        </p-selectButton>
+                    </div>
+
+                    <div class="control-buttons">
+                        <button pButton
+                                icon="pi pi-plus"
+                                type="button"
+                                label="Group"
+                                class="p-button-outlined add-filter-set-button"
+                                [disabled]="!_cbc.queryColumnsOptions?.length"
+                                (click)="_onAddFilterSetClick(rowData)">
+                        </button>
+                        <p-splitButton #addFilterSplitButton
+                                       label="Filter"
+                                       icon="pi pi-plus"
+                                       styleClass="p-button-outlined"
+                                       appendTo="body"
+                                       [model]="_filterSetAddButtonModel"
+                                       [disabled]="!_cbc.queryColumnsOptions?.length"
+                                       (onDropdownClick)="_onFilterSetAddButtonClicked(rowData)"
+                                       (onClick)="_onFilterSetAddButtonClicked(rowData, addFilterSplitButton, $event)">
+                        </p-splitButton>
+                        <div *ngIf="!rowData.parentQueryId" class="row-options-button-container">
+                            <button pButton
+                                    type="button"
+                                    icon="pi pi-ellipsis-v"
+                                    class="p-button-rounded p-button-text"
+                                    (click)="_onQueryFilterSetRowMenuClicked(rowData, $event)">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'queryFilter'" class="filters-table-row filter-row" [style]="_calcNodeFilterIndentStyle(rowNode.level)">
+                    <div class="filter-column-container">
+                        <p-dropdown [(ngModel)]="rowData.queryTableColumnId"
+                                    [options]="_cbc.queryColumnsOptions"
+                                    [filter]="true"
+                                    appendTo="body"
+                                    [style]="{'width':'100%'}"
+                                    styleClass="query-expr-table-column"
+                                    (onChange)="_onQueryTableColumnChanged(rowData)">
+                        </p-dropdown>
+                    </div>
+                    <div class="filter-operator-container">
+                        <p-dropdown [(ngModel)]="rowData.queryRuleId"
+                                    [options]="_cbc.possibleQueryRulesOfClrTypesMap[_cbc.queryColumnsMetadataMap[rowData.queryTableColumnId].staticData.clrTypeGroup]"
+                                    appendTo="body"
+                                    [style]="{'width':'100%'}"
+                                    (onChange)="_onQueryFilterChangeSubmitted(rowData)">
+                        </p-dropdown>
+                    </div>
+                    <div class="filter-value-container">
+                        <ng-container *ngIf="!_queryFiltersBindingEnabledMap[rowData.id]; else filterControlBinding"
+                                      [ngSwitch]="rowNode.node.inputType">
+                            <!-- Calendar (if input is date type) -->
+                            <ng-container *ngSwitchCase="_filterInputTypeEnum.Calendar">
+                                <p-calendar *ngIf="!_cbc.queryFiltersRelatedDataMap[rowData.id].isBetween; else rangeDateFilter"
+                                            [(ngModel)]="rowData.value"
+                                            [ngModelOptions]="{standalone: true}"
+                                            dataType="date"
+                                            [showButtonBar]="true"
+                                            [readonlyInput]="true"
+                                            [yearNavigator]="true"
+                                            [yearRange]="_calendarYearRange"
+                                            [monthNavigator]="true"
+                                            appendTo="body"
+                                            [style]="{'width':'100%'}"
+                                            (ngModelChange)="_onQueryFilterChangeSubmitted(rowData)">
+                                </p-calendar>
+                                <ng-template #rangeDateFilter>
+                                    <p-calendar [(ngModel)]="_cbc.queryFiltersRelatedDataMap[rowData.id].betweenInputComponentValue"
+                                                [ngModelOptions]="{standalone: true}"
+                                                dataType="date"
+                                                selectionMode="range"
+                                                [showButtonBar]="true"
+                                                [readonlyInput]="true"
+                                                [yearNavigator]="true"
+                                                [yearRange]="_calendarYearRange"
+                                                [monthNavigator]="true"
+                                                appendTo="body"
+                                                [style]="{'width':'100%'}"
+                                                (onSelect)="_onBetweenValueChanged(rowData, _cbc.queryFiltersRelatedDataMap[rowData.id].betweenInputComponentValue)"
+                                                (onClearClick)="_onBetweenValueChanged(rowData, _cbc.queryFiltersRelatedDataMap[rowData.id].betweenInputComponentValue)">
+                                    </p-calendar>
+                                </ng-template>
+                            </ng-container>
+
+                            <!-- Checkbox -->
+                            <p-dropdown *ngSwitchCase="_filterInputTypeEnum.Checkbox"
+                                        [(ngModel)]="rowData.value"
+                                        [options]="_trueFalseOptions"
+                                        appendTo="body"
+                                        [style]="{'width':'100%'}"
+                                        (onChange)="_onQueryFilterChangeSubmitted(rowData)">
+                            </p-dropdown>
+
+                            <!-- Number -->
+                            <!-- [size]=1 - fix to solve width scaling problem-->
+                            <ng-container *ngSwitchCase="_filterInputTypeEnum.Number">
+                                <p-inputNumber *ngIf="!_cbc.queryFiltersRelatedDataMap[rowData.id].isBetween; else rangeNumbersFilter"
+                                               [(ngModel)]="rowData.value"
+                                               [ngModelOptions]="{standalone: true}"
+                                               [showButtons]="true"
+                                               placeholder="Value"
+                                               (onInput)="rowData.value = $event.value"
+                                               (keydown.enter)="_onQueryFilterChangeSubmitted(rowData)"
+                                               (keydown.escape)="_onQueryFilterValueChangeCancelled(rowData)"
+                                               [style]="{'width':'100%'}"
+                                               [size]="1">
+                                </p-inputNumber>
+                                <ng-template #rangeNumbersFilter>
+                                    <bb-input-number-range [(ngModel)]="_cbc.queryFiltersRelatedDataMap[rowData.id].betweenInputComponentValue"
+                                                           [style]="{'width':'100%'}"
+                                                           [ngModelOptions]="{standalone: true}"
+                                                           (keydown)="_onQueryFilterNumericRangeKeyDown($event, rowData)"
+                                                           (ngModelChange)="_onBetweenValueChanged(rowData, _cbc.queryFiltersRelatedDataMap[rowData.id].betweenInputComponentValue)">
+                                    </bb-input-number-range>
+                                </ng-template>
+                            </ng-container>
+
+                            <!-- Text -->
+                            <input *ngSwitchDefault
+                                   pInputText
+                                   [(ngModel)]="rowData.value"
+                                   [style]="{'width':'100%'}"
+                                   placeholder="Value"
+                                   (keydown.enter)="_onQueryFilterChangeSubmitted(rowData)"
+                                   (keydown.escape)="_onQueryFilterValueChangeCancelled(rowData)" />
+                        </ng-container>
+                        <ng-template #filterControlBinding>
+                            <div title="Linked UI control"
+                                 class="filter-control-binding query-expr-ui-control"
+                                 [innerHtml]="_getLinkedFilterControlHtmlName(rowData)">
+                            </div>
+                        </ng-template>
+
+                        <div class="filter-buttons">
+                            <div class="p-inputgroup">
+                                <button *ngIf="!_autoSubmitFiltersMap[rowData.id] &&
+                                            (rowData.value !== _originalFiltersMap[rowData.id]?.value ||
+                                            rowData.value2 !== _originalFiltersMap[rowData.id]?.value2)"
+                                        type="button"
+                                        pButton pRipple
+                                        icon="pi pi-check"
+                                        styleClass="p-button-success"
+                                        (click)="_onQueryFilterChangeSubmitted(rowData)">
+                                </button>
+                                <button *ngIf="!_autoSubmitFiltersMap[rowData.id] &&
+                                            (rowData.value !== _originalFiltersMap[rowData.id]?.value ||
+                                            rowData.value2 !== _originalFiltersMap[rowData.id]?.value2)"
+                                        type="button"
+                                        pButton
+                                        pRipple
+                                        icon="pi pi-undo"
+                                        styleClass="p-button-danger"
+                                        (click)="_onQueryFilterValueChangeCancelled(rowData)">
+                                </button>
+                                <button *ngIf="_queryFiltersBindingEnabledMap[rowData.id]"
+                                        type="button"
+                                        pButton
+                                        pRipple
+                                        title="Unlink UI control"
+                                        icon="pi pi-times"
+                                        styleClass="p-button-danger"
+                                        (click)="_onFilterDeleteBindingClicked(rowData)">
+                                </button>
+                                <button type="button"
+                                        [disabled]="_cbc.queryFiltersRelatedDataMap[rowData.id].possibleFilterControls.length === 0"
+                                        pButton
+                                        pRipple
+                                        title="Link UI control"
+                                        icon="pi pi-at"
+                                        styleClass="p-button-danger"
+                                        (click)="_onFilterOptionsToggle(rowData, $event)">
+                                </button>
+                                <button pButton
+                                        pRipple
+                                        type="button"
+                                        icon="pi pi-ellipsis-v"
+                                        styleClass="p-button-rounded p-button-text"
+                                        (click)="_onQueryFilterRowMenuClicked(rowData, $event)">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="'sqlFilter'" class="filters-table-row filter-row" [style]="_calcNodeFilterIndentStyle(rowNode.level)">
+                    <div class="sql-filter-container">
+                        <div class="p-inputgroup">
+                            <input #sqlFilterInput
+                                   id="{{_sqlFilterInputIdPrefix}}{{rowData.id}}"
+                                   pInputText
+                                   [(ngModel)]="rowData.customSqlCodeTemplate"
+                                   placeholder="SQL code"
+                                   (keydown)="_onSqlFilterKeydown(rowData, $event)" />
+                            <button *ngIf="rowData.customSqlCodeTemplate !== _originalFiltersMap[rowData.id]?.customSqlCodeTemplate"
+                                    type="button"
+                                    pButton pRipple
+                                    icon="pi pi-check"
+                                    styleClass="p-button-success"
+                                    (click)="_onSqlFilterChangeSubmitted(rowData)">
+                            </button>
+                            <button *ngIf="rowData.customSqlCodeTemplate !== _originalFiltersMap[rowData.id]?.customSqlCodeTemplate"
+                                    type="button"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-undo"
+                                    styleClass="p-button-danger"
+                                    (click)="_onSqlFilterChangeCancelled(rowData)">
+                            </button>
+                            <button type="button"
+                                    pButton
+                                    pRipple
+                                    title="Insert table column or filter control's name into SQL"
+                                    icon="pi pi-at"
+                                    styleClass="p-button-danger"
+                                    (click)="_onSqlFilterOptionsToggle(rowData, $event)">
+                            </button>
+                            <button pButton
+                                    pRipple
+                                    type="button"
+                                    icon="pi pi-ellipsis-v"
+                                    styleClass="p-button-rounded p-button-text"
+                                    (click)="_onQueryFilterRowMenuClicked(rowData, $event)">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="'masterDetailFilter'" class="filters-table-row filter-row master-detail-filter-row" [style]="_calcNodeFilterIndentStyle(rowNode.level)">
+                    <div class="master-detail-filter-data">
+                        <span class="master-detail-filter-column-name master-detail-filter-source-column-name">
+                            {{_getMasterDetailSourceQueryTableColumnName(rowData.queryTableColumnId)}}
+                        </span>&nbsp;
+                        <span class="master-detail-filter-label">
+                            binded to master grid's column
+                        </span>&nbsp;
+                        <span class="master-detail-filter-column-name master-detail-filter-target-column-name">
+                            {{_getMasterDetailTargetQueryTableColumnName(rowData)}}
+                        </span>&nbsp;
+                        <span class="master-detail-filter-label">
+                            of section
+                        </span>&nbsp;
+                        <span class="master-detail-filter-column-name master-detail-filter-target-section-name">
+                            {{_getMasterDetailTargetSectionName(rowData)}}
+                        </span>
+                    </div>
+
+                    <div class="filter-buttons">
+                        <div class="p-inputgroup">
+                            <button pButton
+                                    pRipple
+                                    type="button"
+                                    icon="pi pi-ellipsis-v"
+                                    styleClass="p-button-rounded p-button-text"
+                                    (click)="_onQueryFilterRowMenuClicked(rowData, $event)">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-treeTable>
+
+<p-tieredMenu #rowMenu
+              [model]="_rowMenuModel"
+              appendTo="body"
+              [popup]="true">
+</p-tieredMenu>
+
+<p-overlayPanel #overlayPanelFilterOptions styleClass="filter-options">
+    <ng-template pTemplate>
+        <p-listbox [listStyle]="{'max-height':'250px'}"
+                   [group]="true"
+                   [filter]="true"
+                   [options]="_filterOptions"
+                   (onChange)="_onFilterBindingOptionSelected($event)">
+            <ng-template let-group pTemplate="group">
+                <div class="flex align-items-center" style="font-weight: 500; padding:0.75rem">
+                    <span>{{group.label}}</span>
+                </div>
+            </ng-template>
+        </p-listbox>
+    </ng-template>
+</p-overlayPanel>
+
+<p-overlayPanel #overlayPanelSqlFilterOptions styleClass="sql-filter-options">
+    <ng-template pTemplate>
+        <p-listbox [listStyle]="{'max-height':'250px'}"
+                   [group]="true"
+                   [filter]="true"
+                   [options]="_sqlFilterOptions"
+                   (onChange)="_onSqlFilterPasteOptionSelected($event)">
+            <ng-template let-group pTemplate="group">
+                <div class="flex align-items-center" style="font-weight: 500; padding:0.75rem">
+                    <span>{{group.label}}</span>
+                </div>
+            </ng-template>
+        </p-listbox>
+    </ng-template>
+</p-overlayPanel>
+
+<p-dialog [(visible)]="_masterDetailFilterEditingDialogVisible"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Master Detail Filter Editing"
+          appendTo="body"
+          (onHide)="_onMasterDetailFilterEditingDialogHide()">
+    <form #masterDetailForm="ngForm" class="inputs-group">
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Query table column:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_masterDetailEditingData.queryTableColumnId"
+                            [options]="_cbc.queryColumnsOptions"
+                            [filter]="true"
+                            required
+                            autofocus
+                            name="queryTableColumn"
+                            appendTo="body"
+                            placeholder="Select the query table column">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Master section:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_masterDetailEditingData.masterSectionId"
+                            [options]="_masterDetailSectionOptions"
+                            required
+                            name="masterSection"
+                            appendTo="body"
+                            placeholder="Select the master section"
+                            [disabled]="!_masterDetailSectionOptions?.length"
+                            (onChange)="_onMasterSectionChanged()">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Master section table column:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [(ngModel)]="_masterDetailEditingData.masterSectionTableColumnId"
+                            [options]="_masterDetailColumnsOptions"
+                            [filter]="true"
+                            required
+                            name="masterSectionTableColumn"
+                            appendTo="body"
+                            placeholder="Select the master section column"
+                            [disabled]="!_masterDetailColumnsOptions?.length">
+                </p-dropdown>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <button pButton
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="_masterDetailFilterEditingDialogVisible = false">
+        </button>
+        <button pButton
+                label="Save"
+                [disabled]="!masterDetailForm.valid"
+                (click)="_saveMasterDetailFilter()">
+        </button>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,73 @@
+{
+    "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+    "index": "/index.html",
+    "assetGroups": [
+        {
+            "name": "app",
+            "installMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/favicon.ico",
+                    "/blank.ico",
+                    "/manifest.json",
+                    "/*.css",
+                    "/*.js",
+                    "/data/**"
+                ]
+            }
+        },
+        {
+            "name": "assets",
+            "installMode": "lazy",
+            "updateMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/assets/**",
+                    "!/assets/fonts/**"
+                ]
+            }
+        },
+        {
+            "name": "fonts",
+            "installMode": "prefetch",
+            "resources": {
+                "files": [
+                    "/assets/fonts/**"
+                ]
+            }
+        }
+    ],
+    "dataGroups": [
+        {
+            "name": "account_login_home_cached_routes",
+            "urls": [
+                "/api/user/me",
+                "/api/system-configuration",
+                "/api/db-doc/metadata",
+                "/api/role/model",
+                "/api/account/site-key",
+                "/api/site-key",
+                "/api/system-data/saml",
+                "/api/account/ip-locking-time",
+                "/api/menu",
+                "/api/footer-menu",
+                "/api/system-data/version",
+                "/api/route/me"
+            ],
+            "cacheConfig": {
+                "maxSize": 100,
+                "maxAge": "1d",
+                "strategy": "freshness"
+            }
+        },
+        {
+            "name": "not_in_cache",
+            "urls": [ "**/SsoProvider/**", "/signin-facebook", "/signin-google", "/signin-linkedin" ],
+            "cacheConfig": {
+                "maxSize": 0,
+                "maxAge": "0u",
+                "strategy":  "freshness"
+            }
+        }
+    ]
+}

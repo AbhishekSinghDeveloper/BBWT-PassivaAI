@@ -1,0 +1,75 @@
+<div *ngIf="settings" class="p-g" rte="Qq">
+    <form #form="ngForm" class="inputs-group p-g-12" (ngSubmit)="save()" rte="Qr">
+        <div class="inputs-group-row" rte="Qs">
+            <label for="projectName" class="inputs-group-row-name" rte="Qt">Name:</label>
+            <div class="inputs-group-row-value" rte="Qu">
+                <input [(ngModel)]="settings.name"
+                       pInputText
+                       id="projectName"
+                       name="projectName"  rte="Qv"/>
+            </div>
+        </div>
+
+        <div class="inputs-group-row no-label-padding" rte="Qw">
+            <span class="inputs-group-row-name" rte="Qx">Theme:</span>
+            <div class="inputs-group-row-value" rte="Qy">{{ThemesClass.GetThemeByCode(settings.themeCode)?.name}}</div>
+        </div>
+
+        <div class="inputs-group-row" rte="Qz">
+            <label for="iconUploader" class="inputs-group-row-name" rte="QA">Icon:</label>
+            <div class="inputs-group-row-value inputs-group-row-value-uploader" rte="QB">
+                <p-fileUpload #logoIconUploader
+                              id="iconUploader"
+                              name="logoIconFiles[]"
+                              mode="basic"
+                              accept=".ico"
+                              [auto]="true"
+                              (uploadHandler)="logoIconUploading($event)"
+                              (onError)="onLogoIconUploadingError($event)"
+                              [customUpload]="true" rte="QC">
+                </p-fileUpload>
+                <div *ngIf="editedImages.logoIcon" class="inputs-group-row-value-uploader-preview-container" rte="QD">
+                    <img [src]="editedImages.logoIcon.url" class="inputs-group-row-value-uploader-preview-image" rte="QE">
+                    <p-button icon="pi pi-trash"
+                              (onClick)="clearLogoIcon()" rte="QF">
+                    </p-button>
+                </div>
+                <div class="inputs-group-row-value-uploader-description" rte="QG">
+                    This graphic must be supplied in icon format (.ico). File size must not exceed 100 Kb. Recommended proportions are 1x1. We also recommend a transparent background.
+                </div>
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="QH">
+            <label for="imageUploader" class="inputs-group-row-name" rte="QI">Logo:</label>
+            <div class="inputs-group-row-value inputs-group-row-value-uploader" rte="QJ">
+                <p-fileUpload #logoImageUploader
+                              id="imageUploader"
+                              name="logoImageFiles[]"
+                              mode="basic"
+                              accept=".png,.gif,.jpg,.jpeg"
+                              [auto]="true"
+                              (uploadHandler)="logoImageUploading($event)"
+                              (onError)="onLogoImageUploadingError($event)"
+                              [customUpload]="true" rte="QK">
+                </p-fileUpload>
+                <div *ngIf="editedImages.logoImage" class="inputs-group-row-value-uploader-preview-container" rte="QL">
+                    <img [src]="editedImages.logoImage.thumbnailUrl" class="inputs-group-row-value-uploader-preview-image" style="background-color: #ddd;" rte="QM">
+                    <p-button icon="pi pi-trash"
+                              (onClick)="clearLogoImage()" rte="QN">
+                    </p-button>
+                </div>
+                <div class="inputs-group-row-value-uploader-description" rte="QO">
+                    This graphic must be supplied in PNG, GIF or JPEG formats. File size must not exceed 1Mb. Recommended proportions are 10x3 (e.g. 250x75 pixels). We also recommend a transparent background.
+                </div>
+            </div>
+        </div>
+
+
+        <div class="buttons-panel" rte="QP">
+            <button pButton type="submit" label="Save" [disabled]="!form.valid" rte="QQ"></button>
+        </div>
+
+        <span class="warning-message" rte="QR">After saving these changes you might need to refresh the browser in order to see them applied.</span>
+    </form>
+</div>

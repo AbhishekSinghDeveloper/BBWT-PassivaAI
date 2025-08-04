@@ -1,0 +1,21 @@
+{
+    "SkippedNodes": [ "script", "style", "br", "ng-container", "ng-content", "ng-template", "router-outlet" ],
+    "AllowedNodes": [ "*" ],
+    "CleanupSkippedNodes": true,
+    "SkipEmptyNodes": false,
+    // Isn't used when SkipEmptyNodes == false
+    "SkippedEmptyNodes": [ "a", "div", "h1", "h2", "h3", "h4", "p", "label", "span" ],
+    "SkipParentNodes": false,
+    // Isn't used when SkipParentNodes == false
+    "AllowedParentNodes": [ "p-tabpanel" ],
+    // Isn't used when SkipParentNodes == false
+    "AllowedChildNodes": [ "br", "i", "strong", "b", "u" ],
+    "SkipAttributeRequiredNodes": false,
+    // Isn't used when SkipAttributeRequiredNodes == false
+    "AttributeRequiredNodes": [
+        {
+            "Node": "input",
+            "Attr": "placeholder"
+        }
+    ]
+}

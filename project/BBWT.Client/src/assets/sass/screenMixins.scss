@@ -1,0 +1,32 @@
+$layout-breakpoint-tablet: 600px !default;
+$layout-breakpoint-desktop: 1200px !default;
+
+@mixin for-phone-only {
+    @media (max-width: $layout-breakpoint-tablet - 1) {
+        @content;
+    }
+}
+
+@mixin for-tablet-only {
+    @media (min-width: $layout-breakpoint-tablet) and (max-width: $layout-breakpoint-desktop - 1) {
+        @content;
+    }
+}
+
+@mixin for-tablet-up {
+    @media (min-width: $layout-breakpoint-tablet) {
+        @content;
+    }
+}
+
+@mixin for-tablet-down {
+    @media (max-width: $layout-breakpoint-desktop - 1) {
+        @content;
+    }
+}
+
+@mixin for-desktop-up {
+    @media (min-width: $layout-breakpoint-desktop) {
+        @content;
+    }
+}

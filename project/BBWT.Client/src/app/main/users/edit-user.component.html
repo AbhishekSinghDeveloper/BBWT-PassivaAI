@@ -1,0 +1,309 @@
+<div class="card--hidden" rte="18p">
+    <h1 rte="18q">{{ "Edit User " + getTitle() }}</h1>
+
+    <ng-container *ngIf="enableImpersonateBtn">
+        <p rte="eD">
+            <a [routerLink]="[]" (click)="impersonate()" rte="eE"
+                >Impersonate this user</a
+            >
+        </p>
+    </ng-container>
+
+    <form #form="ngForm" (ngSubmit)="save()" rte="18r">
+        <p-tabView rte="18s">
+            <p-tabPanel header="Basic Details" rte="18t">
+                <div class="basic-details-container" rte="18u">
+                    <div
+                        class="inputs-group basic-details-form-container"
+                        rte="18v"
+                    >
+                        <div class="inputs-group-row" rte="18w">
+                            <label
+                                for="email"
+                                class="inputs-group-row-name asterisk-mark"
+                                rte="18x"
+                                >Email:</label
+                            >
+                            <div class="inputs-group-row-value" rte="eL">
+                                <input
+                                    [(ngModel)]="user.email"
+                                    pInputText
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    emailMaxLength
+                                    [pattern]="validationPatterns.email"
+                                    rte="18y"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="inputs-group-row" rte="18z">
+                            <label
+                                for="firstName"
+                                class="inputs-group-row-name asterisk-mark"
+                                rte="18A"
+                                >First name:</label
+                            >
+                            <div class="inputs-group-row-value" rte="18B">
+                                <input
+                                    [(ngModel)]="user.firstName"
+                                    pInputText
+                                    id="firstName"
+                                    name="firstName"
+                                    required
+                                    maxlength="35"
+                                    [pattern]="validationPatterns.notEmpty"
+                                    rte="eQ"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="inputs-group-row" rte="eR">
+                            <label
+                                for="lastname"
+                                class="inputs-group-row-name asterisk-mark"
+                                rte="eS"
+                                >Last name:</label
+                            >
+                            <div class="inputs-group-row-value" rte="eT">
+                                <input
+                                    [(ngModel)]="user.lastName"
+                                    pInputText
+                                    id="lastname"
+                                    name="lastname"
+                                    required
+                                    maxlength="35"
+                                    [pattern]="validationPatterns.notEmpty"
+                                    rte="eU"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            *ngIf="roleOptionsReadyAndNotEmpty"
+                            class="inputs-group-row"
+                            rte="eV"
+                        >
+                            <label
+                                for="roles"
+                                class="inputs-group-row-name"
+                                rte="eW"
+                                >Roles:</label
+                            >
+                            <div class="inputs-group-row-value" rte="eX">
+                                <p-multiSelect
+                                    [(ngModel)]="user.roles"
+                                    [options]="roleOptions"
+                                    defaultLabel="Select roles"
+                                    optionLabel="name"
+                                    dataKey="id"
+                                    id="roles"
+                                    name="roles"
+                                    rte="eY"
+                                >
+                                </p-multiSelect>
+                            </div>
+                        </div>
+
+                        <div
+                            *ngIf="
+                                permissionOptionsReadyAndNotEmpty &&
+                                isPermissionBasedModel
+                            "
+                            class="inputs-group-row"
+                            rte="f0"
+                        >
+                            <label
+                                for="permissions"
+                                class="inputs-group-row-name"
+                                rte="f1"
+                                >Additional permissions:</label
+                            >
+                            <div class="inputs-group-row-value" rte="f2">
+                                <p-multiSelect
+                                    [(ngModel)]="user.permissions"
+                                    [options]="permissionOptions"
+                                    defaultLabel="Select permissions"
+                                    optionLabel="name"
+                                    dataKey="id"
+                                    id="permissions"
+                                    name="permissions"
+                                    rte="f3"
+                                >
+                                </p-multiSelect>
+                            </div>
+                        </div>
+
+                        <div
+                            *ngIf="groupOptionsReadyAndNotEmpty"
+                            class="inputs-group-row"
+                            rte="f5"
+                        >
+                            <label
+                                for="groups"
+                                class="inputs-group-row-name"
+                                rte="f6"
+                                >Groups:</label
+                            >
+                            <div class="inputs-group-row-value" rte="f7">
+                                <p-multiSelect
+                                    [(ngModel)]="user.groups"
+                                    [options]="groupOptions"
+                                    defaultLabel="Select groups"
+                                    dataKey="id"
+                                    optionLabel="name"
+                                    id="groups"
+                                    name="groups"
+                                    rte="f8"
+                                >
+                                </p-multiSelect>
+                            </div>
+                        </div>
+
+                        <div
+                            class="buttons-panel buttons-panel-left-alignment user-control-buttons"
+                            rte="fb"
+                        >
+                            <button
+                                *ngIf="enableResendInvitationBtn"
+                                type="button"
+                                pButton
+                                label="Resend invitation"
+                                (click)="resendInvitation()"
+                                rte="fc"
+                            ></button>
+                            <button
+                                *ngIf="enableResendEmailConfirmationBtn"
+                                type="button"
+                                pButton
+                                label="Send email confirmation"
+                                (click)="resendEmailConfirmation()"
+                                rte="fd"
+                            ></button>
+                            <button
+                                *ngIf="enableSendPasswordResetMailBtn"
+                                type="button"
+                                [disabled]="user.ssoProvider"
+                                pButton
+                                label="Password reset"
+                                (click)="sendPasswordResetMail()"
+                                rte="fe"
+                            ></button>
+                            <button
+                                *ngIf="enableApproveBtn"
+                                type="button"
+                                pButton
+                                label="Approve"
+                                ngClass="p-button-success"
+                                (click)="approve()"
+                                rte="ff"
+                            ></button>
+                            <button
+                                *ngIf="enableSuspendBtn || enableUnsuspendBtn"
+                                type="button"
+                                pButton
+                                [label]="
+                                    enableSuspendBtn ? 'Suspend' : 'Unsuspend'
+                                "
+                                [ngClass]="
+                                    enableSuspendBtn
+                                        ? 'p-button-danger'
+                                        : 'p-button-success'
+                                "
+                                (click)="toggleLocking()"
+                                rte="fg"
+                            ></button>
+                            <button
+                                *ngIf="enableDeleteBtn || enableRestoreBtn"
+                                type="button"
+                                pButton
+                                [label]="enableDeleteBtn ? 'Delete' : 'Restore'"
+                                (click)="toggleDeleting()"
+                                rte="fh"
+                            ></button>
+                        </div>
+
+                        <div
+                            class="buttons-panel buttons-panel-top-margin"
+                            rte="18C"
+                        >
+                            <button
+                                pButton
+                                type="button"
+                                label="Cancel"
+                                class="p-button-secondary"
+                                (click)="back()"
+                                rte="18D"
+                            ></button>
+                            <button
+                                pButton
+                                type="submit"
+                                label="Save"
+                                [disabled]="!form.valid"
+                                rte="18E"
+                            ></button>
+                        </div>
+                    </div>
+                    <div class="avatar-container" rte="f9">
+                        <img
+                            [src]="
+                                user.avatarImage
+                                    ? user.avatarImage.url
+                                    : 'assets/images/noavatar.png'
+                            "
+                            class="avatar-image"
+                            rte="fa"
+                        />
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Organization Details" rte="18F">
+                <div class="inputs-group" rte="fj">
+                    <div class="inputs-group-row" rte="fk">
+                        <label
+                            for="organizations"
+                            class="inputs-group-row-name"
+                            rte="fl"
+                            >Organization:</label
+                        >
+                        <div class="inputs-group-row-value" rte="fm">
+                            <p-multiSelect #organization="ngModel"
+                                        [(ngModel)]="user.organizations"
+                                        optionLabel="name"
+                                        dataKey="id"
+                                        [options]="organizationOptions"
+                                        id="organizations"
+                                        name="organizations"
+                                        defaultLabel="Select organization"
+                                        rte="fn">
+                            </p-multiSelect>
+                        </div>
+                    </div>
+
+                    <div
+                        class="buttons-panel buttons-panel-top-margin"
+                        rte="17Z"
+                    >
+                        <button
+                            pButton
+                            type="button"
+                            label="Cancel"
+                            class="p-button-secondary"
+                            (click)="back()"
+                            rte="180"
+                        ></button>
+                        <button
+                            pButton
+                            type="submit"
+                            label="Save"
+                            [disabled]="!form.valid"
+                            rte="181"
+                        ></button>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </form>
+</div>

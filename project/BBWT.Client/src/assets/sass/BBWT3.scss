@@ -1,0 +1,523 @@
+/* **************************************************************
+ *           _____    ______   ____     ____     __
+ *          / ___/   /_  __/  / __ \   / __ \   / /
+ *          \__ \     / /    / / / /  / /_/ /  / /
+ *         ___/ /    / /    / /_/ /  / ____/  /_/
+ *        /____/    /_/     \____/  /_/      (_)
+ *
+ * Please read this documentation BEFORE making changes to ANY
+ * files in this folder:
+ *
+ *      https://wiki.bbconsult.co.uk/x/ZQDhAw
+ *
+ * ************************************************************* */
+
+/* Module CSS */
+/* Module or feature-specific custom CSS */
+@import "screenMixins";
+@import "fonts.scss";
+@import "primeNgOverrides.scss";
+
+/**
+* Include BBWT3 specific variables
+*/
+@import "./BBWT3Variables.scss";
+
+
+@mixin sentence-case() {
+    text-transform: lowercase;
+
+    &:first-letter {
+        text-transform: uppercase;
+    }
+}
+
+
+/* iOS-specific rules cancel */
+[type="text"],
+[type="button"] {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+}
+
+/* Feedback block position fix */
+#feedbacks-launcher {
+    display: inline-block;
+}
+
+/* Material icons */
+.material-icons {
+    font-family: "Material Icons";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.5em; /* Preferred icon size */
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Support for IE. */
+    font-feature-settings: "liga";
+}
+
+.p-button {
+    /* Material icons for buttons */
+    i.material-icons {
+        display: inline-block;
+        float: left;
+        padding: 0 1em 0 0;
+        height: 100%;
+        width: auto;
+        font-size: 1.15em;
+
+        & + .p-button-label {
+            float: right;
+            margin-left: -0.5em;
+            padding-left: 0;
+        }
+    }
+
+    &.p-button-icon-only {
+        i.material-icons {
+            padding-right: 0;
+            position: relative;
+            left: -3px;
+        }
+    }
+}
+
+/* Padding for the password input with an eye icon. */
+input[showpassword] {
+    padding-right: 35px;
+}
+
+/* Padding for the password input with an eye icon. */
+input[showpassword] {
+    padding-right: 35px;
+}
+
+/* Global banner */
+.global-info-banner {
+    position: fixed;
+    top: 75px;
+    left: 0;
+    width: 100%;
+    z-index: 95;
+    border-bottom: 1px solid #b1b1b1;
+    padding: 1em;
+    box-sizing: border-box;
+
+    @include for-tablet-only {
+        padding: 0.75em;
+    }
+
+    &.collapsed {
+        top: 0;
+        height: 95px;
+        padding-bottom: 20px;
+
+        .expand-icon {
+            display: inline-block;
+        }
+        .collapse-icon {
+            display: none;
+        }
+    }
+
+    .expand-icon {
+        display: none;
+    }
+    .collapse-icon {
+        display: inline-block;
+    }
+    .expand-icon,
+    .collapse-icon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+    }
+}
+
+/* Sub-header */
+.page-sub-header {
+    display: block;
+    margin-bottom: 15px;
+    color: #666666;
+}
+
+/* Text and icon alignment by center for buttons */
+.button-text-center {
+    text-align: center;
+
+    &.p-button,
+    .p-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        i.material-icons {
+            float: none;
+            padding: 0;
+
+            & + .p-button-label {
+                float: none;
+                padding-left: 5px;
+                width: auto;
+                flex: none;
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
+/* Inputs group */
+.inputs-group {
+    display: block;
+    max-width: 600px;
+
+    .inputs-sub-group-name {
+        display: flex;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .inputs-group-row {
+        width: 100%;
+        margin-bottom: 20px;
+        display: flex;
+
+        .inputs-group-row-name {
+            display: inline-block;
+            padding-top: 0.429em;
+            padding-right: 10px;
+            width: 200px;
+            vertical-align: top;
+            margin-right: 0.7rem;
+            @include for-phone-only {
+                padding-top: 0;
+                padding-right: 0;
+                width: 100%;
+
+                &.empty-row-name {
+                    margin-bottom: 0;
+                }
+            }
+
+            /*@include sentence-case();*/
+
+            bb-tooltip {
+                margin-left: 5px;
+            }
+        }
+
+        .inputs-group-row-value {
+            display: inline-block;
+            width: 100%;
+
+            @include for-phone-only {
+                padding-left: 0;
+                max-width: unset;
+            }
+
+            .inputs-group-row-value-item {
+                display: block;
+
+                &:not(:last-of-type) {
+                    margin-bottom: 5px;
+                }
+            }
+
+            .p-dropdown,
+            .p-multiselect,
+            .p-inputnumber,
+            .p-calendar,
+            input,
+            textarea {
+                width: 100%;
+                max-width: 388px;
+            }
+
+            .p-inputnumber-buttons-stacked .p-inputnumber-button-group {
+                border-radius: 0 6px 6px 0 !important;
+
+                .p-button.p-inputnumber-button {
+                    height: unset !important;
+                }
+            }
+
+            .input-with-button-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .p-dropdown,
+                .p-multiselect,
+                .p-inputnumber,
+                .p-calendar,
+                input,
+                textarea {
+                    width: calc(#{100%} - 105px);
+                    max-width: 400px;
+                }
+                .p-button {
+                    width: 100px;
+                }
+            }
+
+            > p-checkbox:first-of-type,
+            > p-radioButton:first-of-type {
+                display: block;
+                padding-top: 0.429em;
+            }
+
+            .validation-error {
+                display: block;
+                margin-top: 5px;
+            }
+
+            &.inputs-group-row-value-uploader {
+                .inputs-group-row-value-uploader-preview-container,
+                .inputs-group-row-value-uploader-description {
+                    margin-top: 5px;
+                    width: 100%;
+                }
+
+                .inputs-group-row-value-uploader-preview-container {
+                    display: flex;
+                    align-items: flex-end;
+
+                    .inputs-group-row-value-uploader-preview-image {
+                        margin-right: 5px;
+                        max-width: calc(#{100%} - 50px);
+                    }
+                }
+            }
+
+            .ql-editing input {
+                width: unset;
+                max-width: unset;
+            }
+        }
+
+        &.no-label-padding {
+            .inputs-group-row-name {
+                padding-top: 0;
+            }
+        }
+
+        .inputs-group-row-name + .inputs-group-row-value {
+            padding-left: 10px;
+            width: calc(#{100%} - 200px);
+
+            @include for-phone-only {
+                margin-top: 10px;
+                padding-left: 0;
+                width: 100%;
+
+                .p-float-label {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+
+    &.top-placed-labels {
+        .inputs-group-row {
+            flex-wrap: wrap;
+
+            .inputs-group-row-name {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .inputs-group-row-value {
+                width: 100%;
+            }
+        }
+    }
+
+    &.no-labels-padding {
+        .inputs-group-row {
+            .inputs-group-row-name {
+                padding-top: 0;
+            }
+        }
+    }
+
+    /* To make one or all labels right side aligned */
+    @include for-tablet-up {
+        &.right-aligned-labels .inputs-group-row-name,
+        .inputs-group-row-name.right-aligned,
+        .inputs-group-row-name .right-aligned {
+            text-align: right;
+        }
+    }
+}
+
+.p-dialog .p-dialog-content .inputs-group {
+    .inputs-group-row {
+        .inputs-group-row-name {
+            width: 150px;
+        }
+
+        .inputs-group-row-name + .inputs-group-row-value {
+            width: calc(#{100%} - 150px);
+
+            @include for-phone-only {
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* Buttons panel */
+.buttons-panel {
+    overflow: hidden;
+    width: 100%;
+    text-align: right;
+
+    &.buttons-panel-left-alignment {
+        text-align: left;
+
+        .p-button {
+            margin-right: 5px;
+            margin-left: 0;
+        }
+    }
+    &.buttons-panel-center-alignment {
+        text-align: center;
+
+        .p-button {
+            margin-right: 2.5px;
+            margin-left: 2.5px;
+        }
+    }
+    &.buttons-panel-right-alignment {
+        text-align: right;
+
+        .p-button {
+            margin-left: 5px;
+            margin-right: 0;
+        }
+    }
+    &.buttons-panel-top-margin {
+        margin-top: 0.5em;
+    }
+    &.buttons-panel-bottom-margin {
+        margin-bottom: 0.5em;
+    }
+
+    .p-button {
+        margin-left: 5px;
+    }
+    .buttons-panel-left-side {
+        float: left;
+
+        .p-button {
+            margin-left: 0;
+            margin-right: 5px;
+        }
+    }
+    .buttons-panel-right-side {
+        float: right;
+
+        .p-button {
+            margin-left: 5px;
+            margin-right: 0;
+        }
+    }
+}
+
+.asterisk-mark:after {
+    content: "*";
+    color: red;
+}
+
+/* Inline input */
+.inline-text-input {
+    &.p-inputtext {
+        display: inline-block;
+        margin: 0 5px;
+        width: 50px;
+        padding: 5px;
+    }
+}
+
+/* Runtime Editor */
+.rte-el-hover {
+    box-shadow: inset 0 0 2px 2px #ce69ce, 0 0 10px 0 #ce69ce !important;
+}
+
+.rte-changed {
+    border: 1px dashed red !important;
+}
+
+.rte-node-text-item {
+    position: absolute;
+    z-index: 2000;
+    background: #ce69ce;
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.rte-node-menu-item {
+    cursor: pointer;
+    color: white;
+    width: 150px;
+    text-align: left;
+    padding-left: 20px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.rte-node-menu-item:hover {
+    background: #6c296c;
+}
+
+.rte-node-title {
+    color: #fafa76;
+    font-weight: bold;
+    padding: 5px 5px 0 5px;
+    height: 24px;
+}
+
+/* Hide recaptchaV3 */
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
+grid {
+    .p-paginator {
+        &-left-content, &-right-content {
+            .button-delete-all {
+                .p-button {
+                    background-color: transparent;
+                    color: $bbwtRed;
+                    border: 1px solid #0000001F;
+                    transition: all 0.3s ease-in-out;
+
+                    &:hover {
+                        background-color: $bbwtRed;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}

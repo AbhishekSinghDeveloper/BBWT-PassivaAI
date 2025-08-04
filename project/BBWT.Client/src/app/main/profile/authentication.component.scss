@@ -1,0 +1,91 @@
+@import "screenMixins";
+
+:host ::ng-deep {
+    .panels-container {
+        width: 100%;
+        max-width: 600px;
+
+        .two-step-login-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+
+            &:hover {
+                border: 1px solid #bbb;
+            }
+
+            .text-container {
+                display: flex;
+                flex-direction: column;
+                margin: 0 20px;
+            }
+
+            .title-container {
+                display: flex;
+                align-items: center;
+            }
+
+            .enabled-icon {
+                color: green !important;
+                margin: 0 0 0 8px !important;
+            }
+
+            p {
+                word-break: normal;
+                overflow-wrap: break-word;
+            }
+
+            @include for-phone-only {
+                flex-wrap: wrap;
+                align-items: flex-end;
+
+                .text-container {
+                    order: 1;
+                    width: 100%;
+                    margin: 0 0 10px 0;
+                }
+                .login-item-logo {
+                    order: 2;
+                }
+                .login-item-manage-button {
+                    order: 3;
+                }
+            }
+        }
+    }
+
+    p-message {
+        &.setup-2fa-error-message {
+            .p-inline-message {
+                width: 100% !important;
+            }
+        }
+    }
+
+    .p-dialog {
+        .recovery-code {
+            display: block;
+            padding: 10px 5px;
+            background-color: #f6f6f6;
+            word-break: break-word;
+            font-size: 10px;
+        }
+        .shared-key {
+            display: block;
+            padding: 10px 5px;
+            background-color: #f6f6f6;
+        }
+        .inputs-group {
+            margin-top: 10px;
+        }
+    }
+
+    li {
+        margin-top: 20px;
+    }
+}
+
+

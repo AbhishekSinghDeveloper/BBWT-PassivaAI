@@ -1,0 +1,120 @@
+<form (ngSubmit)="search()" autocomplete="off" class="filter-form" rte="18c">
+    <!-- Filter inputs -->
+    <div *ngFor="let filterItem of _filtersArray; index as i" class="filter-item-container" [class.filter-and-match-mode]="_matchModeSelectorVisible(filterItem)" rte="18d">
+        <ng-container *ngIf="!_customFilterExists(filterItem.field); else customFilter" [ngSwitch]="filterItem.settings.inputType">
+            <div class="filter-input-container" rte="1gN">
+                <!-- Calendar -->
+                <span *ngSwitchCase="_inputTypeEnum.Calendar" class="p-float-label" rte="1C">
+                    <p-calendar [(ngModel)]="filterItem.value"
+                                [ngModelOptions]="{standalone: true}"
+                                dataType="date"
+                                [dateFormat]="filterItem.settings.calendarDateFormat ? filterItem.settings.calendarDateFormat : defaultDateFormat"
+                                [showButtonBar]="true"
+                                [readonlyInput]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="filterItem.settings.calendarYearRange ? filterItem.settings.calendarYearRange : defaultCalendarYearRange"
+                                [monthNavigator]="true"
+                                [selectionMode]="filterItem.matchMode === _matchModeEnum.Between ? 'range' : 'single'"
+                                appendTo="body"
+                                (onSelect)="_onSelectableInputChanged(filterItem)"
+                                rte="1D">
+                    </p-calendar>
+
+                    <label rte="1cJ">{{filterItem.settings.header}}</label>
+                </span>
+
+                <!-- Number -->
+                <ng-container *ngSwitchCase="_inputTypeEnum.Number">
+                    <span *ngIf="filterItem.matchMode !== _matchModeEnum.Between; else numericBetweenInputs" class="p-float-label" rte="1L">
+                        <p-inputNumber [(ngModel)]="filterItem.value"
+                                       [ngModelOptions]="{standalone: true}"
+                                       [showButtons]="true"
+                                       [maxFractionDigits]="filterItem.settings.numericInputMaxFractionDigits"
+                                       mode="decimal"
+                                       locale="en-US"
+                                       rte="1gO"
+                                       (onInput)="_onFilterChanged(filterItem)"
+                                       (onClear)="_onFilterChanged(filterItem)">
+                        </p-inputNumber>
+
+                        <label rte="1cK">{{filterItem.settings.header}}</label>
+                    </span>
+                    <ng-template #numericBetweenInputs>
+                        <bb-input-number-range [(ngModel)]="filterItem.value"
+                                               [ngModelOptions]="{standalone: true}"
+                                               [placeholder]="filterItem.settings.header"
+                                               [floatingLabel]="true"
+                                               [maxFractionDigits]="filterItem.settings.numericInputMaxFractionDigits"
+                                               rte="1f5"
+                                               (change)="_onFilterChanged(filterItem)">
+                        </bb-input-number-range>
+                    </ng-template>
+                </ng-container>
+
+                <!-- Checkbox -->
+                <span *ngSwitchCase="_inputTypeEnum.Checkbox" rte="1F">
+                    <p-checkbox [(ngModel)]="filterItem.value"
+                                [ngModelOptions]="{standalone: true}"
+                                [binary]="true"
+                                [label]="filterItem.settings.header"
+                                (onChange)="_onSelectableInputChanged(filterItem)"
+                                rte="1G">
+                    </p-checkbox>
+                </span>
+
+                <!-- Dropdown -->
+                <p-dropdown *ngSwitchCase="_inputTypeEnum.Dropdown"
+                            [(ngModel)]="filterItem.value"
+                            [ngModelOptions]="{standalone: true}"
+                            [placeholder]="filterItem.settings.header"
+                            [options]="filterItem.settings.dropdownOptions"
+                            [showClear]="true"
+                            appendTo="body"
+                            (onChange)="_onSelectableInputChanged(filterItem)"
+                            rte="1I">
+                </p-dropdown>
+
+                <p-multiSelect *ngSwitchCase="_inputTypeEnum.Multiselect"
+                            [(ngModel)]="filterItem.value"
+                            [ngModelOptions]="{standalone: true}"
+                            [placeholder]="filterItem.settings.header"
+                            [options]="filterItem.settings.dropdownOptions"
+                            (onChange)="_onSelectableInputChanged(filterItem)"
+                            appendTo="body"
+                            rte="1sj">
+                </p-multiSelect>
+
+                <!-- Text -->
+                <span *ngSwitchDefault class="p-float-label" rte="1P">
+                    <input pInputText
+                           [(ngModel)]="filterItem.value"
+                           [ngModelOptions]="{standalone: true}"
+                           rte="1Q"
+                           (input)="_onFilterChanged(filterItem)" />
+
+                    <label rte="18e">{{filterItem.settings.header}}</label>
+                </span>
+            </div>
+            <div *ngIf="_matchModeSelectorVisible(filterItem)" class="filter-match-mode-selector" rte="1gP">
+                <p-dropdown [(ngModel)]="filterItem.matchMode"
+                            [ngModelOptions]="{standalone: true}"
+                            [options]="filterItem.settings.matchModeOptions"
+                            dropdownIcon="pi pi-filter"
+                            appendTo="body"
+                            (onChange)="_onMatchModeChanged(filterItem)" rte="1gQ">
+                </p-dropdown>
+            </div>
+        </ng-container>
+        <ng-template #customFilter>
+            <div class="filter-input-container" rte="1gR">
+                <ng-container *ngTemplateOutlet="_getFilterTemplate(filterItem.field); context: {$implicit: filterItem}"></ng-container>
+            </div>
+        </ng-template>
+    </div>
+
+    <!-- Submit/clear buttons -->
+    <div class="filter-buttons-panel" rte="18f">
+        <button *ngIf="showClearButton" pButton type="button" [label]="clearButtonText" class="p-button-text" (click)="clear()" rte="18g"></button>
+        <button *ngIf="showSubmitButton" pButton type="submit" [label]="submitButtonText" class="p-button-secondary" rte="18h"></button>
+    </div>
+</form>

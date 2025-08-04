@@ -1,0 +1,38 @@
+:host::ng-deep {
+    .version-changes-tree {
+        max-width: 800px;
+
+        td {
+            height: 50px !important;
+            padding: 5px !important;
+
+            .default-value-editor {
+                gap: 10px;
+                display: flex;
+                width: fit-content;
+
+                > p-button > button {
+                    padding: 5px;
+
+                    > span {
+                        white-space: nowrap;
+                    }
+                }
+
+                > formio {
+                    .formio-form {
+                        min-height: unset;
+                    }
+
+                    .form-group {
+                        margin: 0;
+                    }
+
+                    .col-form-label {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

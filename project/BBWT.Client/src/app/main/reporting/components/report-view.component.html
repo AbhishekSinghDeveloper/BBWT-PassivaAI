@@ -1,0 +1,48 @@
+<h1 *ngIf="_reportView?.showTitle">{{_reportView?.name}}</h1>
+
+<div *ngFor="let sectionsRow of _sectionsSchemeMatrix" class="sections-view-row">
+    <ng-container *ngFor="let section of sectionsRow; let sectionIndex=index">
+        <div *ngIf="_sectionExists(section.id)"
+             [hidden]="!_sectionsVisibleState[section.id]"
+             class="sections-view-item">
+            <ng-container *ngIf="section.expandBehaviour === 'noContainer'">
+                <div [class]="sectionIndex > 0 && _reportView.sections[sectionIndex-1].expandBehaviour !== 'noContainer' ? 'section-no-container section-no-container-top-indent' : 'section-no-container'">
+                    <h1 *ngIf="section.showTitle && !_reportView?.showTitle">{{section.title}}</h1>
+                    <h2 *ngIf="section.showTitle && _reportView?.showTitle">{{section.title}}</h2>
+                    <section-view #sec
+                                  [sectionId]="section.id"
+                                  (masterSectionCommand)="_onMasterSectionCommand($event)"
+                                  (sectionContainerStateChange)="_onSectionContainerStateChange($event)">
+                    </section-view>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="section.expandBehaviour !== 'noContainer'">
+                <div class="section-with-container">
+                    <p-accordion [multiple]="false"
+                                 (onOpen)="onSectionExpand(section.id)">
+                        <p-accordionTab [(selected)]="_sectionExpandState[section.id]"
+                                        [disabled]="section.expandBehaviour === 'static'"
+                                        [class.accordion-tab-disabled]="section.expandBehaviour === 'static'">
+                            <ng-template pTemplate="header">
+                                <div class="header-title">
+                                    {{ section.showTitle ? section.title : "" }}
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="content">
+                                <section-view [sectionId]="section.id"
+                                              (masterSectionCommand)="_onMasterSectionCommand($event)"
+                                              (sectionContainerStateChange)="_onSectionContainerStateChange($event)">
+                                </section-view>
+                            </ng-template>
+                        </p-accordionTab>
+                    </p-accordion>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>
+
+<ng-container *ngIf="!_reportView?.sections?.length">
+    <p-message severity="warning" text="The report does not contain any tables."></p-message>
+</ng-container>

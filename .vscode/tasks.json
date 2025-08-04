@@ -1,0 +1,164 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+    },
+    "inputs": [
+        {
+            "id": "buildConfiguration",
+            "default": "Debug",
+            "description": "Build configuration to use. Either 'Debug' or 'Release'.",
+            "options": [
+                "Debug",
+                "Release"
+            ],
+            "type": "pickString"
+        },
+        {
+            "id": "runtimeIdentifier",
+            "default": "linux-x64",
+            "description": "Runtime identifier (RID) to publish for.",
+            "options": [
+                "linux-x64",
+                "win-x64",
+                "osx-x64"
+            ],
+            "type": "pickString"
+        },
+        {
+            "id": "dockerTag",
+            "default": "commit_sha",
+            "description": "Tag name for docker image. Use 'commit_sha' to use short commit hash.",
+            "type": "promptString"
+        }
+    ],
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "-c",
+                "${input:buildConfiguration}",
+                "${workspaceFolder}/BBWT.sln"
+            ],
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test",
+            "type": "process",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "command": "dotnet",
+            "args": [
+                "test",
+                "${workspaceFolder}/test/BBWT.Services.Test/BBWT.Services.Test.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Run",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/BBWT.Web/"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "Restore",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "restore"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Clean",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Publish (runtime independent) - output: ./publish/",
+            "type": "process",
+            "command": "dotnet",
+            "group": "build",
+            "args": [
+                "publish",
+                "--configuration",
+                "${input:buildConfiguration}",
+                "--runtime",
+                "${input:runtimeIdentifier}",
+                "-o",
+                "${workspaceFolder}/publish/"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Publish (runtime dependent) - output: ./publish/",
+            "type": "process",
+            "command": "dotnet",
+            "group": "build",
+            "args": [
+                "publish",
+                "--configuration",
+                "${input:buildConfiguration}",
+                "--output",
+                "${workspaceFolder}/publish/"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Prepare Docker image (publish first).",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/docker/"
+            },
+            "osx": {
+                "command": "if [[ ${input:dockerTag} == 'commit_sha' ]]; then TAG=$(git rev-parse --short HEAD); else TAG=${input:dockerTag}; fi; cp -R ../publish ./build && docker build -t bbwt3:${TAG} ."
+            },
+            "linux": {
+                "command": "if [[ ${input:dockerTag} == 'commit_sha' ]]; then TAG=$(git rev-parse --short HEAD); else TAG=${input:dockerTag}; fi; cp -R ../publish ./build && docker build -t bbwt3:${TAG} ."
+            },
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "powershell.exe",
+                        "args": [
+                            "-NoProfile",
+                            "-ExecutionPolicy",
+                            "Bypass",
+                            "-Command"
+                        ]
+                    }
+                },
+                "command": "if (${input:dockerTag} -eq 'commit_sha') {$TAG = $(git rev-parse --short HEAD)} else {$TAG = ${input:dockerTag}}; Copy-Item ${workspaceFolder}/publish -Filter *.* -Destination ${workspaceFolder}/build/ -Recurse ; if ($?) {docker build -t bbwt3:$TAG .}"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

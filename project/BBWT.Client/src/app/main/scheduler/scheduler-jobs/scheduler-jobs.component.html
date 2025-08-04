@@ -1,0 +1,13 @@
+<scheduler-dashboard-menu></scheduler-dashboard-menu>
+<div class="scheduler-table">
+    <p-tabView (onChange)="onTabChange($event)">
+        <p-tabPanel header="Enqueued"></p-tabPanel>
+    <p-tabPanel header="Scheduled"></p-tabPanel>
+    <p-tabPanel header="Processing"></p-tabPanel>
+    <p-tabPanel header="Succeeded"></p-tabPanel>
+    <p-tabPanel header="Failed"></p-tabPanel>
+    <p-tabPanel header="Deleted"></p-tabPanel>
+    <p-tabPanel header="Awaiting"></p-tabPanel>
+    <scheduler-job [status]="selectedStatus" rte="1jF"></scheduler-job>
+</p-tabView>
+</div>

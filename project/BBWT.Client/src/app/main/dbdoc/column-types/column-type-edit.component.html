@@ -1,0 +1,189 @@
+<div class="card--hidden" rte="1ln">
+    <h1 rte="1rw">
+        {{ !columnType.id ? "Add Column Type" : "Edit Column Type" }}
+    </h1>
+
+    <form #form="ngForm" class="inputs-group" (ngSubmit)="save()" rte="1lr">
+        <div class="inputs-group-row" rte="1ls">
+            <label class="inputs-group-row-name asterisk-mark" rte="1lt"
+                >Name:</label
+            >
+            <div class="inputs-group-row-value" rte="1lu">
+                <input
+                    #name="ngModel"
+                    [(ngModel)]="columnType.name"
+                    pInputText
+                    notEmpty
+                    trim
+                    name="name"
+                    rte="1lv"
+                />
+                <span
+                    *ngIf="name.touched && name.hasError('notEmpty')"
+                    class="validation-error"
+                    rte="1rx"
+                    >Name is required</span
+                >
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1ly">
+            <label class="inputs-group-row-name asterisk-mark" rte="1lz"
+                >Group:</label
+            >
+            <div class="inputs-group-row-value" rte="1lA">
+                <p-dropdown
+                    #typeGroup="ngModel"
+                    [(ngModel)]="columnType.group"
+                    placeholder="Select the type group"
+                    [options]="typeGroups"
+                    appendTo="body"
+                    required
+                    name="group"
+                    rte="1lB"
+                >
+                </p-dropdown>
+                <span
+                    *ngIf="typeGroup.touched && typeGroup.hasError('required')"
+                    class="validation-error"
+                    rte="1ry"
+                    >Type group is required</span
+                >
+            </div>
+        </div>
+
+        <div class="inputs-group-row" rte="1lE">
+            <label class="inputs-group-row-name" rte="1lG"
+                >Anonymization rule:</label
+            >
+            <div class="inputs-group-row-value" rte="1lH">
+                <p-dropdown
+                    #anonymizationRule="ngModel"
+                    [(ngModel)]="columnType.anonymizationRule"
+                    placeholder="Select the anonymization rule"
+                    [options]="anonymizationRuleOptions"
+                    [showClear]="true"
+                    name="anonymizationRule"
+                    rte="1lI"
+                >
+                </p-dropdown>
+                <span
+                    *ngIf="
+                        anonymizationRule.touched &&
+                        anonymizationRule.hasError('required')
+                    "
+                    class="validation-error"
+                    rte="1rz"
+                    >Anonymization rule is required</span
+                >
+            </div>
+        </div>
+
+        <div class="inputs-group-row buttons-panel" rte="1lN">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="back()"
+                rte="1lP"
+            ></button>
+            <button
+                pButton
+                type="submit"
+                label="Save"
+                [disabled]="form.invalid"
+                rte="1lR"
+            ></button>
+        </div>
+    </form>
+
+    <ng-container *ngIf="columnType.id">
+        <p-accordion
+            [multiple]="true"
+            class="validation-view-metadata-editor"
+            rte="1rA"
+        >
+            <p-accordionTab
+                *ngIf="columnType.validationMetadata"
+                [selected]="true"
+                rte="1rB"
+            >
+                <p-header class="validation-metadata-header" rte="1rC">
+                    <span class="panel-bold-header-text" rte="1rD"
+                        >Validation metadata</span
+                    >
+                    <p-button
+                        type="button"
+                        icon="pi pi-trash"
+                        label="Delete"
+                        class="delete-validation-button"
+                        (click)="
+                            startValidationMetadataDeleting();
+                            $event.stopPropagation()
+                        "
+                        rte="1rE"
+                    >
+                    </p-button>
+                </p-header>
+                <validation-editor
+                    *ngIf="columnType.validationMetadata"
+                    [columnValidationMetadata]="columnType.validationMetadata"
+                    [typeGroup]="columnType.group"
+                    (change)="updateValidationMetadata()"
+                    rte="1rF"
+                >
+                </validation-editor>
+            </p-accordionTab>
+            <p-accordionTab
+                *ngIf="columnType.viewMetadata"
+                [selected]="true"
+                rte="1rG"
+            >
+                <p-header class="view-metadata-header" rte="1rH">
+                    <span class="panel-bold-header-text" rte="1rI"
+                        >View metadata</span
+                    >
+                    <p-button
+                        type="button"
+                        icon="pi pi-trash"
+                        label="Delete"
+                        class="delete-validation-button"
+                        (click)="
+                            startViewMetadataDeleting();
+                            $event.stopPropagation()
+                        "
+                        rte="1rJ"
+                    >
+                    </p-button>
+                </p-header>
+                <view-editor
+                    *ngIf="columnType.viewMetadata"
+                    [columnViewMetadata]="columnType.viewMetadata"
+                    (change)="updateViewMetadata()"
+                    rte="1rK"
+                >
+                </view-editor>
+            </p-accordionTab>
+        </p-accordion>
+
+        <button
+            *ngIf="!columnType.validationMetadata"
+            pButton
+            type="button"
+            label="Add validation metadata"
+            class="validation-metadata-add-button"
+            (click)="addValidationMetadata()"
+            rte="1rL"
+        ></button>
+        <button
+            *ngIf="!columnType.viewMetadata"
+            pButton
+            type="button"
+            label="Add view metadata"
+            class="view-metadata-add-button"
+            (click)="addViewMetadata()"
+            rte="1rM"
+        ></button>
+    </ng-container>
+</div>

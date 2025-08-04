@@ -1,0 +1,13 @@
+<grid #quartzSchedulerRuleGrid [tableSettings]="tableSettings" [gridSettings]="gridSettings" rte="1jM"></grid>
+    <scheduler-job-edit *ngIf="isJobCreateVisible"
+                                        (save)="createJob($event)"
+                                        (cancel)="isJobCreateVisible = false" rte="1jN">
+    <ng-container header>Add Job</ng-container>
+</scheduler-job-edit>
+<scheduler-job-edit *ngIf="isJobEditVisible"
+                                        [rule]="editingRule"
+                                        [jobsInfo]="jobsInfo"
+                                        (save)="updateRow($event)"
+                                        (cancel)="isJobEditVisible = false" rte="1jO">
+    <ng-container header>Edit Job</ng-container>
+</scheduler-job-edit>

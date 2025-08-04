@@ -1,0 +1,42 @@
+:host ::ng-deep {
+    .main-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .iframe-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 3rem;
+
+        @media screen and (max-width: 800px) {
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+            border-bottom: 1px solid lightgray;
+        }
+    }
+
+    .close-tab {
+        visibility: collapse;
+
+        @media screen and (max-width: 800px) {
+            margin-top: 0.5rem;
+            visibility: visible !important;
+        }
+    }
+
+    .responsive-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 1rem;
+    }
+}

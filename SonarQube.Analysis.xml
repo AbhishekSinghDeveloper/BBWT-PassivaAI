@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SonarQubeAnalysisProperties  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <Property Name="sonar.verbose">false</Property>  
+  <Property Name="sonar.tests">test/**/*</Property>
+  <Property Name="sonar.host.url">https://sonar.bbconsult.co.uk</Property>
+  <Property Name="sonar.cs.vstest.reportsPaths">TestResults/*.trx</Property>
+  <Property Name="sonar.cs.opencover.reportsPaths">TestResults/**/coverage.opencover.xml</Property>
+  <Property Name="sonar.cs.xunit.reportsPaths">xunit-result.xml</Property>
+  <Property Name="sonar.typescript.lcov.reportPaths">./lcov.info</Property>
+  <Property Name="sonar.cpd.cs.minimumTokens">30</Property>
+  <Property Name="sonar.cpd.cs.minimumLines">3</Property>
+  <Property Name="sonar.coverage.exclusions">
+      **/test/**,
+      **/BBWM.Demo/**,
+      **/BBWM.Demo.Data/**,
+      **/BBWT.Data.MySQL/**,
+      **/BBWT.Data.SqlServer/**,
+      **/BBWT.Server/**,
+      **/*MappingProfile.cs,
+      **/*ModuleLinkage.cs,
+      **/*DTO.cs,
+      **/*Extensions.cs
+  </Property>
+    <Property Name="sonar.cpd.exclusions">**/Migrations/*.cs,**/Migrations.*/*.cs</Property>
+</SonarQubeAnalysisProperties>

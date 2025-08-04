@@ -1,0 +1,19 @@
+<div class="flex gap-5">
+    <h4>Form Name: <span>{{ FormDefinitionName }}</span></h4>
+    <h4>Version: <span>{{ FormVersion }}</span></h4>
+</div>
+<bb-form-renderer
+    [formDefId]="formId"
+    [formDataId]="formDataId"
+    [revisionId]="revisionId"
+    [readOnlyForm]="readOnlyForm"
+    [requestId]="requestId"
+    [surveyId]="surveyId"
+    [extraData]="extraData">
+</bb-form-renderer>
+
+<div class="close-tab d-flex justify-content-around">
+    <button type="button" class="btn btn-primary mr-2" (click)="confirm()">Close tab</button>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

@@ -1,0 +1,1125 @@
+<div class="card--hidden" rte="MC">
+    <h1 rte="MD">Grids</h1>
+
+    <p rte="ME">
+        Content of the grid should be visible without horizontal scrolling. But
+        you can always discuss it with your manager.
+    </p>
+
+    <!-- TODO - this needs converting to the grid+filter components -->
+    <div class="p-g filterTopPanel" rte="MF">
+        <form (ngSubmit)="search()" rte="MG">
+            <div class="p-g-12 p-md-4 p-lg-2" rte="MH">
+                <span class="p-float-label" rte="MI">
+                    <input
+                        name="id"
+                        pInputText
+                        [(ngModel)]="filter.id"
+                        class="filterControl"
+                        rte="MJ"
+                    />
+                    <label rte="MK">Order ID</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="ML">
+                <span class="p-float-label" rte="MM">
+                    <input
+                        name="customerCode"
+                        pInputText
+                        [(ngModel)]="filter.customerCode"
+                        class="filterControl"
+                        rte="MN"
+                    />
+                    <label rte="MO">Customer code</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="MP">
+                <span class="p-float-label" rte="MQ">
+                    <p-calendar
+                        name="orderDate"
+                        [(ngModel)]="filter.orderDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="MR"
+                    >
+                    </p-calendar>
+                    <label rte="MS">Order date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="MT">
+                <span class="p-float-label" rte="MU">
+                    <p-calendar
+                        name="requiredDate"
+                        [(ngModel)]="filter.requiredDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="MV"
+                    >
+                    </p-calendar>
+                    <label rte="MW">Required Date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="MX">
+                <span class="p-float-label" rte="MY">
+                    <p-calendar
+                        name="shippedDate"
+                        [(ngModel)]="filter.shippedDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="MZ"
+                    >
+                    </p-calendar>
+                    <label rte="N0">Shipped date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="N1">
+                <div class="filterButtons" rte="N2">
+                    <button
+                        pButton
+                        type="submit"
+                        label="Search"
+                        rte="N3"
+                    ></button>
+                    <button
+                        pButton
+                        type="button"
+                        label="Clear"
+                        class="p-button-secondary"
+                        (click)="clearFilter()"
+                        rte="N4"
+                    ></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <p-table
+        [value]="page.items"
+        [lazy]="true"
+        [rows]="10"
+        [responsive]="true"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [pageLinks]="3"
+        [editable]="true"
+        [totalRecords]="page.total"
+        selectionMode="single"
+        (onLazyLoad)="onGridLazyLoad($event)"
+        [tableStyle]="{ 'table-layout': ' auto' }"
+        rte="N5"
+    >
+        <p-column
+            field="id"
+            [style]="{ width: '10%' }"
+            header="Order Id"
+            [sortable]="true"
+            rte="N6"
+        ></p-column>
+        <p-column
+            field="customerCode"
+            header="Customer Code"
+            [sortable]="true"
+            rte="N7"
+        ></p-column>
+
+        <p-column
+            field="orderDate"
+            header="Order Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="N8"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Na">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="requiredDate"
+            header="Required Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="Nb"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Nd">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="shippedDate"
+            header="Shipped Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="Ne"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Ng">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+        <p-column header="Action" rte="Nh">
+            <ng-template let-order="rowData" pTemplate="body">
+                <p-button icon="pi pi-plus" rte="Nj"></p-button>
+                <p-button icon="pi pi-trash" rte="Nk"></p-button>
+            </ng-template>
+        </p-column>
+    </p-table>
+
+    <div class="filterBottomPanel" rte="Nl">
+        <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            label="Add"
+            class="btn-standard-size"
+            rte="Nm"
+        ></button>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Nn">
+        &lt;div class=&quot;p-g filterTopPanel&quot;&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input id=&quot;orderIdFilter&quot; type=&quot;text&quot; pInputText class=&quot;filterControl&quot; /&gt;
+                    &lt;label&gt;Order Id&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input type=&quot;text&quot; pInputText class=&quot;filterControl&quot; /&gt;
+                    &lt;label&gt;Customer Code&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;orderDate&quot; [(ngModel)]=&quot;filter.orderDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Order Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;requiredDate&quot; [(ngModel)]=&quot;filter.requiredDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Required Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;shippedDate&quot; [(ngModel)]=&quot;filter.shippedDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Shipped Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-8&quot;&gt;
+                &lt;div class=&quot;filterButtons&quot;&gt;
+                    &lt;button pButton type=&quot;submit&quot; label=&quot;Search&quot;&gt;&lt;/button&gt;
+                    &lt;button pButton type=&quot;button&quot; label=&quot;Clear&quot; (click)=&quot;clearFilter()&quot;&gt;&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;p-table [value]=&quot;page.items&quot; [lazy]=&quot;true&quot; [rows]=&quot;10&quot; [responsive]=&quot;true&quot;
+                     [paginator]=&quot;true&quot; [rowsPerPageOptions]=&quot;[5,10,20]&quot; [pageLinks]=&quot;3&quot;
+                     [editable]=&quot;true&quot; [totalRecords]=&quot;page.total&quot;
+                     selectionMode=&quot;single&quot; (onLazyLoad)=&quot;onGridLazyLoad($event)&quot;&gt;
+            &lt;p-column field=&quot;id&quot; header=&quot;Order Id&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;customerCode&quot; header=&quot;Customer Code&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Order Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Required Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Shipped Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column&gt;
+                &lt;ng-template let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;button type=&quot;button&quot; pButton&gt;
+                        &lt;i class=&quot;material-icons&quot;&gt;add&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;p-button icon="pi pi-trash"&gt;&lt;/p-button&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+        &lt;/p-table&gt;
+
+        &lt;div class=&quot;filterBottomPanel&quot;&gt;
+            &lt;button class=&quot;btn-standard-size&quot; pButton type=&quot;button&quot; label=&quot;Add&quot;&gt;
+                &lt;i class=&quot;material-icons&quot;&gt;add&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <p rte="No">A grid using multiple selection with checkboxes:</p>
+
+    <div class="p-g filterTopPanel" rte="Np">
+        <form (ngSubmit)="search()" rte="Nq">
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Nr">
+                <span class="p-float-label" rte="Ns">
+                    <input
+                        name="id"
+                        pInputText
+                        [(ngModel)]="filter.id"
+                        class="filterControl"
+                        rte="Nt"
+                    />
+                    <label rte="Nu">Order ID</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Nv">
+                <span class="p-float-label" rte="Nw">
+                    <input
+                        name="customerCode"
+                        pInputText
+                        [(ngModel)]="filter.customerCode"
+                        class="filterControl"
+                        rte="Nx"
+                    />
+                    <label rte="Ny">Customer code</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Nz">
+                <span class="p-float-label" rte="NA">
+                    <p-calendar
+                        name="orderDate"
+                        [(ngModel)]="filter.orderDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="NB"
+                    >
+                    </p-calendar>
+                    <label rte="NC">Order date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="ND">
+                <span class="p-float-label" rte="NE">
+                    <p-calendar
+                        name="requiredDate"
+                        [(ngModel)]="filter.requiredDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="NF"
+                    >
+                    </p-calendar>
+                    <label rte="NG">Required Date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="NH">
+                <span class="p-float-label" rte="NI">
+                    <p-calendar
+                        name="shippedDate"
+                        [(ngModel)]="filter.shippedDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="NJ"
+                    >
+                    </p-calendar>
+                    <label rte="NK">Shipped date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="NL">
+                <div class="filterButtons" rte="NM">
+                    <button
+                        pButton
+                        type="submit"
+                        label="Search"
+                        rte="NN"
+                    ></button>
+                    <button
+                        pButton
+                        type="button"
+                        label="Clear"
+                        class="p-button-secondary"
+                        (click)="clearFilter()"
+                        rte="NO"
+                    ></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <p-table
+        [value]="page.items"
+        [lazy]="true"
+        [rows]="10"
+        [responsive]="true"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [pageLinks]="3"
+        [editable]="true"
+        [totalRecords]="page.total"
+        dataKey="id"
+        [(selection)]="selectedOrders"
+        (onLazyLoad)="onGridLazyLoad($event)"
+        [tableStyle]="{ 'table-layout': ' auto' }"
+        rte="NP"
+    >
+        <p-column
+            [style]="{ width: '42px' }"
+            selectionMode="multiple"
+            rte="NQ"
+        ></p-column>
+        <p-column
+            field="id"
+            [style]="{ width: '10%' }"
+            header="Order Id"
+            [sortable]="true"
+            rte="NR"
+        ></p-column>
+        <p-column
+            field="customerCode"
+            header="Customer Code"
+            [sortable]="true"
+            rte="NS"
+        ></p-column>
+
+        <p-column
+            field="orderDate"
+            header="Order Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="NT"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="NV">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="requiredDate"
+            header="Required Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="NW"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="NY">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="shippedDate"
+            header="Shipped Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="NZ"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="O1">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+        <p-column rte="O2">
+            <ng-template let-order="rowData" pTemplate="body">
+                <button type="button" pButton rte="O4">
+                    <i class="material-icons" rte="O5">edit</i>
+                </button>
+                <p-button icon="pi pi-trash" rte="O6"></p-button>
+            </ng-template>
+        </p-column>
+    </p-table>
+
+    <div class="filterBottomPanel" rte="O7">
+        <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            label="Add"
+            class="btn-standard-size"
+            rte="O8"
+        ></button>
+        <button
+            pButton
+            type="button"
+            (click)="onShowSelected()"
+            style="width: 145px"
+            type="button"
+            label="Show Selected"
+            rte="O9"
+        >
+            <i class="material-icons" rte="Oa">search</i>
+        </button>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Ob">
+        &lt;div class=&quot;p-g filterTopPanel&quot;&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input id=&quot;orderIdFilter&quot; type=&quot;text&quot; pInputText class=&quot;filterControl&quot; /&gt;
+                    &lt;label&gt;Order Id&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input type=&quot;text&quot; pInputText class=&quot;filterControl&quot; /&gt;
+                    &lt;label&gt;Customer Code&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;orderDate&quot; [(ngModel)]=&quot;filter.orderDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Order Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;requiredDate&quot; [(ngModel)]=&quot;filter.requiredDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Required Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;shippedDate&quot; [(ngModel)]=&quot;filter.shippedDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Shipped Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-8&quot;&gt;
+                &lt;div class=&quot;filterButtons&quot;&gt;
+                    &lt;button pButton type=&quot;submit&quot; label=&quot;Search&quot;&gt;&lt;/button&gt;
+                    &lt;button pButton type=&quot;button&quot; label=&quot;Clear&quot; (click)=&quot;clearFilter()&quot;&gt;&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;p-table [value]=&quot;page.items&quot; [lazy]=&quot;true&quot; [rows]=&quot;10&quot; [responsive]=&quot;true&quot;
+                     [paginator]=&quot;true&quot; [rowsPerPageOptions]=&quot;[5,10,20]&quot; [pageLinks]=&quot;3&quot;
+                     [editable]=&quot;true&quot; [totalRecords]=&quot;page.total&quot; dataKey=&quot;id&quot;
+                     [(selection)]=&quot;selectedOrders&quot; (onLazyLoad)=&quot;onGridLazyLoad($event)&quot;&gt;
+            &lt;p-column [style]=&quot;&#123;&#39;width&#39;:&#39;42px&#39;&#125;&quot; selectionMode=&quot;multiple&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;id&quot; header=&quot;Order Id&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;customerCode&quot; header=&quot;Customer Code&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Order Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;requiredDate&quot; header=&quot;Required Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;shippedDate&quot; header=&quot;Shipped Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+            &lt;p-column&gt;
+                &lt;ng-template let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;button type=&quot;button&quot; pButton&gt;
+                        &lt;i class=&quot;material-icons&quot;&gt;edit&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;p-button icon="pi pi-trash">&lt;/p-button&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+        &lt;/p-table&gt;
+
+        &lt;div class=&quot;filterBottomPanel&quot;&gt;
+            &lt;button pButton class=&quot;btn-standard-size&quot; type=&quot;button&quot; label=&quot;Add&quot;&gt;
+                &lt;i class=&quot;material-icons&quot;&gt;add&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button pButton (click)=&quot;onShowSelected()&quot; style=&quot;width:145px&quot; type=&quot;button&quot; label=&quot;Show Selected&quot;&gt;
+                &lt;i class=&quot;material-icons&quot;&gt;search&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    </pre>
+
+    <p rte="Oc">In the typescript component:</p>
+
+    <pre class="codeHighlight" rte="Od">
+        export class GridsComponent implements OnInit &#123;
+
+        queryCommand: IQueryCommand;
+        filter: &#123; customerCode: string, id: number, orderDate: Date, requiredDate: Date, shippedDate: Date &#125;;
+
+            selectedOrders: Order[];
+
+            page: PageResult&lt;Order&gt; = &#123;
+                items: [],
+                total: 0
+            &#125;;
+
+            constructor(private orderService: OrderService) &#123; &#125;
+
+            ngOnInit() &#123;
+                this.selectedOrders = [];
+                this.initDefaultQueryCommand()
+                this.load(this.queryCommand)
+            &#125;
+
+            onShowSelected() &#123;
+                var str: string = '';
+                this.selectedOrders.forEach(item => &#123; str += item.id.toString() + ';' &#125;);
+            &#125;
+
+            load(queryCommand: IQueryCommand) &#123;
+                this.orderService.getPage(queryCommand)
+                    .then((result: PageResult&lt;Order&gt;) => &#123;
+                        if (result) &#123;
+                            this.page.items = result.items;
+                            this.page.total = result.total;
+                        &#125;
+                    &#125;);
+            &#125;
+
+            onGridLazyLoad(event: LazyLoadEvent) &#123;
+                // map grid lazy load event to filter
+                this.queryCommand = new QueryCommand(event);
+                this.fillFilters();
+
+                //load data
+                this.load(this.queryCommand);
+            &#125;
+
+            clearFilter() &#123;
+                this.initDefaultQueryCommand();
+                this.load(this.queryCommand);
+            &#125;
+
+            search() &#123;
+                this.fillFilters();
+                this.load(this.queryCommand);
+            &#125;
+
+            private initDefaultQueryCommand() &#123;
+                this.queryCommand = &#123;
+                    first: 0,
+                    rows: 10,
+                    sortOrder: 1,
+                    filters: []
+                &#125;;
+                this.filter = &#123;
+                    customerCode: null,
+                    id: null,
+                    orderDate: null,
+                    requiredDate: null,
+                    shippedDate: null
+                &#125;;
+            &#125;
+
+            private fillFilters() &#123;
+                this.queryCommand.filters = [];
+
+                if (this.filter.id) &#123;
+                    this.queryCommand.filters.push(new NumberFilter('id', this.filter.id));
+                &#125;
+                if (this.filter.customerCode) &#123;
+                    this.queryCommand.filters.push(new StringFilter('CustomerCode', this.filter.customerCode));
+                &#125;
+                if (this.filter.orderDate) &#123;
+                    this.queryCommand.filters.push(new DateFilter('OrderDate', this.filter.orderDate));
+                &#125;
+                if (this.filter.shippedDate) &#123;
+                    this.queryCommand.filters.push(new DateFilter('ShippedDate', this.filter.shippedDate));
+                &#125;
+                if (this.filter.requiredDate) &#123;
+                    this.queryCommand.filters.push(new DateFilter('RequiredDate', this.filter.requiredDate));
+                &#125;
+            &#125;
+        &#125;
+    </pre>
+
+    <p rte="Oe">A grid using single selection:</p>
+
+    <div class="p-g filterTopPanel" rte="Of">
+        <form (ngSubmit)="search()" rte="Og">
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Oh">
+                <span class="p-float-label" rte="Oi">
+                    <input
+                        name="id"
+                        pInputText
+                        [(ngModel)]="filter.id"
+                        class="filterControl"
+                        rte="Oj"
+                    />
+                    <label rte="Ok">Order ID</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Ol">
+                <span class="p-float-label" rte="Om">
+                    <input
+                        name="customerCode"
+                        pInputText
+                        [(ngModel)]="filter.customerCode"
+                        class="filterControl"
+                        rte="On"
+                    />
+                    <label rte="Oo">Customer code</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Op">
+                <span class="p-float-label" rte="Oq">
+                    <p-calendar
+                        name="orderDate"
+                        [(ngModel)]="filter.orderDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="Or"
+                    >
+                    </p-calendar>
+                    <label rte="Os">Order date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Ot">
+                <span class="p-float-label" rte="Ou">
+                    <p-calendar
+                        name="requiredDate"
+                        [(ngModel)]="filter.requiredDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="Ov"
+                    >
+                    </p-calendar>
+                    <label rte="Ow">Required date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="Ox">
+                <span class="p-float-label" rte="Oy">
+                    <p-calendar
+                        name="shippedDate"
+                        [(ngModel)]="filter.shippedDate"
+                        dataType="string"
+                        [showIcon]="true"
+                        [style]="{ width: '100%' }"
+                        rte="Oz"
+                    >
+                    </p-calendar>
+                    <label rte="OA">Shipped date</label>
+                </span>
+            </div>
+            <div class="p-g-12 p-md-4 p-lg-2" rte="OB">
+                <div class="filterButtons" rte="OC">
+                    <button
+                        pButton
+                        type="submit"
+                        label="Search"
+                        rte="OD"
+                    ></button>
+                    <button
+                        pButton
+                        type="button"
+                        label="Clear"
+                        class="p-button-secondary"
+                        (click)="clearFilter()"
+                        rte="OE"
+                    ></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <p-table
+        [value]="page.items"
+        [lazy]="true"
+        [rows]="10"
+        [responsive]="true"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [pageLinks]="3"
+        [editable]="true"
+        [totalRecords]="page.total"
+        dataKey="id"
+        (onLazyLoad)="onGridLazyLoad($event)"
+        [tableStyle]="{ 'table-layout': ' auto' }"
+        rte="OF"
+    >
+        <p-column
+            [style]="{ width: '42px' }"
+            selectionMode="single"
+            rte="OG"
+        ></p-column>
+        <p-column
+            field="id"
+            [style]="{ width: '10%' }"
+            header="Order Id"
+            [sortable]="true"
+            rte="OH"
+        ></p-column>
+        <p-column
+            field="customerCode"
+            header="Customer Code"
+            [sortable]="true"
+            rte="OI"
+        ></p-column>
+
+        <p-column
+            field="orderDate"
+            header="Order Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="OJ"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="OL">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="requiredDate"
+            header="Required Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="OM"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="OO">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="shippedDate"
+            header="Shipped Date"
+            [sortable]="true"
+            [style]="{ overflow: 'visible' }"
+            rte="OP"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="OR">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+        <p-column rte="OS">
+            <ng-template let-order="rowData" pTemplate="body">
+                <button type="button" pButton rte="OU">
+                    <i class="material-icons" rte="OV">edit</i>
+                </button>
+                <p-button icon="pi pi-trash" rte="OW"></p-button>
+            </ng-template>
+        </p-column>
+    </p-table>
+
+    <div class="filterBottomPanel" rte="OX">
+        <button
+            pButton
+            type="button"
+            label="Add"
+            icon="pi pi-plus"
+            class="btn-standard-size"
+            rte="OY"
+        ></button>
+    </div>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="OZ">
+        &lt;div class=&quot;p-g filterTopPanel&quot;&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input id=&quot;orderIdFilter&quot; type=&quot;text&quot; pInputText class=&quot;filterControl&quot; /&gt;
+                    &lt;label&gt;Order Id&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;input type=&quot;text&quot; pInputText class=&quot;filterControl&quot; /&gt;
+                    &lt;label&gt;Customer Code&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;orderDate&quot; [(ngModel)]=&quot;filter.orderDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Order Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;requiredDate&quot; [(ngModel)]=&quot;filter.requiredDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Required Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-2&quot;&gt;
+                &lt;span class=&quot;p-float-label&quot;&gt;
+                    &lt;p-calendar name=&quot;shippedDate&quot; [(ngModel)]=&quot;filter.shippedDate&quot; dataType=&quot;string&quot; dateFormat=&quot;dd/mm/yy&quot; [showIcon]=&quot;true&quot; [style]=&quot; &#123;'width': '100%'&#125;&quot;&gt;&lt;/p-calendar&gt;
+                    &lt;label&gt;Shipped Date&lt;/label&gt;
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;p-g-12 p-md-4 p-lg-8&quot;&gt;
+                &lt;div class=&quot;filterButtons&quot;&gt;
+                    &lt;button pButton type=&quot;submit&quot; label=&quot;Search&quot;&gt;&lt;/button&gt;
+                    &lt;button pButton type=&quot;button&quot; label=&quot;Clear&quot; (click)=&quot;clearFilter()&quot;&gt;&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;p-table [value]=&quot;page.items&quot; [lazy]=&quot;true&quot; [rows]=&quot;10&quot; [responsive]=&quot;true&quot;
+                     [paginator]=&quot;true&quot; [rowsPerPageOptions]=&quot;[5,10,20]&quot; [pageLinks]=&quot;3&quot;
+                     [editable]=&quot;true&quot; [totalRecords]=&quot;page.total&quot; dataKey=&quot;id&quot; (onLazyLoad)=&quot;onGridLazyLoad($event)&quot;&gt;
+            &lt;p-column [style]=&quot;&#123;&#39;width&#39;:&#39;42px&#39;&#125;&quot; selectionMode=&quot;single&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;id&quot; header=&quot;Order Id&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;customerCode&quot; header=&quot;Customer Code&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Order Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;requiredDate&quot; header=&quot;Required Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;shippedDate&quot; header=&quot;Shipped Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;overflow&#39;:&#39;visible&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+            &lt;p-column&gt;
+                &lt;ng-template let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;button type=&quot;button&quot; pButton&gt;
+                        &lt;i class=&quot;material-icons&quot;&gt;edit&lt;/i&gt;
+                    &lt;/button&gt;
+                    &lt;button icon="pi pi-trash"&gt;&lt;/button&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+        &lt;/p-table&gt;
+
+        &lt;div class=&quot;filterBottomPanel&quot;&gt;
+            &lt;button pButton class=&quot;btn-standard-size&quot; type=&quot;button&quot; label=&quot;Add&quot;&gt;
+                 &lt;i class=&quot;material-icons&quot;&gt;add&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    </pre>
+    <p rte="P0">
+        100% page width – where one or more columns would need to use up the
+        remaining space on the page if the other columns are narrow
+    </p>
+    <p-table
+        [value]="page.items"
+        [lazy]="true"
+        [rows]="10"
+        [responsive]="true"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [pageLinks]="3"
+        [editable]="true"
+        [totalRecords]="page.total"
+        (onLazyLoad)="onGridLazyLoad($event)"
+        [tableStyle]="{ 'table-layout': ' auto' }"
+        rte="P1"
+    >
+        <p-column
+            field="id"
+            [style]="{ width: '10%' }"
+            header="Order Id"
+            [sortable]="true"
+            rte="P2"
+        ></p-column>
+        <p-column
+            field="customerCode"
+            header="Customer Code"
+            [sortable]="true"
+            rte="P3"
+        ></p-column>
+
+        <p-column
+            field="orderDate"
+            header="Order Date"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="P4"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="P6">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="requiredDate"
+            header="Required Date"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="P7"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="P9">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="shippedDate"
+            header="Shipped Date"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="Pa"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Pc">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+    </p-table>
+    <p rte="Pd"></p>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Pe">
+        &lt;p-table [value]=&quot;page.items&quot; [lazy]=&quot;true&quot; [rows]=&quot;10&quot; [responsive]=&quot;true&quot;
+                     [paginator]=&quot;true&quot; [rowsPerPageOptions]=&quot;[5,10,20]&quot; [pageLinks]=&quot;3&quot;
+                     [editable]=&quot;true&quot; [totalRecords]=&quot;page.total&quot; (onLazyLoad)=&quot;onGridLazyLoad($event)&quot;&gt;
+            &lt;p-column field=&quot;id&quot; header=&quot;Order Id&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;customerCode&quot; header=&quot;Customer Code&quot; [sortable]=&quot;true&quot;&gt;&lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Order Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;requiredDate&quot; header=&quot;Required Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;shippedDate&quot; header=&quot;Shipped Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt; &#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+        &lt;/p-table&gt;
+    </pre>
+
+    <p rte="Pf">
+        Auto-width on all columns – where the table ends up narrower than the
+        page.
+    </p>
+
+    <p-table
+        [value]="page.items"
+        [lazy]="true"
+        [rows]="10"
+        [paginator]="true"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [pageLinks]="3"
+        [editable]="true"
+        [totalRecords]="page.total"
+        [style]="{ width: '750px' }"
+        (onLazyLoad)="onGridLazyLoad($event)"
+        [tableStyle]="{ 'table-layout': ' auto' }"
+        rte="Pg"
+    >
+        <p-column
+            field="id"
+            [style]="{ width: '10%' }"
+            header="Order Id"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="Ph"
+        >
+        </p-column>
+        <p-column
+            field="customerCode"
+            header="Customer Code"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="Pi"
+        ></p-column>
+
+        <p-column
+            field="orderDate"
+            header="Order Date"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="Pj"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Pl">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="requiredDate"
+            header="Required Date"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="Pm"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Po">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+
+        <p-column
+            field="shippedDate"
+            header="Shipped Date"
+            [sortable]="true"
+            [style]="{ width: '150px' }"
+            rte="Pp"
+        >
+            <ng-template let-col let-order="rowData" pTemplate="body">
+                <span rte="Pr">{{
+                    order[col.field] | date : "dd/MM/yyyy"
+                }}</span>
+            </ng-template>
+        </p-column>
+    </p-table>
+    <p rte="Ps"></p>
+    HTML looks like this:
+    <pre class="codeHighlight" rte="Pt">
+        &lt;p-table [value]=&quot;page.items&quot; [lazy]=&quot;true&quot; [rows]=&quot;10&quot;
+                     [paginator]=&quot;true&quot; [rowsPerPageOptions]=&quot;[5,10,20]&quot; [pageLinks]=&quot;3&quot;
+                     [editable]=&quot;true&quot; [totalRecords]=&quot;page.total&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;750px&#39;&#125;&quot;&gt;
+            &lt;p-column field=&quot;id&quot; header=&quot;Order Id&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39; &#125;&quot; (onLazyLoad)=&quot;onGridLazyLoad($event)&quot;&gt;&lt;/p-column&gt;
+            &lt;p-column field=&quot;customerCode&quot; header=&quot;Customer Code&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39; &#125;&quot;&gt;&lt;/p-column&gt;
+
+            &lt;p-column field=&quot;orderDate&quot; header=&quot;Order Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39; &#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;requiredDate&quot; header=&quot;Required Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+
+            &lt;p-column field=&quot;shippedDate&quot; header=&quot;Shipped Date&quot; [sortable]=&quot;true&quot; [style]=&quot;&#123;&#39;width&#39;:&#39;150px&#39;&#125;&quot;&gt;
+                &lt;ng-template let-col let-order=&quot;rowData&quot; pTemplate=&quot;body&quot;&gt;
+                    &lt;span&gt;&#123; &#123; order[col.field] | date:&#39;dd/MM/yyyy&#39; &#125; &#125;&lt;/span&gt;
+                &lt;/ng-template&gt;
+            &lt;/p-column&gt;
+        &lt;/p-table&gt;
+    </pre>
+</div>

@@ -1,0 +1,102 @@
+:host::ng-deep {
+    .sql-editor {
+        height: 800px;
+        width: 600px;
+        display: flex;
+
+        .editor-section {
+            height: auto;
+            width: 100%;
+            flex: 1 1 0;
+            display: flex;
+            position: relative;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: start;
+
+            query-table-selector {
+                height: 100%;
+                width: 300px;
+                border-top-left-radius: 6px;
+                border-bottom-left-radius: 6px;
+            }
+
+            code-editor {
+                height: 100%;
+                width: calc(100% - 300px);
+                display: flex;
+
+                .editor-container.code {
+                    width: 100%;
+                    height: 100%;
+
+                    .ql-container {
+                        border-left: 0;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                }
+
+                .hljs-unknownVariable {
+                    color: rgb(250, 15, 15);
+                    border-radius: 5px;
+                    background: rgb(250, 15, 15, 0.2);
+                    border: 2px solid rgb(250, 15, 15);
+                    align-items: center;
+                    padding: 2px 6px;
+                    position: relative;
+                }
+
+                .hljs-unknownVariable::after {
+                    content: "Unknown variable. Create a variable with this name or use a different variable.";
+                    color: rgb(220, 140, 40);
+                    border-radius: 5px;
+                    background: rgb(63, 51, 34);
+                    border: 2px solid rgb(220, 140, 40);
+                    z-index: 1;
+                    opacity: 0;
+                    left: 0;
+                    top: calc(100% + 5px);
+                    width: 525px;
+                    padding: 0 5px;
+                    font-size: 12px;
+                    line-height: 1.42;
+                    text-align: left;
+                    position: absolute;
+                    visibility: hidden;
+                    transition: opacity 0.3s;
+                }
+
+                .hljs-unknownVariable:hover::after {
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+        }
+
+        .editor-disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    }
+
+    .overly-listbox {
+        display: none;
+        position: absolute;
+        visibility: hidden;
+
+        p-listbox {
+            z-index: 1 !important;
+            position: relative !important;
+
+            .p-listbox-item {
+                height: 30px !important;
+                padding: 5px 10px !important;
+            }
+
+            .p-listbox:not(:has(.p-listbox-item)) {
+                border: 0 !important;
+            }
+        }
+    }
+}

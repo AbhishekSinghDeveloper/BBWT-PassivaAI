@@ -1,0 +1,22 @@
+<div class="card--hidden" rte="XU">
+    <h1 rte="XV">Customers</h1>
+
+    <p rte="XW">
+        There are currently
+        {{ grid.getTableProperty("totalRecords") }} records.<br />
+        You can
+        <data-generation
+            startGenerationMethodName="GenerateCustomers"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="XX"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <grid
+        #grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        rte="1kW"
+    ></grid>
+</div>

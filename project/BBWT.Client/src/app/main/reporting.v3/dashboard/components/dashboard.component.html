@@ -1,0 +1,59 @@
+<ng-container *ngIf="!!dashboardView">
+    <div [class]="output === 'web' ? 'dashboard-container' : 'dashboard-pdf-view-container'">
+
+        <div class="dashboard-topbar">
+            <h2 *ngIf="dashboardView.displayName">{{dashboardView.name}}</h2>
+            <p-button *ngIf="exportable"
+                      styleClass="p-button-lg p-button-outlined p-button-text p-button-icon-only"
+                      class="pdf-exporting-button" icon="pi pi-file-pdf" title="Export to PDF"
+                      (onClick)="generatePdf()">
+            </p-button>
+        </div>
+
+        <!-- Empty dashboard -->
+        <div class="empty-dashboard" *ngIf="!dashboardView.widgets?.length">
+            <!--suppress AngularNgOptimizedImage -->
+            <img class="dashboard-image" src="assets/images/reporting/dashboard.png" alt="">
+            <div class="empty-message">
+                <h2 class="mb-0">Empty dashboard</h2>
+                <label class="dashboard-label mb-2">No widgets to display.</label>
+            </div>
+        </div>
+
+        <!-- Dashboard widgets -->
+        <div class="dashboard-widget-grid {{getLayoutTypeName(dashboardView.layout).toLowerCase()}}"
+             *ngIf="!!dashboardView.widgets?.length">
+
+            <div [class]="separatorClass(0)" [style]="separatorStyle(0)"></div>
+
+            <ng-container *ngFor="let row of dashboardGrid; let i = index">
+                <div class="dashboard-widget-row" *ngIf="!!row?.length">
+
+                    <div [class]="separatorClass(i, 0)" [style]="separatorStyle(i, 0)"></div>
+
+                    <ng-container *ngFor="let widget of row; let j = index">
+                        <div [class]="widgetClass(widget)" [style]="widgetStyle(widget)" *ngIf="!!widget">
+
+                            <reporting-widget [output]="output"
+                                              [exportable]="false"
+                                              [widgetType]="widget.widgetType"
+                                              [widgetSourceId]="widget.widgetSourceId"
+                                              (widgetComponentChange)="refreshWidget($event, i, j)">
+                            </reporting-widget>
+
+                        </div>
+
+                        <div [class]="separatorClass(i, j + 1)" [style]="separatorStyle(i, j + 1)">
+                            <div class="{{j + 1 < row.length ? 'separator-bar' : ''}}"></div>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div [class]="separatorClass(i + 1)" [style]="separatorStyle(i + 1)">
+                    <div class="{{i + 1 < dashboardGrid.length ? 'separator-bar' : ''}}"></div>
+                </div>
+            </ng-container>
+        </div>
+
+    </div>
+</ng-container>

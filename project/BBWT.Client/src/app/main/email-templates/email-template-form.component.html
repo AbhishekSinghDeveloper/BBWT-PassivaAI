@@ -1,0 +1,277 @@
+<div class="card--hidden" rte="db">
+    <h1 rte="dc">{{ pageTitle }}</h1>
+
+    <p-tabView rte="dd">
+        <p-tabPanel header="Email Template" rte="de">
+            <form
+                #form="ngForm"
+                class="inputs-group"
+                (ngSubmit)="save()"
+                rte="df"
+            >
+                <div class="inputs-group-row" rte="dg">
+                    <label
+                        for="code"
+                        class="inputs-group-row-name asterisk-mark"
+                        rte="dh"
+                        >Code:</label
+                    >
+                    <div class="inputs-group-row-value" rte="di">
+                        <input
+                            #code="ngModel"
+                            [(ngModel)]="emailTemplate.code"
+                            pInputText
+                            required
+                            [serverValidate]="checkCodeEndpoint"
+                            [queryParams]="{ id: emailTemplate.id }"
+                            id="code"
+                            name="code"
+                            rte="dj"
+                        />
+                        <span
+                            *ngIf="code.touched && code.hasError('required')"
+                            class="validation-error"
+                            rte="dk"
+                        >
+                            Code is required
+                        </span>
+                        <span
+                            *ngIf="
+                                code.touched && code.hasError('serverValidate')
+                            "
+                            class="validation-error"
+                            rte="dl"
+                        >
+                            Code must be unique
+                        </span>
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="dm">
+                    <label
+                        for="title"
+                        class="inputs-group-row-name asterisk-mark"
+                        rte="dn"
+                        >Title:</label
+                    >
+                    <div class="inputs-group-row-value" rte="do">
+                        <input
+                            #title="ngModel"
+                            [(ngModel)]="emailTemplate.title"
+                            pInputText
+                            required
+                            id="title"
+                            name="title"
+                            rte="dp"
+                        />
+                        <span
+                            *ngIf="title.touched && !title.valid"
+                            class="validation-error"
+                            rte="dq"
+                        >
+                            Title is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="dr">
+                    <label
+                        for="from"
+                        class="inputs-group-row-name asterisk-mark"
+                        rte="ds"
+                        >From:</label
+                    >
+                    <div class="inputs-group-row-value" rte="dt">
+                        <input
+                            #from="ngModel"
+                            [(ngModel)]="emailTemplate.from"
+                            pInputText
+                            required
+                            email
+                            id="from"
+                            name="from"
+                            rte="du"
+                        />
+                        <span
+                            *ngIf="
+                                from.touched &&
+                                !from.valid &&
+                                from.errors.required
+                            "
+                            class="validation-error"
+                            rte="dv"
+                        >
+                            From is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="dw">
+                    <label
+                        for="from"
+                        class="inputs-group-row-name asterisk-mark"
+                        rte="dx"
+                        >Subject:</label
+                    >
+                    <div class="inputs-group-row-value" rte="dy">
+                        <input
+                            #subject="ngModel"
+                            [(ngModel)]="emailTemplate.subject"
+                            pInputText
+                            required
+                            id="subject"
+                            name="subject"
+                            rte="dz"
+                        />
+                        <span
+                            *ngIf="subject.touched && !subject.valid"
+                            class="validation-error"
+                            rte="dA"
+                        >
+                            Subject is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="dB">
+                    <label
+                        for="from"
+                        class="inputs-group-row-name asterisk-mark"
+                        rte="dC"
+                        >Body:</label
+                    >
+                    <div class="inputs-group-row-value" rte="dD">
+                        <p-dropdown
+                            #emailTemplateControl
+                            [(ngModel)]="selectedTemplate"
+                            [options]="templates"
+                            id="templates"
+                            name="templates"
+                            placeholder="Select a template"
+                            class="body-dropdown"
+                            (onChange)="onChangeTemplate($event.value)"
+                            rte="dE"
+                        >
+                        </p-dropdown>
+                        <p-editor
+                            [(ngModel)]="emailTemplate.body"
+                            id="message"
+                            name="message"
+                            [style]="{ height: '320px' }"
+                            (onInit)="onEditorCreated($event)"
+                            rte="dF"
+                        >
+                        </p-editor>
+                    </div>
+                </div>
+
+                <div class="buttons-panel" rte="dG">
+                    <button
+                        pButton
+                        type="button"
+                        label="Cancel"
+                        class="p-button-secondary"
+                        (click)="back()"
+                        rte="dH"
+                    ></button>
+                    <button
+                        pButton
+                        type="submit"
+                        label="Save"
+                        [disabled]="form.invalid"
+                        rte="dI"
+                    ></button>
+                </div>
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Email Template Parameters" rte="dJ">
+            <grid
+                [tableSettings]="tableSettings"
+                [gridSettings]="gridSettings"
+                rte="1gt"
+            ></grid>
+        </p-tabPanel>
+        <p-tabPanel header="Test Email Templates" rte="dL">
+            <form
+                #formtest="ngForm"
+                class="inputs-group"
+                (ngSubmit)="sendTest()"
+                rte="dM"
+            >
+                <div class="inputs-group-row" rte="dN">
+                    <div class="inputs-group-row-name" rte="dO">
+                        <label class="asterisk-mark" for="to" rte="dP"
+                            >To:</label
+                        >
+                    </div>
+                    <div class="inputs-group-row-value" rte="dQ">
+                        <input
+                            #to="ngModel"
+                            [(ngModel)]="email.to"
+                            pInputText
+                            required
+                            id="to"
+                            name="to"
+                            rte="dR"
+                        />
+                        <span
+                            *ngIf="to.touched && !to.valid"
+                            class="validation-error"
+                            rte="dS"
+                        >
+                            To is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="dT">
+                    <div class="inputs-group-row-name" rte="dU">
+                        Attachments:
+                    </div>
+                    <div class="inputs-group-row-value" rte="dV">
+                        <p *ngFor="let file of files; let i = index" rte="dW">
+                            {{ file.name }}
+                            <button
+                                pButton
+                                type="button"
+                                (click)="removeFile(i)"
+                                class="p-button-icon-only"
+                                rte="dX"
+                            >
+                                <i class="material-icons" rte="dY">clear</i>
+                            </button>
+                        </p>
+                        <p-fileUpload
+                            #uploader
+                            name="uploader"
+                            [customUpload]="true"
+                            auto="auto"
+                            mode="basic"
+                            (uploadHandler)="appendFile($event)"
+                            rte="dZ"
+                        >
+                        </p-fileUpload>
+                    </div>
+                </div>
+
+                <div class="buttons-panel" rte="e0">
+                    <button
+                        pButton
+                        type="button"
+                        label="Cancel"
+                        class="p-button-secondary"
+                        (click)="back()"
+                        rte="e1"
+                    ></button>
+                    <button
+                        pButton
+                        type="submit"
+                        label="Send"
+                        [disabled]="allowSendTest()"
+                        rte="e2"
+                    ></button>
+                </div>
+            </form>
+        </p-tabPanel>
+    </p-tabView>
+</div>

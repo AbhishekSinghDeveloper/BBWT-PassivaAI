@@ -1,0 +1,29 @@
+:host ::ng-deep {
+    .edit-control-bindings {
+        margin-bottom: 1rem;
+    }
+
+    .query-expr-ui-control {
+        color: #3F51B5;
+        font-weight: 500;
+    }
+
+    .query-expr-table-column {
+        color: #af5d35;
+        font-weight: 500;
+    }
+
+    .linked-filter-expr-row {
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+    }
+
+    .ui-controls-settings-table {
+        .reorderable-row {
+            td {
+                padding-top: 0.3rem;
+                padding-bottom: 0.3rem;
+            }
+        }
+    }
+}

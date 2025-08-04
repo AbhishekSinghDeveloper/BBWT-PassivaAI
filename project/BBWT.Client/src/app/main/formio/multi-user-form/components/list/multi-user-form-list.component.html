@@ -1,0 +1,128 @@
+<div class="card main-container">
+    <h1>Multi User Form Definitions</h1>
+    <grid #definitionGrid [tableSettings]="tableSettingsMUFViewer"
+          [gridSettings]="mufViewerGridSettings" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnSelect($event)"></grid>
+
+    <div *ngIf="selectedMUF">
+        <h4 class="mt-2 ml-1">Associations list for the MUF: <b>{{ selectedMUF?.name }}</b></h4>
+        <grid #assocGrid [tableSettings]="tableSettingsMUFAssocViewer"
+              [gridSettings]="mufViewerGridAssocSettings"></grid>
+    </div>
+</div>
+
+<p-dialog [(visible)]="addingMUF" [style]="{'max-width': '450px', width: '100%'}" contentStyleClass="pb-0"
+          header="Multi-User Form creation" [modal]="true" [closable]="true" [resizable]="false" (onHide)="cancelMUFCreation()">
+    <form #form="ngForm"
+          class="inputs-group"
+          (ngSubmit)="createMUF()"
+          (keydown.enter)="form.valid" novalidate>
+        <div class="inputs-group">
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name">Form Definition:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown name="formDef"
+                                [options]="formDefs"
+                                required
+                                [(ngModel)]="selectedFormDef"
+                                optionLabel="name"
+                                appendTo="body"
+                                [showClear]="true"
+                                (onChange)="onSelectedFormDef($event)"
+                                placeholder="Select a Form Definition">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label for="formName" class="inputs-group-row-name">Name:</label>
+                <div class="inputs-group-row-value">
+                    <input pInputText
+                           [(ngModel)]="newFormName"
+                           type="text"
+                           name="formName"
+                           [disabled]="!selectedFormDef"
+                           placeholder="Type Multi-User form's name"
+                           required/>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <div class="buttons-panel buttons-panel-top-margin">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelMUFCreation()">
+            </button>
+            <button pButton
+                    type="submit"
+                    label="Create"
+                    [disabled]="form.invalid"
+                    class="p-button-primary">
+            </button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="instantiatingMUF" [style]="{'max-width': '450px', width: '100%'}"
+          header="Multi-User Form Instantiation" [modal]="true" [closable]="true" (onHide)="cancelMUFInstantiation()">
+    <form #mufForm="ngForm"
+          class="inputs-group"
+          (ngSubmit)="instantiateMUF()"
+          (keydown.enter)="form.valid" novalidate>
+        <div class="inputs-group">
+            <div class="inputs-group-row">
+                <label for="formName" class="inputs-group-row-name">Name:</label>
+                <div class="inputs-group-row-value">
+                    <input pInputText
+                           [(ngModel)]="newFormName"
+                           type="text"
+                           id="formName"
+                           name="formName"
+                           placeholder="Type Multi-User form instance's name"
+                           required/>
+                </div>
+            </div>
+            <div *ngFor="let stage of stages; index as i" class="inputs-group-row">
+                <label for="formName" class="inputs-group-row-name">{{ stage.label }}</label>
+                <div *ngIf="stage.value.stageTargetType === 2" class="inputs-group-row-value">
+                    <p>This is a self tab, the target will be you.</p>
+                </div>
+                <div *ngIf="stage.value.stageTargetType === 1" class="inputs-group-row-value">
+                    <input pInputText
+                           [(ngModel)]="stagesValue[stage.value.innerTabKey]"
+                           type="text"
+                           id="stage.innerTabKey"
+                           name="stage.innerTabKey"
+                           placeholder="Type the external user email"
+                           required/>
+                </div>
+                <div *ngIf="stage.value.stageTargetType === 0" class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="stagesValue[stage.value.innerTabKey]"
+                                name="actions"
+                                [ngModelOptions]="{standalone: true}"
+                                placeholder="Select user"
+                                [options]="stagesUsers[stage.value.id_original]"
+                                appendTo="body">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="buttons-panel buttons-panel-top-margin">
+                <button
+                    pButton
+                    type="button"
+                    label="Cancel"
+                    class="p-button-secondary"
+                    (click)="cancelMUFInstantiation()">
+                </button>
+                <button pButton
+                        type="submit"
+                        label="Create"
+                        [disabled]="mufForm.invalid"
+                        class="p-button-primary">
+                </button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

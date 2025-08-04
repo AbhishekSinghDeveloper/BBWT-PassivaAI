@@ -1,0 +1,19 @@
+:host ::ng-deep {
+    .section-grid-view-filter-container {
+        overflow: visible;
+        padding-top: 10px;
+    }
+    grid p-table .p-datatable .p-datatable-tbody tr td {
+        padding: 0.25rem;
+    }
+    .footer-row {
+        td {
+            font-weight: bold;
+
+            .column-header-text {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+    }
+}

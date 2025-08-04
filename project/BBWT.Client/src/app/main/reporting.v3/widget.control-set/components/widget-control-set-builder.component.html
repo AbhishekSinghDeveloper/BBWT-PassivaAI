@@ -1,0 +1,365 @@
+<div class="widget-builder-container">
+    <p-tabView [(activeIndex)]="activeIndex" class="reporting-tabview">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">edit_note</i>
+                <span>General</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <ng-content></ng-content>
+            </ng-template>
+        </p-tabPanel>
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">view_list</i>
+                <span>Controls</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="tab-content-padding darker-panel">
+                    <div *ngIf="!items?.length; else controlsTable" class="tab-content-part-message">
+                        Click <span class="add-control-link" (click)="onControlSetViewItemStartEditing()">+ UI Control</span> to start adding UI
+                        controls.
+                    </div>
+                    <ng-template #controlsTable>
+                        <p-table [columns]="tableColumns"
+                                 dataKey="id"
+                                 [reorderableColumns]="true"
+                                 [lazy]="false"
+                                 [loading]="loading"
+                                 [paginator]="false"
+                                 [value]="items"
+                                 class="reporting-table"
+                                 (onRowReorder)="onRowReordered()">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3rem"></th>
+                                    <th *ngFor="let column of tableColumns">{{ column.header }}</th>
+                                    <th [style.width]="'12rem'">Actions</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-controlSetViewItem let-index="rowIndex">
+                                <tr [pReorderableRow]="index" class="reorderable-row">
+                                    <td>
+                                        <span class="material-icons" pReorderableRowHandle>drag_indicator</span>
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Name</span>
+                                        {{ controlSetViewItem["name"] }}
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Placeholder text</span>
+                                        {{ controlSetViewItem["hintText"] }}
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Variables</span>
+                                        <span class="copyable" (click)="copyToClipboard(controlSetViewItem)">
+                                            #{{ getVariableName(controlSetViewItem["variableName"]) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="p-column-title">Type</span>
+                                        {{ controlSetViewItem["inputType"] }}
+                                    </td>
+                                    <td>
+                                        <button pButton type="button" label="Edit" class="p-button-text"
+                                                (click)="onControlSetViewItemStartEditing(index)">
+                                        </button>
+                                        <button pButton type="button" label="Delete" class="p-button-text p-button-danger"
+                                                (click)="onControlSetViewItemStartDeleting(index)">
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+                    <div class="add-new-component-area" (click)="onControlSetViewItemStartEditing()">
+                        <p-button [text]="true">
+                            <i class="material-icons mr-2 fill">add</i> UI Control
+                        </p-button>
+                    </div>
+                </div>
+                <div class="tab-content-padding">
+                    <span class="tab-content-part-header">Preview</span>
+                    <widget-control-set [controlSetDisplayView]="controlSetPreview"
+                                        [style.visibility]="items?.length ? 'visible' : 'hidden'">
+                    </widget-control-set>
+                    <div [style.visibility]="items?.length ? 'hidden' : 'visible'" class="tab-content-part-message">No content to
+                        preview yet.
+                    </div>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-dialog [(visible)]="editControlSetViewItemDialogVisible"
+          [header]="editControlSetViewItem?.id ? 'UI Control Editing' : 'New UI Control'"
+          [modal]="true"
+          [draggable]="false"
+          (onHide)="onEditingControlSetViewItemCancel()"
+          class="p-reporting-dialog"
+          styleClass="control-set-ui-edit">
+    <p-tabView class="reporting-tabview">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">drive_file_rename_outline</i>
+                <span>General</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <form #editControlSetViewItemForm="ngForm" *ngIf="editControlSetViewItem" class="reporting-form">
+                    <div class="tab-content-top-padding tab-content-sides-padding reporting-form-body darker-panel">
+                        <div class="form-section two-input-columns">
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Name:</label>
+                                <div class="form-input-control-wrapper">
+                                    <input pInputText
+                                           [(ngModel)]="editControlSetViewItem.name"
+                                           name="name" required notEmpty
+                                           [maxLength]="128"
+                                           [class.ng-invalid]="!editItemValidName()"
+                                           class="form-input-control"/>
+                                    <div class="p-error">
+                                        <small *ngIf="!editItemValidName()">A control with the same name already exists.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Placeholder text:</label>
+                                <div class="form-input-control-wrapper">
+                                    <input pInputText
+                                           [(ngModel)]="editControlSetViewItem.hintText"
+                                           name="hintText" required notEmpty
+                                           [maxLength]="128"
+                                           class="form-input-control"
+                                           (focus)="onWidgetPlaceholderFocus()"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section two-input-columns">
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Data type:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.dataType"
+                                                [options]="dataTypeOptions"
+                                                appendTo="body"
+                                                id="dataType"
+                                                name="dataType"
+                                                required
+                                                class="form-input-control"
+                                                (onChange)="onDataTypeChanged()">
+                                    </p-dropdown>
+                                </div>
+                                <label class="form-input-label m-0 pt-2" *ngIf="emptyIfFalseSelectorVisible">
+                                    Consider uncheck as empty filter:
+                                </label>
+                            </div>
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Input control type:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.inputType"
+                                                [options]="inputTypesOptions"
+                                                appendTo="body"
+                                                id="inputType"
+                                                name="inputType"
+                                                required
+                                                class="form-input-control"
+                                                (onChange)="onInputTypeChanged()">
+                                    </p-dropdown>
+                                </div>
+                                <div class="form-input-control-wrapper m-0 pt-2" *ngIf="emptyIfFalseSelectorVisible">
+                                    <p-checkbox [(ngModel)]="editControlSetViewItem.emptyFilterIfFalse"
+                                                [value]="true"
+                                                binary="true"
+                                                name="emptyFilterIfFalse"
+                                                class="form-input-control">
+                                    </p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section table-selector-container" *ngIf="tableSelectorVisible">
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Source table:</label>
+                                <input pInputText readonly [value]="!!tableSelection?.length ? tableSelection[0].name : ''">
+                            </div>
+                            <query-table-selector [collapsed]="true"
+                                                  [tablesOnly]="true"
+                                                  tableSelectionMode="single"
+                                                  [tableSelection]="tableSelection"
+                                                  [folderId]="editControlSetViewItem.folderId"
+                                                  (tableSelectionChange)="onTableSelectionChange($event)"
+                                                  (onFolderChange)="onFolderChange($event)">
+                            </query-table-selector>
+                        </div>
+                        <div class="form-section two-input-columns" *ngIf="tableSelectorVisible">
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Display field:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.labelColumnId"
+                                                [options]="columnOptions"
+                                                appendTo="body" required
+                                                id="dropdownLabelColumn"
+                                                name="dropdownLabelColumn"
+                                                class="form-input-control">
+                                        <ng-template pTemplate="selectedItem" let-item>
+                                            <div class="control-set-dropdown-field-item">
+                                                <i *ngIf="item.icon" class="material-icons">{{ item.icon }}</i>
+                                                <label>{{ item.label }}</label>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="item" let-item>
+                                            <div class="control-set-dropdown-field-item">
+                                                <i *ngIf="item.icon" class="material-icons">{{ item.icon }}</i>
+                                                <label>{{ item.label }}</label>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Value field:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.valueColumnId"
+                                                [options]="columnOptions"
+                                                appendTo="body" required
+                                                id="dropdownValueColumn"
+                                                name="dropdownValueColumn"
+                                                class="form-input-control">
+                                        <ng-template pTemplate="selectedItem" let-item>
+                                            <div class="control-set-dropdown-field-item">
+                                                <i *ngIf="item.icon" class="material-icons">{{ item.icon }}</i>
+                                                <label>{{ item.label }}</label>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="item" let-item>
+                                            <div class="control-set-dropdown-field-item">
+                                                <i *ngIf="item.icon" class="material-icons">{{ item.icon }}</i>
+                                                <label>{{ item.label }}</label>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section no-bottom-border">
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Control value emit type:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.valueEmitType"
+                                                [options]="controlValueEmitTypeOptions"
+                                                appendTo="body"
+                                                id="valueEmitType"
+                                                name="valueEmitType"
+                                                required
+                                                class="form-input-control">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="warning-message-container tab-content-padding bottom-border">
+                        <ng-container *ngIf="editControlSetViewItem.name">
+                            <span class="material-icons warning-icon">info</span>
+                            The output value from this UI control will be put into variable
+                            <span class="value-display value-controlled-overflow copyable" (click)="copyToClipboard(editControlSetViewItem)">
+                                #{{ getVariableName(editControlSetViewItem.name) }}
+                            </span>
+                        </ng-container>
+                    </div>
+                </form>
+            </ng-template>
+        </p-tabPanel>
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">tune</i>
+                <span>Advanced settings</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <form #editControlSetViewItemAdvancedForm="ngForm" *ngIf="editControlSetViewItem" class="reporting-form">
+                    <div class="tab-content-top-padding tab-content-sides-padding reporting-form-body darker-panel">
+                        <div class="form-section no-bottom-border">
+                            <span class="form-section-name">Variable linkage</span>
+                            <div class="tab-content-part-message">Optionally, set a rule to filter the list of options shown in the dropdown based on
+                                a variable.
+                            </div>
+                            <div class="reporting-inputs-row-group full-width">
+                                <div class="reporting-inputs-row-group-controls">
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.filterRule.tableColumnId"
+                                                [options]="columnOptions"
+                                                [disabled]="!isDropdownType(editControlSetViewItem.inputType)"
+                                                [showClear]="true"
+                                                appendTo="body"
+                                                name="filterField"
+                                                placeholder="Field"
+                                                class="form-input-control">
+                                        <ng-template pTemplate="selectedItem" let-item>
+                                            <div class="control-set-dropdown-field-item">
+                                                <i *ngIf="item.icon" class="material-icons">{{ item.icon }}</i>
+                                                <label>{{ item.label }}</label>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="item" let-item>
+                                            <div class="control-set-dropdown-field-item">
+                                                <i *ngIf="item.icon" class="material-icons">{{ item.icon }}</i>
+                                                <label>{{ item.label }}</label>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <p-dropdown [(ngModel)]="editControlSetViewItem.filterRule.operator"
+                                                [options]="expressionOperatorOptions"
+                                                [disabled]="!isDropdownType(editControlSetViewItem.inputType) ||
+                                                            !editControlSetViewItem.filterRule.tableColumnId"
+                                                appendTo="body"
+                                                name="filterOperator"
+                                                placeholder="Operator"
+                                                class="operation-selector">
+                                    </p-dropdown>
+                                    <p-inputGroup class="form-input-control">
+                                        <input [(ngModel)]="editControlSetViewItem.filterRule.operand"
+                                               [disabled]="!isDropdownType(editControlSetViewItem.inputType) ||
+                                                           !editControlSetViewItem.filterRule.tableColumnId"
+                                               pInputText
+                                               placeholder="Variable/Value"
+                                               name="filterVariable"/>
+                                        <p-inputGroupAddon>
+                                            <p-button [text]="true" [plain]="true"
+                                                      [label]="!!variableOptions && !variableOptions.length ? '' : '#'"
+                                                      [loading]="!!variableOptions && !variableOptions.length"
+                                                      [disabled]="!isDropdownType(editControlSetViewItem.inputType) ||
+                                                           !editControlSetViewItem.filterRule.tableColumnId"
+                                                      loadingIcon="pi pi-spin pi-spinner"
+                                                      styleClass="justify-content-center"
+                                                      (onClick)="showVariableOptions($event)"></p-button>
+                                        </p-inputGroupAddon>
+                                    </p-inputGroup>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+        </p-tabPanel>
+    </p-tabView>
+
+    <p-footer *ngIf="editControlSetViewItem">
+        <button pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="onEditingControlSetViewItemCancel()">
+            <i class="material-icons">clear</i>
+        </button>
+        <button pButton
+                type="submit"
+                [label]="!!editControlSetViewItem.id ? 'Save' : 'Add'"
+                [loading]="loading"
+                [disabled]="!valid"
+                (click)="onEditingControlSetViewItemFormSubmit()">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-menu [model]="variableOptions" [popup]="true"
+        styleClass="p-0 max-h-25rem overflow-y-auto"
+        appendTo="body"></p-menu>

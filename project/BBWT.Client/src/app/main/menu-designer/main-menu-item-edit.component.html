@@ -1,0 +1,79 @@
+<form #form="ngForm" class="inputs-group" (ngSubmit)="onSaveMenuItem()" rte="iw">
+    <div class="inputs-group-row" rte="iH">
+        <label for="routerLink" class="inputs-group-row-name" rte="iI">Router link:</label>
+        <div class="inputs-group-row-value" rte="iJ">
+            <p-dropdown [(ngModel)]="menuItem.routerLink"
+                        [options]="routes"
+                        optionLabel="title"
+                        optionValue="path"
+                        [showClear]="true"
+                        [filter]="true"
+                        filterBy="title"
+                        id="routerLink"
+                        name="routerLink"
+                        placeholder="Choose a router link"
+                        [disabled]="menuItem.customHandler"
+                        (onChange)="onItemRouteChange($event)"
+                        rte="iK">
+                <ng-template pTemplate="selectedItem">
+                    <div *ngIf="menuItem.routerLink" rte="1bt">
+                        <div rte="1bu">{{titleByPath(menuItem.routerLink)}}</div>
+                        <div class="route-selector-path" rte="1bv">{{menuItem.routerLink}}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-route pTemplate="item">
+                    <div rte="1bw">
+                        <div rte="1bx">{{route.title}}</div>
+                        <div class="route-selector-path" rte="1by">{{route.path}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="iL">
+        <div class="inputs-group-row-name" rte="iM">
+            <label for="customHandler" rte="iN">Custom handler:</label>
+        </div>
+        <div class="inputs-group-row-value" rte="iO">
+            <p-dropdown [(ngModel)]="menuItem.customHandler"
+                        [options]="customHandlersOptions"
+                        [showClear]="true"
+                        id="customHandler"
+                        name="customHandler"
+                        placeholder="Select pre-defined handler"
+                        [disabled]="menuItem.routerLink" rte="iP">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="ix">
+        <label for="name" class="inputs-group-row-name asterisk-mark" rte="iy">Name:</label>
+        <div class="inputs-group-row-value" rte="iz">
+            <input pInputText [(ngModel)]="menuItem.label" id="name" name="label" required notEmpty rte="iA" />
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="iQ">
+        <label for="icon" class="inputs-group-row-name" rte="iR">Icon:</label>
+        <div class="inputs-group-row-value" rte="iS">
+            <bb-icon-dropdown [(iconModel)]="menuItem.icon" id="icon" rte="iT"></bb-icon-dropdown>
+        </div>
+    </div>
+    <div class="inputs-group-row" rte="iU">
+        <div class="inputs-group-row-name" rte="iV">
+            <label for="hidden" rte="iW">Hidden:</label>
+            <bb-tooltip message="This option switched on doesn’t change access rules for a page linked to a menu item but just hides the item. After you check the option the page will remain accessible." rte="iX">
+            </bb-tooltip>
+        </div>
+        <div class="inputs-group-row-value" rte="iY">
+            <p-checkbox [(ngModel)]="menuItem.hidden" [binary]="true" id="hidden" name="hidden" rte="iZ"></p-checkbox>
+        </div>
+    </div>
+
+    <div class="buttons-panel" rte="j0">
+        <button pButton *ngIf="isNewItem" type="button" label="Cancel" class="p-button-secondary" (click)="onCancelNewItem()" rte="1bJ">
+            <i class="material-icons" rte="1bK">clear</i>
+        </button>
+        <button pButton type="submit" label="Save" [disabled]="form.invalid" rte="j1">
+            <i class="material-icons" rte="1bL">check</i>
+        </button>
+    </div>
+</form>

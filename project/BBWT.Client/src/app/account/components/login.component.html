@@ -1,0 +1,264 @@
+<ng-container *ngIf="!authenticationSettings.isSystemTester; else realDataForm">
+    <h1 rte="7h">Login</h1>
+
+    <div class="login-reasons-container" rte="7i">
+        <p-message *ngIf="loginMessage" severity="error" [text]="loginMessage" rte="7j"></p-message>
+        <p-message *ngIf="!appOnlineStateService.isAppOnline" severity="error" text="The application is in offline mode. You can't log in until you get back online." rte="7l"></p-message>
+        <p-message *ngIf="ssoProviderService.ssoLoginError" severity="error" [text]="ssoProviderService.ssoLoginError" rte="7k"></p-message>
+    </div>
+
+    <div [ngSwitch]="loginState" rte="1d3">
+        <div *ngSwitchCase="loginStateType.LogPasswordStep" rte="1d4">
+
+            <span class="page-sub-header" rte="7n">Please enter your email address and password</span>
+
+            <form #form="ngForm"
+                  class="inputs-group"
+                  (ngSubmit)="login()"
+                  (keydown.enter)="form.valid"
+                  [antiAutoComplete]="antiAutocomplete" novalidate rte="1d5">
+                <div class="inputs-group-row" rte="7p">
+                <span class="p-float-label inputs-group-row-value" rte="7q">
+                    <!-- Note that the "p-inputwrapper-filled" class is necessary to make floating labels as focused and avoid UI layering when the browser proposes passwords. -->
+                    <input pInputText
+                           [(ngModel)]="loginRequest.email"
+                           type="email"
+                           id="email"
+                           name="email"
+                           required
+                           [pattern]="validationPatternsType.email"
+                           class="p-inputwrapper-filled"
+                           rte="7r" />
+                    <label for="email" rte="7s">Email</label>
+                </span>
+                </div>
+                <div class="inputs-group-row" rte="7t">
+                <span class="p-float-label inputs-group-row-value" rte="7u">
+                    <!-- Note that the "p-inputwrapper-filled" class is necessary to make floating labels as focused and avoid UI layering when the browser proposes passwords. -->
+                    <input pPassword
+                           [(ngModel)]="loginRequest.password"
+                           showPassword
+                           id="password"
+                           name="password"
+                           [feedback]="false"
+                           [maxLength]='200'
+                           required
+                           class="p-inputwrapper-filled" rte="7v">
+                    <label for="password" rte="7w">Password</label>
+                </span>
+                </div>
+
+                <button pButton
+                        type="submit"
+                        label="Log in"
+                        [disabled]="form.invalid || loginBtnDisabled || !appOnlineStateService.isAppOnline"
+                        class="full-width-button button-text-center" rte="7z">
+                    <i class="material-icons" rte="7A">person</i>
+                </button>
+
+                <div class="additional-login-options-container text-left" *ngIf="appOnlineStateService.isAppOnline" rte="7B">
+                    <span class="additional-login-option" rte="7C"> Do you need to <a routerLink="/account/forgotpassword" rte="7D">recover a forgotten password</a>?</span>
+                    <span class="additional-login-option" rte="7E">If you don't have an account <a routerLink="/account/register" rte="7F">then sign up</a></span>
+                    <!--<span class="additional-login-option">or try <a [href]="sustainsysSamlEndpoint">external login (Sustainsys)</a>.</span>-->
+
+                    <ng-container *ngIf="ssoProviderService.isAnyProviderEnabled">
+                        <span class="label-separator" rte="7H">or try external login</span>
+
+                        <a *ngIf="ssoProviderService.googleSsoSettings?.enabled" class="sign-in-button google additional-login-option" [href]="ssoProviderService.googleEndpoint" rte="7I">
+                            Sign in with Google
+                        </a>
+                        <a *ngIf="ssoProviderService.facebookSsoSettings?.enabled" class="sign-in-button facebook additional-login-option" [href]="ssoProviderService.facebookEndpoint" rte="7J">
+                            Sign in with Facebook
+                        </a>
+                        <a *ngIf="ssoProviderService.linkedInSsoSettings?.enabled" class="sign-in-button linkedin additional-login-option" [href]="ssoProviderService.linkedinEndpoint" rte="7K">
+                            Sign in with LinkedIn
+                        </a>
+                    </ng-container>
+                </div>
+            </form>
+        </div>
+
+        <div *ngSwitchCase="loginStateType.U2fStep" rte="1d6">
+            <p rte="81">Insert your security key into your computer's USB port. If it has a button, touch it.</p>
+            <img width="300" height="200" src="/assets/images/u2fkey.jpg" rte="82" />
+        </div>
+
+        <div *ngSwitchCase="loginStateType.AuthenticatorAppStep" rte="1d7">
+
+            <span class="page-sub-header" rte="1iy">Please use your mobile app to get the two-factor code and enter it below</span>
+
+            <form *ngIf="authenticationSettings.authenticatorEnabled"
+                  #form="ngForm"
+                  class="inputs-group"
+                  (ngSubmit)="login()"
+                  (keydown.enter)="form.valid" rte="7M">
+                <div class="inputs-group-row" rte="7N">
+                <span class="p-float-label inputs-group-row-value" rte="7O">
+                    <input pInputText
+                           [(ngModel)]="loginRequest.twoFactorCode"
+                           id="2fa"
+                           name="twoFactorCode"
+                           autocomplete="off"
+                           required rte="7P" />
+                    <label for="2fa" class="asterisk-mark" rte="7Q">Authenticator code</label>
+                </span>
+                </div>
+
+                <button pButton
+                        type="submit"
+                        label="Log in"
+                        [disabled]="form.invalid || loginBtnDisabled"
+                        class="full-width-button button-text-center" rte="7R">
+                    <i class="material-icons" rte="7S">person</i>
+                </button>
+            </form>
+        </div>
+
+        <div *ngSwitchCase="loginStateType.RecoveryCodeStep" rte="1d8">
+            <form *ngIf="hasTwoFactor"
+                  #form="ngForm"
+                  class="inputs-group"
+                  (ngSubmit)="submitRecoveryCode()"
+                  (keydown.enter)="form.valid" rte="7T">
+                <div class="inputs-group-row" rte="7U">
+                <span class="p-float-label inputs-group-row-value" rte="7V">
+                    <input pInputText
+                           [(ngModel)]="loginRequest.twoFactorRecoveryCode"
+                           id="codeValue"
+                           name="codeValue"
+                           autocomplete="off"
+                           required rte="7W" />
+                    <label for="codeValue" class="asterisk-mark" rte="7X">Recovery code</label>
+                </span>
+                </div>
+
+                <button pButton
+                        type="submit"
+                        label="Log in"
+                        [disabled]="form.invalid"
+                        class="full-width-button button-text-center" rte="7Y">
+                    <i class="material-icons" rte="7Z">person</i>
+                </button>
+            </form>
+        </div>
+
+        <div *ngSwitchCase="loginStateType.LoginLockedStep" class ="login-lock-message-container" rte="1d9">
+            <p-message class="login-lock-message" severity="error" rte="1da" text="Please try again in {{loginLockoutTimeoutInSeconds}} seconds. Too many attempts to login. {{lockType}} is locked out."></p-message>
+        </div>
+
+        <div *ngIf="hasTwoFactor" rte="83">
+            <hr style="border: 1px" rte="84" />
+            <a (click)="twoStepLoginDialogVisible = true" style="cursor: pointer" rte="85">Use another two-step login method</a>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #realDataForm>
+    <h1 rte="87">Welcome</h1>
+
+    <span class="page-sub-header" rte="88">You’re a recognised Blueberry Customer or Tester<br />Please enter your real email / name so we can include this on reports</span>
+
+    <form #form="ngForm"
+          class="inputs-group"
+          (ngSubmit)="login()"
+          (keydown.enter)="form.valid" rte="89">
+        <div class="inputs-group-row" rte="8a">
+            <span class="p-float-label inputs-group-row-value" rte="8b">
+                <input pInputText
+                       [(ngModel)]="loginRequest.realFirstName"
+                       [pattern]="validationPatternsType.notEmpty"
+                       id="realFirstName"
+                       name="realFirstName"
+                       autocomplete="off"
+                       required  rte="8c"/>
+                <label for="realFirstName" class="asterisk-mark" rte="8d">First name</label>
+            </span>
+        </div>
+        <div class="inputs-group-row" rte="8e">
+            <span class="p-float-label inputs-group-row-value" rte="8f">
+                <input pInputText
+                       [(ngModel)]="loginRequest.realLastName"
+                       id="realLastName"
+                       name="realLastName"
+                       autocomplete="off"
+                       required
+                       [pattern]="validationPatternsType.notEmpty"  rte="8g"/>
+                <label for="realLastName" class="asterisk-mark" rte="8h">Last name</label>
+            </span>
+        </div>
+        <div class="inputs-group-row" rte="8i">
+            <span class="p-float-label inputs-group-row-value" rte="8j">
+                <input pInputText
+                       [(ngModel)]="loginRequest.realEmail"
+                       id="realEmail"
+                       name="realEmail"
+                       autocomplete="off"
+                       required
+                       [pattern]="validationPatternsType.email"  rte="8k"/>
+                <label for="realEmail" class="asterisk-mark" rte="8l">Email</label>
+            </span>
+        </div>
+
+        <button pButton
+                type="submit"
+                label="Continue"
+                [disabled]="form.invalid"
+                class="full-width-button button-text-center" rte="8m">
+            <i class="material-icons" rte="8n">person</i>
+        </button>
+    </form>
+</ng-template>
+
+
+<p-dialog [(visible)]="twoStepLoginDialogVisible"
+          [closable]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}"
+          header="Two-step Login Options"
+          class="text-left"
+          rte="8o">
+    <div *ngIf="authenticationSettings.authenticatorEnabled"
+         (click)="loginState = loginStateType.AuthenticatorAppStep; twoStepLoginDialogVisible = false"
+         class="hoverable" rte="8p">
+        <div class="two-step-login-panel" rte="8q">
+            <div class="text-container" rte="8r">
+                <h4 rte="8s">Authenticator App</h4>
+                <p rte="8t">
+                    Use an authenticator app (such as Authy or Google Authenticator) to generate time-based verification
+                    codes.
+                </p>
+            </div>
+            <img src="/assets/images/authenticator.png" width="80" height="40"  rte="8u"/>
+        </div>
+    </div>
+
+    <div *ngIf="authenticationSettings.u2fEnabled"
+         (click)="loginState = loginStateType.U2fStep;twoStepLoginDialogVisible = false" rte="8v">
+        <div class="two-step-login-panel" rte="8w">
+            <div class="text-container" rte="8x">
+                <h4 rte="8y">FIDO U2F Security Key</h4>
+                <p rte="8z">Use any FIDO U2F enabled security key to access your account.</p>
+            </div>
+            <img src="/assets/images/fido.png"  rte="8A"/>
+        </div>
+    </div>
+
+    <div (click)="loginState = loginStateType.RecoveryCodeStep;twoStepLoginDialogVisible = false"
+         class="hoverable" rte="8B">
+        <h4 rte="8C">Recovery Code</h4>
+        <p rte="8D">
+            Lost access to all of your two-factor providers? Use your recovery code to disable all two-factor providers
+            from your account.
+        </p>
+    </div>
+
+    <p-footer rte="8E">
+        <button pButton type="button" label="Close" class="p-button-secondary" (click)="twoStepLoginDialogVisible = false" rte="8F">
+            <i class="material-icons" rte="8G">close</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<span class="recaptcha-terms-message" rte="1db">This site is protected by reCAPTCHA and the Google
+    <a href="https://policies.google.com/privacy" rte="1dc">Privacy Policy</a> and
+    <a href="https://policies.google.com/terms" rte="1dd">Terms of Service</a> apply.</span>

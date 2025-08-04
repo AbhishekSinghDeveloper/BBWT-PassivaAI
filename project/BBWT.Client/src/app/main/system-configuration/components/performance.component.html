@@ -1,0 +1,11 @@
+<div *ngIf="settings" class="p-g" rte="Th">
+    <div class="inputs-group p-g-12" rte="Ti">
+        <div class="inputs-group-row" rte="Tj">
+            <p-checkbox [(ngModel)]="settings.recordLoadingTime"
+                        label="Record loading time"
+                        [binary]="true"
+                        (onChange)="save()" rte="Tk">
+            </p-checkbox>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<p-sidebar [visible]="pwaService.isInstallationEnabled && !pwaService.wasDeclined && (pwaService.appInstallationAvailable || pwaService.isApplePwaCompatibleDevice)"
+           appendTo="body"
+           position="top"
+           [modal]="false"
+           [baseZIndex]="200"
+           styleClass="pwa-sidebar"
+           (onHide)="onHide()" rte="gz">
+    <div class="pwa-banner-content" rte="gA">
+        <ng-container *ngIf="pwaService.isApplePwaCompatibleDevice; else installPrompt">
+            <p class="pwa-text" rte="gC">
+                To install this web app on your device please tap the Menu button and then 'Add to Home screen' button
+            </p>
+            <img src="/assets/icons/ios-menu-btn.png" width="25" rte="gD"><i class="material-icons" rte="gE">navigate_next</i><img src="/assets/icons/ios-add-btn.png" width="25" rte="gF">
+        </ng-container>
+        <ng-template #installPrompt>
+            <p class="pwa-text" rte="gH">
+                You can install the app - this allows you to launch one from the home screen on your device or desktop
+            </p>
+            <button pButton
+                    type="button"
+                    class="p-button-success"
+                    icon="pi pi-external-link"
+                    label="Add to Home screen"
+                    (click)="installApp()" rte="gI">
+            </button>
+        </ng-template>
+    </div>
+</p-sidebar>

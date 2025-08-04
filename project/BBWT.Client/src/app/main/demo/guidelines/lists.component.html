@@ -1,0 +1,133 @@
+<div class="card--hidden" rte="JK">
+    <h1 rte="JL">Lists</h1>
+
+    <p rte="JM">Example of ListBox</p>
+
+    <div class="p-g" rte="JN">
+        <div class="p-g-12" rte="JO">
+            <label for="listbox" rte="JP">Select Theme</label>
+        </div>
+
+        <div class="p-g-12" rte="JQ">
+            <p-listbox
+                id="listbox"
+                [options]="themesOptions"
+                [(ngModel)]="selectedTheme"
+                (onChange)="changeTheme($event)"
+                [style]="{ 'max-height': '500px', 'overflow': 'auto' }"
+                rte="JR"
+            ></p-listbox>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="JS">
+                &lt;div class=&quot;p-g&quot;&gt;
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;label for=&quot;listbox&quot;&gt;Select Theme&lt;/label&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class=&quot;p-g-12&quot;&gt;
+                        &lt;p-listbox [options]=&quot;themesOptions&quot; [(ngModel)]=&quot;selectedTheme&quot;
+                                      (onChange)=&quot;changeTheme($event)&quot; id=&quot;listbox&quot;
+                                      [style]=&quot;&amp;#123;&#39;max-height&#39;:&#39;300px&#39;&amp;#125;&quot;&gt;
+                        &lt;/p-listbox&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="JT">Example of PickList</p>
+
+    <div class="p-g" rte="JU">
+        <div class="p-g-12" rte="JV">
+            <label for="picklist" rte="JW">Label</label>
+        </div>
+
+        <div class="p-g-12" rte="JX">
+            <p-pickList
+                id="picklist"
+                [source]="sourceList"
+                [target]="targetList"
+                rte="JY"
+            >
+                <ng-template let-car pTemplate="item">
+                    <div class="p-helper-clearfix" rte="K0">
+                        <div rte="K1">{{ car.model }} - {{ car.year }}</div>
+                    </div>
+                </ng-template>
+            </p-pickList>
+        </div>
+    </div>
+
+    HTML looks like this:
+    <pre class="codeHighlight" rte="K2">
+&lt;div class=&quot;p-g&quot;&gt;
+                &lt;div class=&quot;p-g-12&quot;&gt;
+                    &lt;label for=&quot;picklist&quot;&gt;Label&lt;/label&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;p-g-12&quot;&gt;
+                    &lt;p-pickList id=&quot;picklist&quot; [source]=&quot;sourceList&quot; [target]=&quot;targetList&quot;&gt;
+                        &lt;ng-template let-car pTemplate=&quot;item&quot;&gt;
+                            &lt;div class=&quot;p-helper-clearfix&quot;&gt;
+                                &lt;div&gt;&#123; &#123;car.model&#125; &#125; - &#123; &#123;car.year&#125; &#125;&lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/ng-template&gt;
+                    &lt;/p-pickList&gt;
+                &lt;/div&gt;
+                &lt;/div&gt;
+            </pre
+    >
+
+    <p rte="K3">Typescript code</p>
+    <pre class="codeHighlight" rte="K4">
+                export class ListsComponent implements OnInit &#123;
+
+                    themesOptions: any[];
+                    selectedTheme: any;
+
+                    sourceList: any[];
+                    targetList: any[];
+
+                    constructor() &#123; &#125;
+
+                    ngOnInit() &#123;
+                        this.selectedTheme = &#123;&#125;;
+                        this.themesOptions = [];
+                        this.themesOptions.push(&#123; label: 'theme-blue', value: 'blue' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-blue-grey', value: 'blue-grey' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-brown', value: 'brown' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-cyan', value: 'cyan' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-dark-blue', value: 'dark-blue' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-dark-green', value: 'dark-green' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-green', value: 'green' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-grey', value: 'grey' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-indigo', value: 'indigo' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-purple-amber', value: 'purple-amber' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-purple-cyan', value: 'purple-cyan' &#125;);
+                        this.themesOptions.push(&#123; label: 'theme-teal', value: 'teal' &#125;);
+
+                        this.sourceList = [];
+                        this.sourceList.push(&#123; model: 'Audi', year: 2017 &#125;);
+                        this.sourceList.push(&#123; model: 'VW', year: 2012 &#125;);
+                        this.sourceList.push(&#123; model: 'BMW', year: 2011 &#125;);
+
+                        this.targetList = [];
+                        this.targetList.push(&#123; model: 'Opel', year: 2002 &#125;);
+                        this.targetList.push(&#123; model: 'Renault', year: 2013 &#125;);
+                    &#125;
+
+                    changeTheme(event: any) &#123;
+
+                        console.log(event);
+                        let themeLink: HTMLLinkElement = &lt;HTMLLinkElement&gt;document.getElementById('theme-css');
+                        themeLink.href = '/theme-' + event.value + '.css';
+
+                        let layoutLink: HTMLLinkElement = &lt;HTMLLinkElement&gt;document.getElementById('layout-css');
+                        layoutLink.href = '/layout-' + event.value + '.css';
+                        event.preventDefault();
+                    &#125;
+                &#125;
+    </pre>
+</div>

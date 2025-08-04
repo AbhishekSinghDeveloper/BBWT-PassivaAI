@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuntimeEditor", "RuntimeEditor.csproj", "{47F45A92-6833-4722-BF44-66B50BB14F09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2568B1E4-5F43-4635-9B7D-0C8BB149095F}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.gitlab-ci.yml = ..\..\.gitlab-ci.yml
+		..\..\project\BBWT.Server\data\runtime-editor\dictionary.json = ..\..\project\BBWT.Server\data\runtime-editor\dictionary.json
+		..\RuntimeEditorData\rte-links-counter.json = ..\RuntimeEditorData\rte-links-counter.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47F45A92-6833-4722-BF44-66B50BB14F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F45A92-6833-4722-BF44-66B50BB14F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F45A92-6833-4722-BF44-66B50BB14F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F45A92-6833-4722-BF44-66B50BB14F09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2ADECD3F-35DB-49A6-B7CF-33F08911ABF3}
+	EndGlobalSection
+EndGlobal

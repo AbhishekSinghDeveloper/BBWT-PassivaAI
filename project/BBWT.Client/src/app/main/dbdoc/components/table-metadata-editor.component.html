@@ -1,0 +1,77 @@
+<p-tabView #tabView (onChange)="activeTabViewIndex = $event.index" rte="120">
+    <p-tabPanel header="Details" [tabIndex]="0" rte="121">
+        <form #form="ngForm" class="inputs-group" (ngSubmit)="save()" rte="122">
+            <div class="inputs-group-row no-label-padding" rte="1rW">
+                <label class="inputs-group-row-name" rte="1rX">Name:</label>
+                <div class="inputs-group-row-value" rte="1rY">{{_tableMetadata.staticData.tableName}}</div>
+            </div>
+            <div class="inputs-group-row" rte="12h">
+                <label class="inputs-group-row-name" rte="12j">Description:</label>
+                <div class="inputs-group-row-value" rte="12k">
+                    <textarea [(ngModel)]="_tableMetadata.description"
+                              pInputTextarea
+                              [rows]="2"
+                              name="table-description"
+                              style="resize: none;"
+                              rte="12m">
+                    </textarea>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="12a">
+                <label class="inputs-group-row-name" rte="12c">Anonymization:</label>
+                <div class="inputs-group-row-value" rte="12e">
+                    <p-dropdown [(ngModel)]="_tableMetadata.anonymization"
+                                [options]="tableAnonymizationOptions"
+                                placeholder="Choose anonymization action"
+                                name="table-anonymization"
+                                rte="12f">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row" rte="12t">
+                <label class="inputs-group-row-name" rte="12v">Representation:</label>
+                <div class="inputs-group-row-value" rte="12w">
+                    <input [(ngModel)]="_tableMetadata.representation"
+                           pInputText
+                           name="representation"
+                           placeholder="value for column id = %id%"
+                           rte="12y">
+                </div>
+            </div>
+            <div class="inputs-group-row no-label-padding" rte="1rZ">
+                <label class="inputs-group-row-name" rte="1s0">Unique ID:</label>
+                <div class="inputs-group-row-value" rte="1s1">{{_tableMetadata.tableId}}</div>
+            </div>
+            <div class="inputs-group-row no-label-padding" rte="1s5">
+                <label class="inputs-group-row-name" rte="1s6">Select Query:</label>
+                <div class="inputs-group-row-value" rte="1s7">{{_tableMetadata.staticData.queryName}}</div>
+            </div>
+            <div class="buttons-panel" rte="1se">
+                <button type="submit" pButton [disabled]="!!form.invalid" label="Save" rte="1sf"></button>
+            </div>
+        </form>
+        <grid [tableSettings]="columnsTableSettings" [gridSettings]="columnsGridSettings" class="columns-grid" rte="1vj">
+            <ng-template gridColumnTemplate="displayingRow" columnName="staticData.columnName" let-rowData>
+                <a href="javascript:void(0);"
+                   (click)="dbExplorerComponent.selectNodeByColumnMetadataId(rowData.id)" rte="1vk">
+                    {{rowData.staticData.columnName}}
+                </a>
+            </ng-template>
+            <ng-template gridColumnTemplate="displayingRow" columnName="hidden" let-rowData>
+                <p-inputSwitch [(ngModel)]="rowData.hidden"
+                               [ngModelOptions]="{standalone: true}"
+                               (onChange)="onColumnMetadataChanged(rowData, false)"
+                               >
+                </p-inputSwitch>
+            </ng-template>
+        </grid>
+    </p-tabPanel>
+
+    <p-tabPanel *ngIf="showTableData" header="Table Data" [tabIndex]="1" rte="13i">
+        <grid #gridTableData *ngIf="activeTabViewIndex === 1"
+              [tableSettings]="tableDataTableSettings"
+              [gridSettings]="tableDataGridSettings"
+              rte="1vl">
+        </grid>
+    </p-tabPanel>
+</p-tabView>

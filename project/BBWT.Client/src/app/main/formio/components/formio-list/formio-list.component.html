@@ -1,0 +1,131 @@
+<div class="card main-container">
+    <h1>Form Designs</h1>
+    <filter #gridFilter [settings]="filterSettings"></filter>
+    <grid #definitionGrid [tableSettings]="tableSettingsFormioViewer" [filter]="gridFilter"
+          [gridSettings]="formioViewerGridSettings" (delete)="onFormDefinitionGridRowDeletedEvent()"></grid>
+</div>
+<p-dialog [(visible)]="publishing" [style]="{'max-width': '450px', width: '100%'}"
+          header="Form Publishing" [modal]="true" [closable]="true" [responsive]="true" (onHide)="cancelPublish()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Organization:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="organizationOptions"
+                               [options]="globalOrganizationOptions"
+                               appendTo="body"
+                               optionLabel="name"
+                               dataKey="id"
+                               id="organizations"
+                               name="organizations"
+                               placeholder="Select organization">
+                </p-multiSelect>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label class="inputs-group-row-name">Category:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown *ngIf="categories"
+                            [(ngModel)]="selectedCat"
+                            [options]="categories"
+                            placeholder="Select a Category"
+                            optionLabel="label"
+                            optionValue="value"></p-dropdown>
+            </div>
+        </div>
+        <div class="buttons-panel buttons-panel-top-margin">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelPublish()"></button>
+            <button
+                pButton
+                type="button"
+                (click)="publish()"
+                label="Publish"></button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="changingOwnership" [style]="{'max-width': '450px', width: '100%'}"
+          header="Change form design ownership" [modal]="true" [closable]="true" [responsive]="true" (onHide)="cancelOwnership()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="changeOwnerEdit" class="inputs-group-row-name">Users:</label>
+            <div class="inputs-group-row-value">
+                <p-dropdown [appendTo]="'body'"
+                            [(ngModel)]="newOwner"
+                            optionLabel="label"
+                            dataKey="value"
+                            [options]="possibleOwners"
+                            id="changeOwnerEdit"
+                            name="changeOwnerEdit"
+                            placeholder="Select an user">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="buttons-panel buttons-panel-top-margin">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelOwnership()"></button>
+            <button
+                pButton
+                type="button"
+                (click)="changeOwnership()"
+                label="Change owner"></button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="makingRequest" [style]="{'max-width': '450px', width: '100%'}"
+          header="New Form Request" [modal]="true" [closable]="true" [responsive]="true" (onHide)="cancelPublish()">
+    <div class="inputs-group">
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Groups:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="selectedTargetGroups"
+                               [options]="targetGroups"
+                               appendTo="body"
+                               optionLabel="label"
+                               dataKey="value"
+                               id="targetGroups"
+                               name="targetGroups"
+                               placeholder="Select groups">
+                </p-multiSelect>
+            </div>
+        </div>
+        <div class="inputs-group-row">
+            <label for="organizations" class="inputs-group-row-name">Users:</label>
+            <div class="inputs-group-row-value">
+                <p-multiSelect [(ngModel)]="selectedTargetUsers"
+                               appendTo="body"
+                               optionLabel="label"
+                               dataKey="value"
+                               [options]="targetUsers"
+                               id="targetUsers"
+                               name="targetUsers"
+                               placeholder="Select users">
+                </p-multiSelect>
+            </div>
+        </div>
+
+        <div class="buttons-panel buttons-panel-top-margin">
+            <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelRequest()"></button>
+            <button
+                pButton
+                type="button"
+                (click)="Request()"
+                label="Create request"></button>
+        </div>
+    </div>
+</p-dialog>

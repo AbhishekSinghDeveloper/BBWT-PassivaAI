@@ -1,0 +1,96 @@
+<div class="card--hidden" rte="xB">
+    <h1 rte="xC">OData</h1>
+    <p-tabView rte="xD">
+        <p-tabPanel header="Requests Examples" rte="xE">
+            <div class="inputs-group" rte="xF">
+                <div class="inputs-group-row" rte="xG">
+                    <label class="inputs-group-row-name" rte="xH"
+                        >Choose predefined query example:</label
+                    >
+                    <div class="inputs-group-row-value" rte="xI">
+                        <p-dropdown
+                            [options]="queryExampleOptions"
+                            placeholder="Select example statement"
+                            (onChange)="selectQueryExample($event.value)"
+                            rte="xJ"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="xK">
+                    <label class="inputs-group-row-name" rte="xL"
+                        >Predefined query URI:</label
+                    >
+                    <div class="inputs-group-row-value" rte="xM">
+                        <input
+                            pInputText
+                            [(ngModel)]="predefinedQuery"
+                            readonly
+                            class="input-with-button"
+                            rte="xN"
+                        />
+                        <p-button
+                            label="Send"
+                            [disabled]="!predefinedQuery"
+                            (onClick)="sendPredefinedRequest()"
+                            rte="xO"
+                        ></p-button>
+                    </div>
+                </div>
+            </div>
+            <div class="inputs-group manually-typed-group" rte="xP">
+                <div class="inputs-group-row" rte="xQ">
+                    <label class="inputs-group-row-name" rte="xR"
+                        >Manually typed query:</label
+                    >
+                    <div class="inputs-group-row-value" rte="xS">
+                        <input
+                            pInputText
+                            [(ngModel)]="manuallyTypedQuery"
+                            class="input-with-button"
+                            rte="xT"
+                        />
+                        <p-button
+                            label="Send"
+                            [disabled]="!manuallyTypedQuery"
+                            (onClick)="sendManuallyTypedRequest()"
+                            rte="xU"
+                        ></p-button>
+                    </div>
+                </div>
+            </div>
+            <div class="request-result-container" rte="xV">
+                <ng-container *ngIf="queryStringResult; else errorResponse">
+                    <code rte="xX">{{ queryStringResult }}</code>
+                </ng-container>
+                <ng-template #errorResponse>
+                    <div class="error-response" rte="xZ">
+                        {{ errorResponseString }}
+                    </div>
+                </ng-template>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Grid" rte="y0">
+            <grid
+                [tableSettings]="tableSettings"
+                [gridSettings]="gridSettings"
+                rte="1iU"
+            >
+                <ng-template
+                    gridColumnTemplate="filterView"
+                    columnName="id"
+                    let-value
+                    let-filterCallback="filterCallback"
+                >
+                    <p-slider
+                        [ngModel]="value"
+                        [min]="1"
+                        [max]="100"
+                        (ngModelChange)="filterCallback($event)"
+                        rte="y3"
+                    ></p-slider>
+                </ng-template>
+            </grid>
+        </p-tabPanel>
+    </p-tabView>
+</div>

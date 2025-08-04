@@ -1,0 +1,25 @@
+:host ::ng-deep {
+    .panel-bold-header-text {
+        font-weight: bold;
+    }
+    .rule-item {
+        display: block;
+        margin-bottom: 10px;
+
+        .rule-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            .rule-header-buttons {
+                button {
+                    margin-left: 5px;
+                }
+            }
+        }
+        .p-panel-content {
+            text-align: left;
+        }
+    }
+}

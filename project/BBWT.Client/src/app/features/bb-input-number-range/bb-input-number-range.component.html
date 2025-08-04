@@ -1,0 +1,53 @@
+<ng-container *ngIf="!placeholder || !floatingLabel; else withFloatingLabels">
+    <p-inputNumber [(ngModel)]="value[0]"
+                   [showButtons]="true"
+                   [placeholder]="placeholder ? placeholder + ' (from)' : ''"
+                   [maxFractionDigits]="maxFractionDigits"
+                   mode="decimal"
+                   locale="en-US"
+                   class="input-number-range-from"
+                   (ngModelChange)="updateModel()"
+                   (keydown)="keydown.emit($event)"
+                   rte="1dB">
+    </p-inputNumber>
+    <p-inputNumber [(ngModel)]="value[1]"
+                   [showButtons]="true"
+                   [placeholder]="placeholder ? placeholder + ' (to)' : ''"
+                   [maxFractionDigits]="maxFractionDigits"
+                   mode="decimal"
+                   locale="en-US"
+                   class="input-number-range-to"
+                   (ngModelChange)="updateModel()"
+                   (keydown)="keydown.emit($event)"
+                   rte="1dC">
+    </p-inputNumber>
+</ng-container>
+
+<ng-template #withFloatingLabels>
+    <span class="p-float-label" rte="1dD">
+        <p-inputNumber [(ngModel)]="value[0]"
+                       [showButtons]="true"
+                       [maxFractionDigits]="maxFractionDigits"
+                       mode="decimal"
+                       locale="en-US"
+                       class="input-number-range-from"
+                       (ngModelChange)="updateModel()"
+                       (keydown)="keydown.emit($event)"
+                       rte="1dE">
+        </p-inputNumber>
+        <label rte="1dF">{{placeholder + " (from)"}}</label>
+    </span>
+    <span class="p-float-label" rte="1dG">
+        <p-inputNumber [(ngModel)]="value[1]"
+                       [showButtons]="true"
+                       [maxFractionDigits]="maxFractionDigits"
+                       mode="decimal"
+                       locale="en-US"
+                       class="input-number-range-to"
+                       (ngModelChange)="updateModel()"
+                       (keydown)="keydown.emit($event)"
+                       rte="1dH">
+        </p-inputNumber>
+        <label rte="1dI">{{placeholder + " (to)"}}</label>
+    </span>
+</ng-template>

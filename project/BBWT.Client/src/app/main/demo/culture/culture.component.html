@@ -1,0 +1,576 @@
+<!--
+Demonstrations list:
+- Different date modifications
+- Labels/controls positioning via "inputs-group" CSS class
+-->
+<div class="card--hidden" rte="C4">
+    <h1 rte="C5">Culture</h1>
+
+    <span class="page-sub-header" rte="C6"
+        >Displays localized values used across BBWT3.</span
+    >
+
+    <p rte="C7">
+        At the current stage of development all locale details are inferred from
+        language selection.
+    </p>
+
+    <p-tabView rte="C8">
+        <p-tabPanel header="Default" rte="C9">
+            <div class="inputs-group right-aligned-labels" rte="Ca">
+                <span class="inputs-sub-group-name" rte="Cb"
+                    >PrimeNG calendar control</span
+                >
+                <div class="inputs-group-row" rte="Cc">
+                    <label class="inputs-group-row-name" rte="Cd">Date:</label>
+                    <div class="inputs-group-row-value" rte="Ce">
+                        <p-calendar
+                            [(ngModel)]="calendarDate"
+                            [showTime]="true"
+                            [showIcon]="true"
+                            rte="Cf"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="inputs-group right-aligned-labels no-labels-padding"
+                rte="Cg"
+            >
+                <span class="inputs-sub-group-name" rte="Ch"
+                    >Angular date formats</span
+                >
+                <div class="inputs-group-row" rte="Ci">
+                    <label class="inputs-group-row-name" rte="Cj"
+                        >Medium:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Ck">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Cl"
+                            >{{ calendarDate | date : "medium" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Cm">
+                    <label class="inputs-group-row-name" rte="Cn">Short:</label>
+                    <div class="inputs-group-row-value" rte="Co">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Cp"
+                            >{{ calendarDate | date : "short" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Cq">
+                    <label class="inputs-group-row-name" rte="Cr"
+                        >MediumTime:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Cs">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Ct"
+                            >{{ calendarDate | date : "mediumTime" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Cu">
+                    <label class="inputs-group-row-name" rte="Cv"
+                        >ShortTime:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Cw">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Cx"
+                            >{{ calendarDate | date : "shortTime" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Cy">
+                    <label class="inputs-group-row-name" rte="Cz"
+                        >FullDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CA">
+                        <span
+                            class="form-control form-control-static"
+                            rte="CB"
+                            >{{ calendarDate | date : "fullDate" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="CC">
+                    <label class="inputs-group-row-name" rte="CD"
+                        >LongDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CE">
+                        <span
+                            class="form-control form-control-static"
+                            rte="CF"
+                            >{{ calendarDate | date : "longDate" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="CG">
+                    <label class="inputs-group-row-name" rte="CH"
+                        >MediumDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CI">
+                        <span
+                            class="form-control form-control-static"
+                            rte="CJ"
+                            >{{ calendarDate | date : "mediumDate" }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="CK">
+                    <label class="inputs-group-row-name" rte="CL"
+                        >ShortDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CM">
+                        <span
+                            class="form-control form-control-static"
+                            rte="CN"
+                            >{{ calendarDate | date : "shortDate" }}</span
+                        >
+                    </div>
+                </div>
+
+                <span class="inputs-sub-group-name" rte="CO"
+                    >MomentJS date formats</span
+                >
+                <div class="inputs-group-row" rte="CP">
+                    <label class="inputs-group-row-name" rte="CQ"
+                        >ShortTime:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CR">
+                        <span
+                            class="form-control form-control-static"
+                            rte="CS"
+                            >{{ getMomentDate("LT") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="CT">
+                    <label class="inputs-group-row-name" rte="CU"
+                        >MediumTime:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CV">
+                        <span
+                            class="form-control form-control-static"
+                            rte="CW"
+                            >{{ getMomentDate("LTS") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="CX">
+                    <label class="inputs-group-row-name" rte="CY"
+                        >ShortDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="CZ">
+                        <span
+                            class="form-control form-control-static"
+                            rte="D0"
+                            >{{ getMomentDate("L") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="D1">
+                    <label class="inputs-group-row-name" rte="D2"
+                        >Short date 2:</label
+                    >
+                    <div class="inputs-group-row-value" rte="D3">
+                        <span
+                            class="form-control form-control-static"
+                            rte="D4"
+                            >{{ getMomentDate("l") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="D5">
+                    <label class="inputs-group-row-name" rte="D6"
+                        >LongDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="D7">
+                        <span
+                            class="form-control form-control-static"
+                            rte="D8"
+                            >{{ getMomentDate("LL") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="D9">
+                    <label class="inputs-group-row-name" rte="Da"
+                        >MediumDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Db">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Dc"
+                            >{{ getMomentDate("ll") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Dd">
+                    <label class="inputs-group-row-name" rte="De"
+                        >Medium:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Df">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Dg"
+                            >{{ getMomentDate("LLL") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Dh">
+                    <label class="inputs-group-row-name" rte="Di">Short:</label>
+                    <div class="inputs-group-row-value" rte="Dj">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Dk"
+                            >{{ getMomentDate("lll") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Dl">
+                    <label class="inputs-group-row-name" rte="Dm">Full:</label>
+                    <div class="inputs-group-row-value" rte="Dn">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Do"
+                            >{{ getMomentDate("LLLL") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Dp">
+                    <label class="inputs-group-row-name" rte="Dq"
+                        >Full 2:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Dr">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Ds"
+                            >{{ getMomentDate("llll") }}</span
+                        >
+                    </div>
+                </div>
+
+                <span class="inputs-sub-group-name" rte="Dt"
+                    >Angular number formats</span
+                >
+                <div class="inputs-group-row" rte="Du">
+                    <label class="inputs-group-row-name" rte="Dv"
+                        >Percent:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Dw">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Dx"
+                            >{{ 1234.45667 | percent }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Dy">
+                    <label class="inputs-group-row-name" rte="Dz"
+                        >Currency:</label
+                    >
+                    <div class="inputs-group-row-value" rte="DA">
+                        <span
+                            class="form-control form-control-static"
+                            rte="DB"
+                            >{{ 1234.45667 | currency }}</span
+                        >
+                    </div>
+                </div>
+
+                <span class="inputs-sub-group-name" rte="DC"
+                    >Additional formats</span
+                >
+                <div class="inputs-group-row" rte="DD">
+                    <label class="inputs-group-row-name" rte="DE"
+                        >SemiDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="DF">
+                        <span
+                            class="form-control form-control-static"
+                            rte="DG"
+                            >{{ getMomentDate("dddd, MMMM DD h:mm a") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="DH">
+                    <label class="inputs-group-row-name" rte="DI"
+                        >ShortNoYear:</label
+                    >
+                    <div class="inputs-group-row-value" rte="DJ">
+                        <span
+                            class="form-control form-control-static"
+                            rte="DK"
+                            >{{ getMomentDate("ddd, MMM DD") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="DL">
+                    <label class="inputs-group-row-name" rte="DM"
+                        >ShortDTNoYear:</label
+                    >
+                    <div class="inputs-group-row-value" rte="DN">
+                        <span
+                            class="form-control form-control-static"
+                            rte="DO"
+                            >{{ getMomentDate("ddd, MMM DD HH:mm") }}</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Specifically set" rte="DP">
+            <div class="inputs-group right-aligned-labels" rte="DQ">
+                <span class="inputs-sub-group-name" rte="DR"
+                    >PrimeNG calendar control</span
+                >
+                <div class="inputs-group-row" rte="DS">
+                    <label class="inputs-group-row-name" rte="DT">Date:</label>
+                    <div class="inputs-group-row-value" rte="DU">
+                        <p-calendar
+                            [(ngModel)]="calendarDate"
+                            [showTime]="true"
+                            [showIcon]="true"
+                            rte="DV"
+                        ></p-calendar>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="DW">
+                    <label class="inputs-group-row-name" rte="DX"
+                        >Cultures:</label
+                    >
+                    <div class="inputs-group-row-value" rte="DY">
+                        <p-dropdown
+                            [(ngModel)]="selectedCulture"
+                            [options]="cultures"
+                            [style]="{ width: '160px' }"
+                            rte="DZ"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="inputs-group right-aligned-labels no-labels-padding"
+                rte="E0"
+            >
+                <span class="inputs-sub-group-name" rte="E1"
+                    >MomentJS date formats</span
+                >
+                <div class="inputs-group-row" rte="E2">
+                    <label class="inputs-group-row-name" rte="E3"
+                        >ShortTime:</label
+                    >
+                    <div class="inputs-group-row-value" rte="E4">
+                        <span
+                            class="form-control form-control-static"
+                            rte="E5"
+                            >{{ getMomentDate("LT") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="E6">
+                    <label class="inputs-group-row-name" rte="E7"
+                        >MediumTime:</label
+                    >
+                    <div class="inputs-group-row-value" rte="E8">
+                        <span
+                            class="form-control form-control-static"
+                            rte="E9"
+                            >{{ getMomentDate("LTS") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Ea">
+                    <label class="inputs-group-row-name" rte="Eb"
+                        >ShortDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Ec">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Ed"
+                            >{{ getMomentDate("L") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Ee">
+                    <label class="inputs-group-row-name" rte="Ef"
+                        >Short date 2:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Eg">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Eh"
+                            >{{ getMomentDate("l") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Ei">
+                    <label class="inputs-group-row-name" rte="Ej"
+                        >LongDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Ek">
+                        <span
+                            class="form-control form-control-static"
+                            rte="El"
+                            >{{ getMomentDate("LL") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Em">
+                    <label class="inputs-group-row-name" rte="En"
+                        >MediumDate:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Eo">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Ep"
+                            >{{ getMomentDate("ll") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Eq">
+                    <label class="inputs-group-row-name" rte="Er"
+                        >Medium:</label
+                    >
+                    <div class="inputs-group-row-value" rte="Es">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Et"
+                            >{{ getMomentDate("LLL") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Eu">
+                    <label class="inputs-group-row-name" rte="Ev">Short:</label>
+                    <div class="inputs-group-row-value" rte="Ew">
+                        <span
+                            class="form-control form-control-static"
+                            rte="Ex"
+                            >{{ getMomentDate("lll") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="Ey">
+                    <label class="inputs-group-row-name" rte="Ez">Full:</label>
+                    <div class="inputs-group-row-value" rte="EA">
+                        <span
+                            class="form-control form-control-static"
+                            rte="EB"
+                            >{{ getMomentDate("LLLL") }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="EC">
+                    <label class="inputs-group-row-name" rte="ED"
+                        >Full 2:</label
+                    >
+                    <div class="inputs-group-row-value" rte="EE">
+                        <span
+                            class="form-control form-control-static"
+                            rte="EF"
+                            >{{ getMomentDate("llll") }}</span
+                        >
+                    </div>
+                </div>
+
+                <span class="inputs-sub-group-name" rte="EG"
+                    >Angular number formats</span
+                >
+                <div class="inputs-group-row" rte="EH">
+                    <label class="inputs-group-row-name" rte="EI"
+                        >Percent:</label
+                    >
+                    <div class="inputs-group-row-value" rte="EJ">
+                        <span
+                            class="form-control form-control-static"
+                            rte="EK"
+                            >{{ 1234.45667 | percent }}</span
+                        >
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="EL">
+                    <label class="inputs-group-row-name" rte="EM"
+                        >Currency:</label
+                    >
+                    <div class="inputs-group-row-value" rte="EN">
+                        <span
+                            class="form-control form-control-static"
+                            rte="EO"
+                            >{{ 1234.45667 | currency }}</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Timezones" rte="EP">
+            <div class="inputs-group right-aligned-labels" rte="EQ">
+                <span class="inputs-sub-group-name" rte="ER"
+                    >Date posted to the server and received from it should be
+                    the same for all time zones.</span
+                >
+                <div class="inputs-group-row" rte="ES">
+                    <label class="inputs-group-row-name" rte="ET">Date:</label>
+                    <div class="inputs-group-row-value" rte="EU">
+                        <p-calendar
+                            [(ngModel)]="calendarDate"
+                            [showTime]="true"
+                            [showIcon]="true"
+                            rte="EV"
+                        ></p-calendar>
+                    </div>
+                </div>
+                <div class="inputs-group-row no-label-padding" rte="EW">
+                    <label class="inputs-group-row-name" rte="EX"
+                        >Current Timezone:</label
+                    >
+                    <div class="inputs-group-row-value" rte="EY">
+                        <span rte="EZ">{{ getTimeZone() }}</span>
+                    </div>
+                </div>
+
+                <div class="inputs-group-row" rte="F0">
+                    <button
+                        type="button"
+                        pButton
+                        label="Post Date To Server"
+                        class="margin-top-20"
+                        (click)="onPostDate()"
+                        rte="F1"
+                    ></button>
+                </div>
+                <div class="inputs-group-row no-label-padding" rte="F2">
+                    <label class="inputs-group-row-name" rte="F3"
+                        >Date from server:</label
+                    >
+                    <div class="inputs-group-row-value" rte="F4">
+                        <span rte="F5">{{
+                            returnedDate | date : "dd-MM-yyyy HH:mm:ss Z"
+                        }}</span>
+                    </div>
+                </div>
+                <div class="inputs-group-row" rte="F6">
+                    <label class="inputs-group-row-name" rte="F7"
+                        >Calendar with server date:</label
+                    >
+                    <div class="inputs-group-row-value" rte="F8">
+                        <p-calendar
+                            [(ngModel)]="returnedDate"
+                            [showTime]="true"
+                            [showIcon]="true"
+                            rte="F9"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</div>

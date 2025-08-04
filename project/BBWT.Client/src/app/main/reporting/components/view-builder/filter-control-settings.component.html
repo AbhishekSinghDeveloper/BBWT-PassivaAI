@@ -1,0 +1,282 @@
+<p-fieldset legend="UI Controls" class="ui-controls-fieldset">
+    <div class="buttons-panel buttons-panel-bottom-margin">
+        <button pButton
+                icon="pi pi-plus"
+                type="button"
+                label="Add"
+                class="p-button-outlined"
+                [disabled]="!_vbc.queryColumnsOptions?.length"
+                (click)="_onAddControlClick()">
+        </button>
+    </div>
+    <div *ngIf="!sectionEditorComponent.section.view?.filters?.length; else controlsTable">
+        There are currently no UI controls in this section. Click on "+ Add" to add a UI control.
+    </div>
+    <ng-template #controlsTable>
+        <p-table #table
+                 [columns]="_tableColumns"
+                 dataKey="parameterId"
+                 [reorderableColumns]="true"
+                 [lazy]="false"
+                 [loading]="_loading || _vbc.controllerLoading"
+                 [paginator]="false"
+                 [responsive]="true"
+                 [value]="sectionEditorComponent.section.view.filters"
+                 class="ui-controls-settings-table"
+                 (onRowReorder)="_onRowReordered($event)">
+            <ng-template pTemplate="header">
+                <tr rte="1lU">
+                    <th style="width: 3rem"></th>
+                    <th>Control Name</th>
+                    <th>Hint Text</th>
+                    <th>Control Type</th>
+                    <th>Linked Filters</th>
+                    <th [style.width]="'9rem'">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-filterControl let-index="rowIndex" let-rowData let-expanded="expanded">
+                <tr [pReorderableRow]="index" rte="1lY" class="reorderable-row">
+                    <td rte="1m1">
+                        <span class="pi pi-bars" pReorderableRowHandle rte="1m2"></span>
+                    </td>
+                    <td><a href="#" (click)="_onEditFilterControlClick(rowData, rowIndex); $event.preventDefault();" class="query-expr-ui-control">{{filterControl["name"]}}</a></td>
+                    <td>{{filterControl["hintText"]}}</td>
+                    <td>{{filterControl["inputType"]}}</td>
+                    <td>
+                        <div *ngFor="let s of _linkedFiltersExpressionsMap[rowData.id]"
+                             class="linked-filter-expr-row"
+                             [innerHtml]="s">
+                        </div>
+                    </td>
+                    <td>
+                        <button pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-pencil"
+                                (click)="_onEditFilterControlClick(rowData, rowIndex)"
+                                class="p-button-rounded p-button-text">
+                        </button>
+                        <button pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-trash"
+                                (click)="_onDeleteFilterControlClick(rowData, rowIndex)"
+                                class="p-button-rounded p-button-text p-button-danger">
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+</p-fieldset>
+
+<p-dialog *ngIf="_displayEditControlDialog"
+          [(visible)]="_displayEditControlDialog"
+          [header]="!_editingControl.id ? 'Add UI Control' : 'Edit UI Control'"
+          [modal]="true"
+          [draggable]="false"
+          [style]="{'max-width': '600px', width: '100%'}">
+    <form #form="ngForm" class="inputs-group">
+        <ng-container *ngIf="_linkedFiltersExpressionsMap[_editingControl.id]?.length; then hasBindings else noBindings">
+        </ng-container>
+        <ng-template #hasBindings>
+            <div class="inputs-sub-group-name">Linked Filters</div>
+            <div class="edit-control-bindings">
+                <div *ngFor="let expression of _linkedFiltersExpressionsMap[_editingControl.id]"
+                     class="linked-filter-expr-row" 
+                     [innerHtml]="expression">
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #noBindings>
+            <div class="inputs-group-row">
+                <div class="inputs-group-row-value">
+                    <p-checkbox [(ngModel)]="_editControlCreateFilter"
+                                [binary]="true"
+                                label="Also create new filter"
+                                id="editControlCreateFilter"
+                                name="editControlCreateFilter"
+                                (onChange)="_onCreateFilterCheckboxChanged()">
+                    </p-checkbox>
+                </div>
+            </div>
+            <ng-container *ngIf="_editControlCreateFilter">
+                <div class="inputs-group-row">
+                    <label class="inputs-group-row-name asterisk-mark">Table column:</label>
+                    <div class="inputs-group-row-value">
+                        <p-dropdown [(ngModel)]="_editControlFilterTableColumnId"
+                                    [options]="_vbc.queryColumnsOptions"
+                                    [filter]="true"
+                                    appendTo="body"
+                                    id="editControlFilterTableColumnId"
+                                    name="editControlFilterTableColumnId"
+                                    required
+                                    placeholder="Select column"
+                                    (ngModelChange)="_onFilterTableColumnChanged()">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div *ngIf="_editControlFilterTableColumnId" class="inputs-group-row">
+                    <label class="inputs-group-row-name asterisk-mark">Filter condition:</label>
+                    <div class="inputs-group-row-value">
+                        <p-dropdown [(ngModel)]="_editControlFilterCondition"
+                                    [options]="_queryRulesOptions"
+                                    appendTo="body"
+                                    id="editControlFilterCondition"
+                                    name="editControlFilterCondition"
+                                    required>
+                        </p-dropdown>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-template>
+        <ng-container *ngIf="!_refreshing">
+            <div class="inputs-sub-group-name">UI Control Settings</div>
+            <div class="inputs-group-row">
+                <label for="controlName" class="inputs-group-row-name asterisk-mark">Control name:</label>
+                <div class="inputs-group-row-value">
+                    <input #name="ngModel"
+                           [(ngModel)]="_editingControl.name"
+                           pInputText
+                           [pKeyFilter]="_patternControlName"
+                           id="controlName"
+                           name="controlName"
+                           notEmpty
+                           autofocus
+                           maxlength="500" />
+                    <span *ngIf="!_editingControlNameIsUnique(_editingControl.name)" class="validation-error">The name must be unique.</span>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label class="inputs-group-row-name asterisk-mark">Control type:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="_editingControl.inputType"
+                                [options]="_vbc.possibleFilterInputTypesOfClrTypesMap['default']"
+                                appendTo="body"
+                                id="inputType"
+                                name="inputType"
+                                (onChange)="_onInputTypeChanged()">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div *ngIf="_filterDataTypeSelectionAvailable()" class="inputs-group-row">
+                <label class="inputs-group-row-name asterisk-mark">Data type:</label>
+                <div class="inputs-group-row-value">
+                    <p-dropdown [(ngModel)]="_editingControl.dataType"
+                                [options]="_dataTypesOptions"
+                                appendTo="body"
+                                id="filterDataType"
+                                name="filterDataType">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <label for="hintText" class="inputs-group-row-name asterisk-mark">Hint text:</label>
+                <div class="inputs-group-row-value">
+                    <input [(ngModel)]="_editingControl.hintText"
+                           pInputText id="hintText"
+                           name="hintText"
+                           notEmpty
+                           maxlength="500" />
+                </div>
+            </div>
+            <ng-container *ngIf="_editingControl.inputType === _filterInputTypeEnum.Dropdown || _editingControl.inputType === _filterInputTypeEnum.Multiselect">
+                <div class="inputs-group-row" rte="1mk">
+                    <label class="inputs-group-row-name asterisk-mark" rte="1ml">
+                        Source table:
+                        <bb-tooltip message="The DB table to be used to populate the dropdown"></bb-tooltip>
+                    </label>
+                    <div class="inputs-group-row-value" rte="1mm">
+                        <p-dropdown [(ngModel)]="_editingControl.extraSettings.sourceDbDocTableId"
+                                    [options]="_sourceTableOptions"
+                                    [filter]="true"
+                                    optionLabel="staticData.tableName"
+                                    optionValue="tableId"
+                                    appendTo="body"
+                                    placeholder="Select table"
+                                    id="sourceDbDocTableId"
+                                    name="sourceDbDocTableId"
+                                    required
+                                    (onChange)="_onOptionsSourceTableChanged()">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <ng-container *ngIf="_editingControl.extraSettings.sourceDbDocTableId && !_dropDownSourceTableColumnOptionsLoading">
+                    <div class="inputs-group-row" rte="1mo">
+                        <label class="inputs-group-row-name asterisk-mark" rte="1mp">
+                            Display field:
+                            <bb-tooltip message="The table field to show in the dropdown to end-user"></bb-tooltip>
+                        </label>
+                        <div class="inputs-group-row-value" rte="1mq">
+                            <p-dropdown [(ngModel)]="_editingControl.extraSettings.labelDbDocColumnId"
+                                        [options]="_sourceTableColumnOptions"
+                                        [filter]="true"
+                                        appendTo="body"
+                                        id="labelDbDocColumnId"
+                                        name="labelDbDocColumnId"
+                                        required
+                                        placeholder="Select column">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="inputs-group-row" rte="1ms">
+                        <label class="inputs-group-row-name asterisk-mark" rte="1mt">
+                            Value field:
+                            <bb-tooltip message="The table field to retrieve when end-user makes a selection"></bb-tooltip>
+                        </label>
+                        <div class="inputs-group-row-value" rte="1mu">
+                            <p-dropdown [(ngModel)]="_editingControl.extraSettings.valueDbDocColumnId"
+                                        [options]="_sourceTableColumnOptions"
+                                        [filter]="true"
+                                        appendTo="body"
+                                        id="valueDbDocColumnId"
+                                        name="valueDbDocColumnId"
+                                        required
+                                        placeholder="Select column">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <div class="inputs-sub-group-name">Advanced Settings</div>
+            <div class="inputs-group-row">
+                <div *ngIf="_userCanChangeOperator(_editingControl.inputType)" class="inputs-group-row-value">
+                    <p-checkbox [(ngModel)]="_editingControl.userCanChangeOperator"
+                                [binary]="true"
+                                label="Allow end-user to change the relational operator"
+                                id="userCanChangeOperator"
+                                name="userCanChangeOperator">
+                    </p-checkbox>
+                </div>
+            </div>
+            <div class="inputs-group-row">
+                <div *ngIf="_editingControl.userCanChangeOperator || _editingControl.inputType === _filterInputTypeEnum.Calendar || _editingControl.inputType === _filterInputTypeEnum.Checkbox || _editingControl.inputType === _filterInputTypeEnum.Dropdown || _editingControl.inputType === _filterInputTypeEnum.Multiselect" class="inputs-group-row-value">
+                    <p-checkbox [(ngModel)]="_editingControl.autoSubmitInput"
+                                [binary]="true"
+                                label="Auto-submit input"
+                                id="autoSubmitInput"
+                                name="autoSubmitInput">
+                    </p-checkbox>
+                </div>
+            </div>
+        </ng-container>
+    </form>
+
+    <p-footer>
+        <button pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="_displayEditControlDialog = false">
+            <i class="material-icons">clear</i>
+        </button>
+        <button pButton
+                type="submit"
+                [label]="!_editingControl.id ? 'Add' : 'Save'"
+                [loading]="_loading"
+                [disabled]="form.invalid || !_editingControlNameIsUnique(_editingControl.name)"
+                (click)="_onSubmitFilterControlClick()">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>

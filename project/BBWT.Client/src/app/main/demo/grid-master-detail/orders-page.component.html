@@ -1,0 +1,39 @@
+<div class="card--hidden" rte="lK">
+    <h1 rte="lL">Page Edit</h1>
+
+    <span class="page-sub-header" rte="lM"
+        >Demonstration of view-based editing in a grid component.</span
+    >
+
+    <p rte="lN">
+        You can
+        <data-generation
+            startGenerationMethodName="GenerateOrders"
+            (generationCompleted)="onGenerationCompleted()"
+            rte="lO"
+        ></data-generation>
+        for this page.
+    </p>
+
+    <grid
+        [gridSettings]="gridSettings"
+        [tableSettings]="tableSettings"
+        [(selection)]="selection"
+        rte="1iz"
+    ></grid>
+
+    <div *ngIf="selection?.length" class="p-g selected-data" rte="lR">
+        <h4 rte="lS">Selected Data</h4>
+        <div *ngFor="let item of selection" class="p-g-12" rte="lT">
+            <div class="p-g-12 p-md-4" rte="lU">
+                Customer code: {{ item["customerCode"] }}
+            </div>
+            <div class="p-g-12 p-md-4" rte="lV">
+                Order date: {{ item["orderDate"] | date : "dd/MM/yyyy" }}
+            </div>
+            <div class="p-g-12 p-md-4" rte="lW">
+                Required date: {{ item["requiredDate"] | date : "dd/MM/yyyy" }}
+            </div>
+        </div>
+    </div>
+</div>

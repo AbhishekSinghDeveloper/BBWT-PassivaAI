@@ -1,0 +1,28 @@
+<ng-container *ngIf="jobParametersItems.length || parameters.value.length" [formGroup]="pF">
+    <div class="inputs-group-row" rte="1kv">
+        <label class="inputs-group-row-name no-label-padding" rte="1kw">Parameters: </label>
+        <div class="inputs-group-row-value" formArrayName="parameters" rte="1kx">
+            <bbwt-aws-event-bridge-job-parameter *ngFor="let control of parameters.controls"
+                                                 [formControl]="control"
+                                                 [paramInfo]="getParamInfo(control.value.name)"
+                                                 (remove)="removeParameter($event)" rte="1ky">
+            </bbwt-aws-event-bridge-job-parameter>
+
+            <ng-container *ngIf="displayAddParameter">
+                <button *ngIf="jobParametersItems.length"
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-plus"
+                        class="p-button-rounded p-button-text"
+                        (click)="availableParametersMenu.toggle($event)" rte="1kz">
+                </button>
+                <p-tieredMenu #availableParametersMenu
+                              [model]="jobParametersItems"
+                              [popup]="true"
+                              appendTo="body" rte="1kA">
+                </p-tieredMenu>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,37 @@
+@import "screenMixins";
+
+.pwa-sidebar {
+    .p-sidebar-header {
+        position: absolute;
+        right: 0.75rem;
+        top: 0.75rem;
+        z-index: 1;
+    }
+    .pwa-banner-content {
+        display: flex;
+        align-items: center;
+        width: calc(#{100%} - 65px);
+
+        .pwa-text {
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+        .p-button .p-button-label {
+            padding-left: 5px;
+        }
+
+        @include for-phone-only {
+            width: 100%;
+            flex-wrap: wrap;
+
+            .pwa-text {
+                padding-right: 35px;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .p-button {
+                margin-left: auto;
+            }
+        }
+    }
+}

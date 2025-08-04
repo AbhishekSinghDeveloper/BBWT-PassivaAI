@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <TargetLatestRuntimePatch>false</TargetLatestRuntimePatch>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.7.104.17" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\BBWM.AppConfiguration\BBWM.AppConfiguration.csproj" />
+        <ProjectReference Include="..\BBWM.FileStorage\BBWM.FileStorage.csproj" />
+    </ItemGroup>
+</Project>

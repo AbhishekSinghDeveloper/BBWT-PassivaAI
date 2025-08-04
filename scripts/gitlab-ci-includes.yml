@@ -1,0 +1,504 @@
+.build_base_frontend:
+  stage: build
+  before_script:
+    - 'sed -i "0,/__rollbar_flag__/s//true/" project/BBWT.Client/src/app/bbwt/modules/logging/rollbar.ts'
+    - 'sed -i "s#__rollbar_environment__#${ENVIRONMENT}#g" project/BBWT.Client/src/app/bbwt/modules/logging/rollbar.ts'
+    - 'sed -i "s#__rollbar_server_token__#${ROLLBAR_SERVER_TOKEN}#g" project/BBWT.Client/extra-webpack.config.prod.js'
+    - 'sed -i "s#__rollbar_client_token__#${ROLLBAR_CLIENT_TOKEN}#g" project/BBWT.Client/src/app/bbwt/modules/logging/rollbar.ts'
+    - 'sed -i "s#__rollbar_source_map_version__#${CI_COMMIT_SHA}#g" project/BBWT.Client/src/app/bbwt/modules/logging/rollbar.ts project/BBWT.Client/extra-webpack.config.prod.js'
+    - 'sed -i "s#__rollbar_public_path__#https://${CI_PROJECT_NAME}-${ENVIRONMENT}.blueberrytest.com/dist#g" project/BBWT.Client/extra-webpack.config.prod.js'
+    - 'sed -i "0,/__raygun_flag__/s//true/" project/BBWT.Client/src/app/bbwt/modules/logging/raygun.ts'
+    - 'sed -i "s#__raygun_version__#${CI_COMMIT_SHA}#g" project/BBWT.Client/src/app/bbwt/modules/logging/raygun.ts'
+    - 'sed -i "s#__raygun_api_key__#${RAYGUN_API_KEY}#g" project/BBWT.Client/src/app/bbwt/modules/logging/raygun.ts'
+  script:
+    - 'echo "Front code build started at: `date +"%T"`"'
+    - 'pushd ${CI_PROJECT_DIR}/project/BBWT.Client/'
+    - 'npm ci'
+    - 'npm run lint'
+    - >
+      if [ "${BUILD_CONFIGURATION}" == "Debug" ]; then
+        npm run build
+      else
+        npm run build:prod
+      fi;
+  artifacts:
+    name: '${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}'
+    paths:
+      - project/BBWT.Client/wwwroot
+
+.build_base_backend:
+  stage: build
+  variables:
+    # names of huge dll-files to delete from a non-relevant build
+    # e.g. if a build is for Linux, we delete the Windows dll, no need in it
+    JSREPORT_DLL_LINUX:   'jsreport.Binary.Linux.dll'
+    JSREPORT_DLL_WINDOWS: 'jsreport.Binary.dll'
+  script:
+    - 'echo "Back code build started at: `date +"%T"`"'
+    - 'dotnet publish ${BUILD_EXTRA_OPTS} -c ${BUILD_CONFIGURATION} -o ${CI_PROJECT_DIR}/build/ /p:Version=${BBWT_VERSION}-${CI_PIPELINE_ID}-${CI_COMMIT_SHORT_SHA}-${CI_PROJECT_NAME}-${CI_PROJECT_ID} project/BBWT.Server/BBWT.Server.csproj'
+    - 'echo "Back code build finished at: `date +"%T"`"'
+  after_script:
+    - 'find ./build/ -type f -name "*.js.map" -exec rm {} \;'
+    - |
+      echo "Deleting non-relevant huge jsreport dll-files..."
+      if [[ ${CI_JOB_NAME} =~ 'generic' ]]; then
+        # delete both
+        find ./build/ -type f -name ${JSREPORT_DLL_LINUX}   -ls -exec rm {} \;
+        find ./build/ -type f -name ${JSREPORT_DLL_WINDOWS} -ls -exec rm {} \;
+      #elif [[ ${CI_JOB_NAME} =~ 'linux' ]]; then
+      #  # delete windows
+      #  find ./build/ -type f -name ${JSREPORT_DLL_WINDOWS} -ls -exec rm {} \;
+      #elif [[ ${CI_JOB_NAME} =~ 'win-x64' ]] || [[ ${CI_JOB_NAME} =~ 'windows' ]]; then
+      #  # delete linux
+      #  find ./build/ -type f -name ${JSREPORT_DLL_LINUX}   -ls -exec rm {} \;
+      fi
+    - 'echo "The artifacts folder size:"'
+    - 'du -d 0 -h build'
+  artifacts:
+    name: '${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}'
+    paths:
+      - build
+
+.build_formio_frontend:
+  stage: build
+  image: node:18-bullseye
+  script:
+    - 'pushd ${CI_PROJECT_DIR}/project/BBWT.Client.Formio'
+    - 'npm install -g @angular/cli'
+    - 'npm install --save --legacy-peer-deps'
+    - 'npm run build'
+  artifacts:
+    name: '${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}'
+    paths:
+      - project/BBWT.Client.Formio/dist
+
+
+.migrate_base_mysql:
+  stage: migrate
+  variables:
+    REQUIRED_VARS: 'DB_HOST DB_USER DB_PASS DB_APP_DBNAME DB_AUDIT_DBNAME'
+  script:
+    # check if all required variables were provided; exit with error otherwise
+    - |
+      for VAR in ${REQUIRED_VARS} ; do if [ -z "${!VAR}" ]; then MISSED_VARS="${MISSED_VARS} ${VAR}"; fi; done
+      if [ -n "${MISSED_VARS}" ] ; then
+        echo "Error: some of required variables have empty values. They must be specified for this CI-job. List of missing variables:"
+        echo ${MISSED_VARS}
+        exit 1
+      fi
+    # checking if there's active migration at the moment
+    - 'EXISTING_WINDOW_JSON="$(curl -s -L ${URL} -D - -o /dev/null | grep maintenance || true)"'
+    - >
+      if [[ -n ${EXISTING_WINDOW_JSON} ]]; then
+        EXISTING_WINDOW_JSON=$(echo ${EXISTING_WINDOW_JSON} | tr -d '\r' | sed -En 's/^maintenance: (.*)/\1/p');
+        echo "Existing migration";
+        echo;
+        echo ${EXISTING_WINDOW_JSON} | jq -r .;
+        echo;
+        echo Stopping now.;
+        exit 1;
+      fi;
+    # prepare small config-file for running migrations only
+    - 'cd build'
+    - |
+      jq -n \
+      --arg a "server=${DB_HOST};port=3306;database=${DB_APP_DBNAME};Uid=${DB_USER};Pwd=${DB_PASS}" \
+      --arg b "server=${DB_HOST};port=3306;database=${DB_AUDIT_DBNAME};Uid=${DB_USER};Pwd=${DB_PASS}" \
+      '
+      {
+        "DatabaseConnectionSettings": {
+          "DatabaseType": "mysql"
+        },
+        "migrate": "true",
+        "ConnectionStrings": {
+          "MySqlConnection": $a,
+          "AuditMySqlConnection": $b
+        },
+        "Serilog": {
+          "MinimumLevel": {
+            "Default": "Information"
+          },
+          "WriteTo": [{
+            "Name": "RollingFile",
+            "Args": {
+              "pathFormat": "logs/bbwt3-{Date}.txt",
+              "fileSizeLimitBytes": "734003200",
+              "buffered": true,
+              "restrictedToMinimumLevel": "Information"
+            }
+          }]
+        }
+      }' > appsettings.Development.json
+    # prepare to run the migrations
+    - >
+      MIGRATION_BEGIN_DATE="$(date -u)";
+      export MIGRATION_BEGIN="$(date -u -d "${MIGRATION_BEGIN_DATE}" +%Y-%m-%dT%T%zZ)";
+      export MIGRATION_END="$(date -u -d "${MIGRATION_BEGIN_DATE} +15 minutes" +%Y-%m-%dT%T%zZ)";
+      export PAYLOAD="$(jq -n --arg a ${MIGRATION_BEGIN} --arg b ${MIGRATION_END} --arg c ${MIGRATION_GUID} --arg d "Currently deploying ${CI_COMMIT_SHA}" '{Start:$a, End:$b, Guid:$c, Message:$d}')";
+      echo "${PAYLOAD}";
+      echo;
+      echo "Opening migration window ${MIGRATION_BEGIN} --> ${MIGRATION_END}";
+      curl -sS -X POST -H 'Content-Type: application/json' -d "${PAYLOAD}" ${URL}/api/maintenance;
+      echo;
+      echo "Running the migrations...";
+    # run the migrations with the application, built on previous stage
+    - './BBWT.Server'
+    - 'echo "Done!"'
+  artifacts:
+    name: '${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}'
+    paths:
+      - build/logs
+    when: always
+
+.migrate_base_mssql:
+  stage: migrate
+  variables:
+    REQUIRED_VARS: 'DB_HOST DB_USER DB_PASS DB_APP_DBNAME DB_AUDIT_DBNAME'
+  script:
+    # check if all required variables were provided; exit with error otherwise
+    - |
+      for VAR in ${REQUIRED_VARS} ; do if [ -z "${!VAR}" ]; then MISSED_VARS="${MISSED_VARS} ${VAR}"; fi; done
+      if [ -n "${MISSED_VARS}" ] ; then
+        echo "Error: some of required variables have empty values. They must be specified for this CI-job. List of missing variables:"
+        echo ${MISSED_VARS}
+        exit 1
+      fi
+    # checking if there's active migration at the moment
+    - 'EXISTING_WINDOW_JSON="$(curl -s -L ${URL} -D - -o /dev/null | grep maintenance || true)"'
+    - >
+      if [[ -n ${EXISTING_WINDOW_JSON} ]]; then
+        EXISTING_WINDOW_JSON=$(echo ${EXISTING_WINDOW_JSON} | tr -d '\r' | sed -En 's/^maintenance: (.*)/\1/p');
+        echo "Existing migration";
+        echo;
+        echo ${EXISTING_WINDOW_JSON} | jq -r .;
+        echo;
+        echo Stopping now.;
+        exit 1;
+      fi;
+    # prepare small config-file for running migrations only
+    - 'cd build'
+    - |
+      jq -n \
+      --arg a "Data Source=${DB_HOST};Initial Catalog=${DB_APP_DBNAME};Uid=${DB_USER};Pwd=${DB_PASS};Encrypt=False" \
+      --arg b "Data Source=${DB_HOST};Initial Catalog=${DB_AUDIT_DBNAME};Uid=${DB_USER};Pwd=${DB_PASS};Encrypt=False" \
+      '
+      {
+        "DatabaseConnectionSettings": {
+          "DatabaseType": "mssql"
+        },
+        "migrate": "true",
+        "ConnectionStrings": {
+          "DefaultConnection": $a,
+          "AuditConnection": $b
+        },
+        "Serilog": {
+          "MinimumLevel": {
+            "Default": "Information"
+          },
+          "WriteTo": [{
+            "Name": "RollingFile",
+            "Args": {
+              "pathFormat": "logs/bbwt3-{Date}.txt",
+              "fileSizeLimitBytes": "734003200",
+              "buffered": true,
+              "restrictedToMinimumLevel": "Information"
+            }
+          }]
+        }
+      }' > appsettings.Development.json
+    # prepare to run the migrations
+    - >
+      MIGRATION_BEGIN_DATE="$(date -u)";
+      export MIGRATION_BEGIN="$(date -u -d "${MIGRATION_BEGIN_DATE}" +%Y-%m-%dT%T%zZ)";
+      export MIGRATION_END="$(date -u -d "${MIGRATION_BEGIN_DATE} +15 minutes" +%Y-%m-%dT%T%zZ)";
+      export PAYLOAD="$(jq -n --arg a ${MIGRATION_BEGIN} --arg b ${MIGRATION_END} --arg c ${MIGRATION_GUID} --arg d "Currently deploying ${CI_COMMIT_SHA}" '{Start:$a, End:$b, Guid:$c, Message:$d}')";
+      echo "${PAYLOAD}";
+      echo;
+      echo "Opening migration window ${MIGRATION_BEGIN} --> ${MIGRATION_END}";
+      curl -sS -X POST -H 'Content-Type: application/json' -d "${PAYLOAD}" ${URL}/api/maintenance;
+      echo;
+      echo "Running the migrations...";
+    # run the migrations with the application, built on previous stage
+    - './BBWT.Server'
+    - 'echo "Done!"'
+  artifacts:
+    name: '${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}'
+    paths:
+      - build/logs
+    when: always
+
+
+
+.deploy_base_windows:
+  image: gitlab-registry.bbconsult.co.uk/blueberry/bbwt3-deploy:latest
+  stage: deploy
+  variables:
+    DB_HOST_APP:     '.'
+    DB_APP_DBNAME:   ${CI_PROJECT_NAME}
+    DB_AUDIT_DBNAME: ${CI_PROJECT_NAME}-audit
+    DB_LOGS_DBNAME:  ${CI_PROJECT_NAME}-logs
+    DB_DEMO_DBNAME:  ${CI_PROJECT_NAME}-demo
+
+    IIS_ROOT:       'D:\\IIS_ROOT'
+    WEBSITE_FOLDER: 'bbwt3'
+    WEBSITE_NAME:   'bbwt3'
+    APPPOOL_NAME:   'bbwt3'
+
+    SERVER_PORT: 12
+    SERVER_USER: 'Administrator'
+    SERVER_DEPLOY_VOLUME: 'D'
+
+    REQUIRED_VARS:  'ASPNETCORE_ENVIRONMENT DB_USER DB_PASS SERVER_IP SERVER_KEY'
+
+  before_script:
+    - 'echo "${SERVER_KEY}" > ${HOME}/ssh.key'
+    - 'chmod 600 ${HOME}/ssh.key'
+  script:
+    # check if all required variables were provided; exit with error otherwise
+    - |
+      for VAR in ${REQUIRED_VARS} ; do if [ -z "${!VAR}" ]; then MISSED_VARS="${MISSED_VARS} ${VAR}"; fi; done
+      if [ -n "${MISSED_VARS}" ] ; then
+        echo "Error: some of required variables have empty values. They must be specified for this CI-job. List of missing variables:"
+        echo ${MISSED_VARS}
+        exit 1
+      fi
+    # checking if the ASPNETCORE_ENVIRONMENT var was defined correctly.
+    - |
+      DEPLOY_ENVIRONMENTS=`printf ${DEPLOY_ENVIRONMENTS} | tr ',' '|'`
+      if ! printf "${ASPNETCORE_ENVIRONMENT}" | egrep -q "^(${DEPLOY_ENVIRONMENTS})$" ; then
+        echo "Error: ASPNETCORE_ENVIRONMENT variable has invalid value. It should be one of from the list defined in DEPLOY_ENVIRONMENTS variable of .gitlab-ci.yml"
+        exit 1
+      fi
+    - 'cd build'
+    # preparing config-files
+    # - write env.vars to web.config file
+    - |
+      XMLPATH_ASPNETCORE="configuration/location[@path='.']/system.webServer/aspNetCore"
+      if ! xmlstarlet sel -Q -t -c "//${XMLPATH_ASPNETCORE}" web.config ; then
+        # expected path not found, testing another one from older version
+        XMLPATH_ASPNETCORE="configuration/system.webServer/aspNetCore"
+        if ! xmlstarlet sel -Q -t -c "//${XMLPATH_ASPNETCORE}" web.config ; then
+          # even older one doesn't exist, we won't be able to write env.vars as we don't know the path
+          echo "Correct XML Path to aspNetCore section was not found in web.config."
+          echo "Check if you have proper web.config file."
+          exit 1
+        fi
+      fi
+      # check if environmentVariables section exists and add it only if it doesn't
+      if ! xmlstarlet sel -Q -t -c "//${XMLPATH_ASPNETCORE}/environmentVariables" web.config ; then
+        xmlstarlet ed -L -s "${XMLPATH_ASPNETCORE}" -t elem -n "environmentVariables" web.config
+      fi
+      # now we're ready to write the env-vars
+      echo "${ENV_DATA}" | egrep -v '^$' | while read ENV_LINE ; do
+        KEY=`echo ${ENV_LINE} | cut -f 1 -d'='`
+        VALUE=`echo ${ENV_LINE} | cut -f 2- -d'='`
+        xmlstarlet ed -L \
+          -s "${XMLPATH_ASPNETCORE}/environmentVariables" -t elem -n "environmentVariable_New" -v "" \
+          -i "//environmentVariable_New" -t attr -n "name"  -v "${KEY}" \
+          -i "//environmentVariable_New" -t attr -n "value" -v "${VALUE}" \
+          -r "//environmentVariable_New" -v "environmentVariable" \
+          web.config
+      done
+    # - update some vars inside of backend web.config according to current values
+    - 'sed -i "s#__ASPNETCORE_ENVIRONMENT__#${ASPNETCORE_ENVIRONMENT}#g" web.config'
+    - 'sed -i "s#__CI_PROJECT_NAME__#${CI_PROJECT_NAME}#g"          web.config'
+    - 'sed -i "s#__DB_HOST__#${DB_HOST_APP}#g"                      web.config'
+    - 'sed -i "s#__DB_USER__#${DB_USER}#g"                          web.config'
+    - 'sed -i "s#__DB_PASS__#${DB_PASS}#g"                          web.config'
+    - 'sed -i "s#__DB_APP_DBNAME__#${DB_APP_DBNAME}#g"              web.config'
+    - 'sed -i "s#__DB_AUDIT_DBNAME__#${DB_AUDIT_DBNAME}#g"          web.config'
+    - 'sed -i "s#__DB_LOGS_DBNAME__#${DB_LOGS_DBNAME}#g"            web.config'
+    - 'sed -i "s#__DB_DEMO_DBNAME__#${DB_DEMO_DBNAME}#g"            web.config'
+    # - preparing the appsettings file for this environment
+    - |
+      jq -n \
+      '{
+        "Serilog": {
+          "MinimumLevel": {
+            "Default": "Information"
+          },
+          "WriteTo": [{
+            "Name": "RollingFile",
+            "Args": {
+              "pathFormat": "logs/bbwt3-{Date}.txt",
+              "fileSizeLimitBytes": "734003200",
+              "buffered": true,
+              "retainedFileCountLimit": 5,
+              "restrictedToMinimumLevel": "Warning"
+            }
+          }]
+        }
+       }' > ${CI_PROJECT_DIR}/appsettings.${ASPNETCORE_ENVIRONMENT}.json
+    # creating an archive with the application: backend and frontend
+    - 'mv ${CI_PROJECT_DIR}/project/BBWT.Client/wwwroot ${CI_PROJECT_DIR}/build/'
+    - 'zip "${CI_PROJECT_DIR}/bbwt3-app.zip" -1 -r ./*'
+    - 'cd ${CI_PROJECT_DIR}'
+    # prepare the deploy-script
+    - 'sed -i "s#__IIS_ROOT__#${IIS_ROOT}#g"                        scripts/app-deploy.bat'
+    - 'sed -i "s#__WEBSITE_FOLDER__#${WEBSITE_FOLDER}#g"            scripts/app-deploy.bat'
+    - 'sed -i "s#__WEBSITE_NAME__#${WEBSITE_NAME}#g"                scripts/app-deploy.bat'
+    - 'sed -i "s#__APPPOOL_NAME__#${APPPOOL_NAME}#g"                scripts/app-deploy.bat'
+    # uploading the app, launching the deployment script
+    - 'scp -i ${HOME}/ssh.key -o StrictHostKeyChecking=no -P ${SERVER_PORT} ${CI_PROJECT_DIR}/appsettings.${ASPNETCORE_ENVIRONMENT}.json bbwt3-app.zip scripts/app-deploy.bat ${SERVER_USER}@${SERVER_IP}:${SERVER_DEPLOY_VOLUME}\:/deploy/'
+    - 'ssh -i ${HOME}/ssh.key -o StrictHostKeyChecking=no -p ${SERVER_PORT} -l ${SERVER_USER} ${SERVER_IP} "${SERVER_DEPLOY_VOLUME}:/deploy/app-deploy.bat ${CI_COMMIT_SHA}"'
+    - 'curl https://api.rollbar.com/api/1/deploy/ -F access_token=${ROLLBAR_SERVER_TOKEN} -F environment=${ASPNETCORE_ENVIRONMENT} -F revision=${CI_COMMIT_SHA} -F local_username="${GITLAB_USER_NAME} (${GITLAB_USER_LOGIN})"'
+
+
+.deploy_base_linux:
+  image: gitlab-registry.bbconsult.co.uk/blueberry/bbwt3-deploy:latest
+  stage: deploy
+  variables:
+    DB_HOST_APP:     'localhost'
+    DB_APP_DBNAME:   ${CI_PROJECT_NAME}
+    DB_AUDIT_DBNAME: ${CI_PROJECT_NAME}-audit
+    DB_LOGS_DBNAME:  ${CI_PROJECT_NAME}-logs
+    DB_DEMO_DBNAME:  ${CI_PROJECT_NAME}-demo
+
+    APP_ROOT:     '/mnt/data/webroot/bbwt3-app'
+    APP_USER:     'bbwt3-app'
+    APP_GROUP:    'bbwt3-app'
+    SYSTEMD_NAME: 'bbwt3-app.service'
+
+    SERVER_PORT:        12
+    SERVER_USER:        'ubuntu'
+    SERVER_DEPLOY_TEMP: '/mnt/data/deploy'
+
+    REQUIRED_VARS:  'ASPNETCORE_ENVIRONMENT DB_USER DB_PASS SERVER_IP SERVER_KEY'
+
+  before_script:
+    - 'echo "${SERVER_KEY}" > ${HOME}/ssh.key'
+    - 'chmod 600 ${HOME}/ssh.key'
+  script:
+    # check if all required variables were provided; exit with error otherwise
+    - |
+      for VAR in ${REQUIRED_VARS} ; do if [ -z "${!VAR}" ]; then MISSED_VARS="${MISSED_VARS} ${VAR}"; fi; done
+      if [ -n "${MISSED_VARS}" ] ; then
+        echo "Error: some of required variables have empty values. They must be specified for this CI-job. List of missing variables:"
+        echo ${MISSED_VARS}
+        exit 1
+      fi
+    # checking if the ASPNETCORE_ENVIRONMENT var was defined correctly
+    - |
+      DEPLOY_ENVIRONMENTS=`printf ${DEPLOY_ENVIRONMENTS} | tr ',' '|'`
+      if ! printf "${ASPNETCORE_ENVIRONMENT}" | egrep -q "^(${DEPLOY_ENVIRONMENTS})$" ; then
+        echo "Error: ASPNETCORE_ENVIRONMENT variable has invalid value. It should be one of from the list defined in DEPLOY_ENVIRONMENTS variable of .gitlab-ci.yml"
+        exit 1
+      fi
+    - 'cd build'
+    # preparing config-files
+    # - write env.vars to appsettings.env file
+    - 'echo "${ENV_DATA}" > ${CI_PROJECT_DIR}/appsettings.env'
+    # - update some vars inside of appsettings.env according to current values
+    - 'sed -i "s#__ASPNETCORE_ENVIRONMENT__#${ASPNETCORE_ENVIRONMENT}#g" ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__CI_PROJECT_NAME__#${CI_PROJECT_NAME}#g"          ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_HOST__#${DB_HOST_APP}#g"                      ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_USER__#${DB_USER}#g"                          ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_PASS__#${DB_PASS}#g"                          ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_APP_DBNAME__#${DB_APP_DBNAME}#g"              ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_AUDIT_DBNAME__#${DB_AUDIT_DBNAME}#g"          ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_LOGS_DBNAME__#${DB_LOGS_DBNAME}#g"            ${CI_PROJECT_DIR}/appsettings.env'
+    - 'sed -i "s#__DB_DEMO_DBNAME__#${DB_DEMO_DBNAME}#g"            ${CI_PROJECT_DIR}/appsettings.env'
+    # - preparing the appsettings file for this environment
+    - |
+      jq -n \
+      '{
+        "Serilog": {
+          "MinimumLevel": {
+            "Default": "Information"
+          },
+          "WriteTo": [{
+            "Name": "RollingFile",
+            "Args": {
+              "pathFormat": "logs/bbwt3-{Date}.txt",
+              "fileSizeLimitBytes": "734003200",
+              "buffered": true,
+              "retainedFileCountLimit": 5,
+              "restrictedToMinimumLevel": "Warning"
+            }
+          }]
+        }
+       }' > ${CI_PROJECT_DIR}/appsettings.${ASPNETCORE_ENVIRONMENT}.json
+    # creating an archive with the application: backend and frontend
+    - 'mv ${CI_PROJECT_DIR}/project/BBWT.Client/wwwroot ${CI_PROJECT_DIR}/build/'
+    - 'zip "${CI_PROJECT_DIR}/bbwt3-app.zip" -1 -r ./*'
+    # uploading the app, launching the deployment script
+    - 'cd ${CI_PROJECT_DIR}'
+    - 'scp -i ${HOME}/ssh.key -o StrictHostKeyChecking=no -P ${SERVER_PORT} bbwt3-app.zip appsettings.${ASPNETCORE_ENVIRONMENT}.json appsettings.env ${SERVER_USER}@${SERVER_IP}:${SERVER_DEPLOY_TEMP}'
+    - >
+      ssh ${SERVER_IP} -l ${SERVER_USER} -p ${SERVER_PORT} -o StrictHostKeyChecking=no -i ${HOME}/ssh.key -T << EOF
+        #stop the web-app;
+        sudo systemctl stop ${SYSTEMD_NAME};
+        #save logs;
+        sudo mv ${APP_ROOT}/logs ${SERVER_DEPLOY_TEMP}/;
+        #purge the APP_ROOT folder;
+        sudo rm -rf ${APP_ROOT}/;
+        #extract archive to APP_ROOT && delete it;
+        sudo unzip ${SERVER_DEPLOY_TEMP}/bbwt3-app.zip -d ${APP_ROOT} && sudo rm ${SERVER_DEPLOY_TEMP}/bbwt3-app.zip;
+        #copy json and env-file to APP_ROOT;
+        sudo mv ${SERVER_DEPLOY_TEMP}/appsettings.${ASPNETCORE_ENVIRONMENT}.json ${APP_ROOT}/;
+        sudo mv ${SERVER_DEPLOY_TEMP}/appsettings.env                            ${APP_ROOT}/;
+        #chown everything in APP_ROOT to app:app;
+        sudo chown ${APP_USER}:${APP_GROUP} -R ${APP_ROOT}/*;
+        #restore logs;
+        sudo mv ${SERVER_DEPLOY_TEMP}/logs ${APP_ROOT}/;
+        #start the web-app;
+        sudo systemctl start ${SYSTEMD_NAME};
+      EOF
+    - 'curl https://api.rollbar.com/api/1/deploy/ -F access_token=${ROLLBAR_SERVER_TOKEN} -F environment=${ASPNETCORE_ENVIRONMENT} -F revision=${CI_COMMIT_SHA} -F local_username="${GITLAB_USER_NAME} (${GITLAB_USER_LOGIN})"'
+
+
+
+.smoke_test_base:
+  image: gitlab-registry.bbconsult.co.uk/blueberry/docker:18.09.4
+  stage: smoke-test
+  variables:
+    ATTEMPTS_MAX: '60'
+    ATTEMPTS_INTERVAL: '10'
+    EXPECTED_RESPONSE_CODE: '200'
+    GIT_STRATEGY: 'none'
+  script:
+    - 'echo Checking availability of ${URL} - max attempts: ${ATTEMPTS_MAX} with interval ${ATTEMPTS_INTERVAL}'
+    - >
+      ATTEMPT=1;
+      while [ "${ATTEMPT}" -le "${ATTEMPTS_MAX}" ]; do
+        # server: we may need ' || exit 0' for the case when the Server header is missing, to properly analyse this fact
+        server=$(curl -LIs "${URL}"|grep -i "Server:"|tail -1|cut -d " " -f2|tr -d "\\r" || exit 0);
+        # code: we must fix the content-length issue for dynamic content; '-I' was added temp. to cope with this
+        code=$(curl -I -L --no-keepalive --silent --write-out "%{response_code}" -o /dev/null --url "${URL}");
+        # pipelineId: we may need ' || exit 0' for the case when we're unable to receive the pipelineId
+        healthPipelineId=$(curl -sb -H "Accept: application/json" -L --no-keepalive --silent -o /dev/null --url "${URL}/api/health" | jq -r ".pipelineId" || exit 0);
+
+        # evaluate Server header against ${EXPECTED_SERVERS}
+        if [[ ${server} =~ "${EXPECTED_SERVERS}" || -z ${server} && "${EXPECTED_SERVERS}" -eq '__empty__' ]]; then
+          echo "... server header check - success: ${server}";
+          # Server is ok, now evaluate HTTP Response code against ${EXPECTED_RESPONSE_CODE}
+          if [ "${code}" -ne "${EXPECTED_RESPONSE_CODE}" ]; then
+            # Code doesn't match, we don't exit the cycle/script, make another iteration
+            echo "${ATTEMPT}/${ATTEMPTS_MAX} - Failed. Status: ${code}; Wanted: ${EXPECTED_RESPONSE_CODE}. Trying again in ${ATTEMPTS_INTERVAL} seconds...";
+          else
+            # Code matches, now evaluate PipelineId
+            echo "... response code check success: ${code}";
+            if [ "${healthPipelineId}" -ne "${CI_PIPELINE_ID}" ]; then
+              # PipelineId doesn't match, we don't exit the cycle/script, make another iteration
+              echo "${ATTEMPT}/${ATTEMPTS_MAX} - Failed. Pipeline ID: ${healthPipelineId}. Wanted: ${CI_PIPELINE_ID}. Trying again in ${ATTEMPTS_INTERVAL} seconds...";
+            else
+              # All checks successful. Exiting the script.
+              echo "... pipeline ID check - success: ${healthPipelineId}";
+              echo "Checks completed successfully.";
+              exit 0;
+            fi;
+          fi;
+        else
+          # Server doesn't match, we don't exit the cycle/script, make another iteration
+          echo "${ATTEMPT}/${ATTEMPTS_MAX} - Failed. Server: ${server}; Wanted: ${EXPECTED_SERVERS}. Trying again in ${ATTEMPTS_INTERVAL} seconds...";
+        fi;
+
+        ATTEMPT=$((ATTEMPT+1));
+        if [ "${ATTEMPT}" -gt "${ATTEMPTS_MAX}" ]; then
+          echo "Too many attempts, exiting with error."
+          exit 1;
+        fi;
+
+        sleep "${ATTEMPTS_INTERVAL}";
+      done;
+  dependencies: []

@@ -1,0 +1,13 @@
+<div id="app-root" rte="4P">
+    <!-- Global popups and dialogs -->
+    <p-toast appendTo="body" [autoZIndex]="false" [style]="{ 'z-index': 11050 }" rte="4Q"></p-toast>
+    <p-confirmDialog #cd appendTo="body" [baseZIndex]="10900" header="Confirm Action" rte="4R">
+        <p-footer rte="4S">
+            <button type="button" pButton icon="pi pi-times" label="No" class="p-button-secondary" (click)="cd.reject()" rte="4T"></button>
+            <button type="button" pButton icon="pi pi-check" label="Yes" (click)="cd.accept()" rte="4U"></button>
+        </p-footer>
+    </p-confirmDialog>
+
+    <pwa rte="4V"></pwa>
+    <router-outlet></router-outlet>
+</div>

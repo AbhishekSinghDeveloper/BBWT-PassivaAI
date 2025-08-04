@@ -1,0 +1,17 @@
+<div [ngClass]="'p-card p-widget p-widget-content p-corner-all'" [ngStyle]="style" [class]="styleClass" rte="12">
+    <div class="p-card-header" *ngIf="headerFacet" rte="13">
+        <ng-content select="p-header"></ng-content>
+    </div>
+    <div class="p-card-body" rte="15">
+        <div class="page-header" *ngIf="header || titleContent" rte="16">
+            <span *ngIf="header" rte="17">{{header}} </span><ng-content select="bb-card-title"></ng-content>
+        </div>
+        <div class="page-sub-header" *ngIf="subheader" rte="19">{{subheader}}</div>
+        <div class="p-card-content" rte="1a">
+            <ng-content></ng-content>
+        </div>
+        <div class="p-card-footer" *ngIf="footerFacet" rte="1c">
+            <ng-content select="p-footer"></ng-content>
+        </div>
+    </div>
+</div>

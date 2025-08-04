@@ -1,0 +1,205 @@
+:host::ng-deep {
+    .dashboard-container, .dashboard-pdf-view-container {
+        padding: 10px;
+        border-radius: 9px;
+
+        .dashboard-topbar {
+            display: grid;
+            grid-auto-flow: column;
+
+            h2 {
+                margin: 7px 0;
+            }
+
+            .pdf-exporting-button {
+                justify-self: end;
+                opacity: 0.3;
+            }
+
+            .pdf-exporting-button:hover {
+                opacity: 1;
+            }
+        }
+
+        .empty-dashboard {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            padding: 48px 32px 16px 32px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+
+            .dashboard-image {
+                width: 280px;
+                height: 300px;
+                flex-shrink: 0;
+            }
+
+            .empty-message {
+                display: flex;
+                margin-top: -50px;
+                padding-bottom: 10px;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
+        }
+
+        .dashboard-widget-grid {
+            width: 100%;
+            display: flex;
+            position: relative;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+            .dashboard-widget-row {
+                width: 100%;
+                height: auto;
+                flex: 1 1 0;
+                display: flex;
+                position: relative;
+                flex-direction: row;
+                align-items: stretch;
+                justify-content: center;
+
+                .dashboard-widget {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    overflow: hidden;
+                    position: relative;
+
+                    reporting-widget {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .dashboard-widget-row:not(:has(.dashboard-widget:not(.hidden))) {
+                display: none !important;
+            }
+
+            .dashboard-widget-row-separator {
+                width: 100%;
+                height: 1px;
+
+                .separator-bar {
+                    width: 100%;
+                    height: 1px;
+                    border-radius: 10px;
+                }
+            }
+
+            .dashboard-widget-row-separator:first-child {
+                padding-top: 0 !important;
+            }
+
+            .dashboard-widget-row-separator:last-child {
+                padding-bottom: 0 !important;
+            }
+
+            .dashboard-widget-separator {
+                width: 1px;
+                height: auto;
+
+                .separator-bar {
+                    width: 1px;
+                    height: 100%;
+                    border-radius: 10px;
+                }
+            }
+
+            .dashboard-widget-separator:first-child {
+                padding-left: 0 !important;
+            }
+
+            .dashboard-widget-separator:last-child {
+                padding-right: 0 !important;
+            }
+        }
+
+        .dashboard-widget-grid.cards {
+            .dashboard-widget-row {
+                .dashboard-widget {
+                    border-radius: 9px;
+                    background: #FFF;
+                    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+                }
+            }
+        }
+
+        .dashboard-widget-grid.dividers {
+            .separator-bar {
+                background: linear-gradient(0deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.18) 100%), #FFF;
+            }
+        }
+
+        &:has(.dashboard-widget-grid:not(.cards)) {
+            background: #FFF;
+        }
+    }
+
+    .dashboard-container {
+        .widget-grid-pdf-view-container,
+        .widget-chart-pdf-view-container,
+        .widget-control-set-pdf-view-container,
+        .widget-html-pdf-view-container {
+            min-width: unset !important;
+        }
+    }
+
+    .dashboard-pdf-view-container {
+        background: #FFF;
+        min-width: 1470px;
+        width: min-content;
+        height: fit-content;
+
+        td, th, h1, h2, h3, h4, h5, h6, label, p, li, span:not(.pi) {
+            font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue",
+            Helvetica, Arial, "Lucida Grande", sans-serif;
+        }
+
+        .dashboard-topbar .pdf-exporting-button {
+            display: none !important;
+        }
+
+        .dashboard-widget-grid {
+            .dashboard-widget {
+                box-shadow: unset !important;
+                height: fit-content !important;
+                min-width: min-content !important;
+
+                reporting-widget, reporting-widget > * {
+                    min-width: 100% !important;
+                }
+
+                .widget-grid-pdf-view-container,
+                .widget-chart-pdf-view-container,
+                .widget-control-set-pdf-view-container,
+                .widget-html-pdf-view-container {
+                    min-width: 100% !important;
+                }
+            }
+
+            .dashboard-widget:has(.widget-control-set-pdf-view-container) {
+                .widget-control-set-item:has(.widget-control-set-item-empty) {
+                    display: none !important;
+                }
+            }
+
+            .separator-bar {
+                display: none;
+            }
+        }
+    }
+
+    .dashboard-pdf-view-page-footer {
+        margin-right: 20px;
+        text-align: right;
+        font-size: 12px;
+        width: 100%;
+    }
+}

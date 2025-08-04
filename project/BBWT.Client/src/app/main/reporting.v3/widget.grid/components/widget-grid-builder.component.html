@@ -1,0 +1,616 @@
+<div class="widget-builder-container">
+    <p-tabView [(activeIndex)]="activeIndex" class="reporting-tabview" (onChange)="refreshPreview()">
+
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">edit_note</i>
+                <span>General</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <ng-content></ng-content>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">drive_file_rename_outline</i>
+                <span>Query Builder</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="tab-content-padding darker-panel">
+                    <query-builder [(querySourceId)]="querySourceId"></query-builder>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">view_columns</i>
+                <span>Columns</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="tab-content-padding darker-panel">
+                    <p-table [columns]="tableColumns"
+                             [value]="columns"
+                             [reorderableColumns]="true"
+                             [lazy]="false"
+                             [paginator]="false"
+                             [scrollable]="true"
+                             [loading]="loading"
+                             dataKey="id"
+                             scrollHeight="500px"
+                             class="reporting-table"
+                             styleClass="p-3"
+                             (onRowReorder)="onRowReordered()">
+                        <ng-template pTemplate="header">
+                            <tr class="header-line-1">
+                                <th class="w-3rem"></th>
+                                <th *ngFor="let column of tableColumns">{{ column.header }}</th>
+                                <th class="w-9rem">Actions</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-column let-index="rowIndex">
+                            <tr [pReorderableRow]="index" class="reorderable-row">
+                                <td>
+                                    <span class="material-icons" pReorderableRowHandle>drag_indicator</span>
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Column name</span>
+                                    {{ column["queryAlias"] }}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Displayed name</span>
+                                    {{ column["header"] }}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Aggregations</span>
+                                    {{ getGridColumnAggregationsDisplaying(column.footer) }}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Sortable</span>
+                                    <p-checkbox [(ngModel)]="column['sortable']"
+                                                [binary]="true"
+                                                [ngModelOptions]="{standalone: true}">
+                                    </p-checkbox>
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Visible</span>
+                                    <p-checkbox [(ngModel)]="column['visible']"
+                                                [binary]="true"
+                                                [ngModelOptions]="{standalone: true}">
+                                    </p-checkbox>
+                                </td>
+                                <td>
+                                    <button pButton type="button" label="Edit" class="p-button-text"
+                                            (click)="onGridViewColumnStartEditing(column)">
+                                    </button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">tune</i>
+                <span>Settings</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <form #editGridViewSettingsForm="ngForm" class="reporting-form">
+                    <div class="tab-content-padding reporting-form-body darker-panel">
+                        <div class="form-section">
+                            <span class="form-section-name">Default sorting</span>
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Sort records by column:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-dropdown [(ngModel)]="defaultSortColumnAlias"
+                                                [options]="columnOptions"
+                                                [showClear]="true"
+                                                [filter]="true"
+                                                appendTo="body"
+                                                id="defaultSortColumnAlias"
+                                                name="defaultSortColumnAlias"
+                                                class="form-input-control">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Sort records in:</label>
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="defaultSortOrder"
+                                                   label="Ascending order"
+                                                   [value]="1"
+                                                   name="defaultSortOrder">
+                                    </p-radioButton>
+                                </div>
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="defaultSortOrder"
+                                                   label="Descending order"
+                                                   [value]="-1"
+                                                   name="defaultSortOrder">
+                                    </p-radioButton>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <span class="form-section-name">End-user options</span>
+                            <div class="form-section-input-group">
+                                <div class="form-input-control-wrapper">
+                                    <p-checkbox [(ngModel)]="showVisibleColumnsSelector"
+                                                [binary]="true"
+                                                label="Allow end-user to hide grid columns"
+                                                name="showVisibleColumnsSelector">
+                                    </p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <div class="form-section-input-group">
+                                <div class="form-input-control-wrapper">
+                                    <p-checkbox [(ngModel)]="isRowSelectable"
+                                                [binary]="true"
+                                                label="Allow end-user to select a row"
+                                                name="showVisibleColumnsSelector">
+                                    </p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section second-level-section no-bottom-border">
+                            <div class="form-section-input-group variables-selection-list">
+                                <label class="form-input-label">
+                                    When a row is selected, store the value of the following columns into a variable:
+                                </label>
+                                <div *ngFor="let column of getAlphabeticallySortedColumns()"
+                                     class="form-input-control-wrapper">
+                                    <p-checkbox [(ngModel)]="column.variableName"
+                                                [disabled]="!isRowSelectable"
+                                                [label]="column.queryAlias"
+                                                [name]="column.queryAlias"
+                                                [binary]="true"
+                                                [trueValue]="getGridColumnVariableName(column.queryAlias)"
+                                                [falseValue]="null">
+                                    </p-checkbox>
+                                    <span [class.disabled]="!isRowSelectable || !column.variableName"
+                                          class="value-display copyable"
+                                          (click)="copyColumnVariable(column)">#{{ getGridColumnVariableName(column.queryAlias) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">play_arrow</i>
+                <span>Preview</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <ng-container *ngIf="columns?.length; else emptyPreviewMessage">
+                    <div class="tab-content-padding darker-panel">
+                        <widget-grid [gridDisplayView]="gridPreview" [ignoreDisplayRule]="true"></widget-grid>
+                    </div>
+                </ng-container>
+                <ng-template #emptyPreviewMessage>
+                    <div class="tab-content-part-message">No content to preview yet.</div>
+                </ng-template>
+            </ng-template>
+        </p-tabPanel>
+
+    </p-tabView>
+</div>
+
+<p-dialog [(visible)]="editGridViewColumnDialogVisible"
+          header="Edit Column Properties"
+          [draggable]="false"
+          class="p-reporting-dialog"
+          [style]="{'max-width': '600px', width: '100%', height: '90vh', display: 'block', 'padding-left': '0', 'padding-right': '0'}"
+          (onHide)="onGridViewColumnEditingDialogHide()">
+    <p-tabView class="reporting-tabview">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">invert_colors</i>
+                <span>Appearance</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <form #editGridViewColumnForm="ngForm" *ngIf="editViewColumn" class="reporting-form">
+                    <div class="tab-content-top-padding tab-content-sides-padding reporting-form-body darker-panel">
+                        <div class="form-section">
+                            <span class="form-section-name">Header</span>
+                            <div class="form-section-input-group">
+                                <label class="form-input-label">Displayed name:</label>
+                                <div class="form-input-control-wrapper">
+                                    <input pInputText [(ngModel)]="editViewColumn.header"
+                                           name="header" required notEmpty
+                                           class="form-input-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <div class="form-section-input-group">
+                                <div class="form-input-control-wrapper">
+                                    <p-checkbox [(ngModel)]="editViewColumn.sortable"
+                                                [binary]="true"
+                                                label="Make the column sortable"
+                                                name="sortable">
+                                    </p-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <span class="form-section-name">Width</span>
+                            <div class="form-section-input-group">
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="editViewColumn.extraSettings['widthMode']"
+                                                   label="Inherit width"
+                                                   [value]="0"
+                                                   name="widthMode">
+                                    </p-radioButton>
+                                </div>
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="editViewColumn.extraSettings['widthMode']"
+                                                   label="Define custom width"
+                                                   [value]="1"
+                                                   name="widthMode">
+                                    </p-radioButton>
+                                    <div class="form-sub-group two-input-columns">
+                                        <div class="form-section-input-group">
+                                            <span class="p-float-label">
+                                                <p-inputNumber [(ngModel)]="editViewColumn.extraSettings['minWidth']"
+                                                               name="minWidth"
+                                                               [showButtons]="true"
+                                                               [min]="0"
+                                                               [max]="editViewColumn.extraSettings['maxWidth']"
+                                                               [disabled]="editViewColumn.extraSettings['widthMode'] !== 1"
+                                                               class="form-input-control">
+                                                </p-inputNumber>
+                                                <label>Min width</label>
+                                            </span>
+                                        </div>
+                                        <div class="form-section-input-group">
+                                            <span class="p-float-label">
+                                                <p-inputNumber [(ngModel)]="editViewColumn.extraSettings['maxWidth']"
+                                                               name="maxWidth"
+                                                               [showButtons]="true"
+                                                               [min]="editViewColumn.extraSettings['minWidth']"
+                                                               [disabled]="editViewColumn.extraSettings['widthMode'] !== 1"
+                                                               class="form-input-control">
+                                                </p-inputNumber>
+                                                <label>Max width</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <span class="form-section-name">Mask</span>
+                            <div class="form-section-input-group">
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="editViewColumn.extraSettings['maskDisplayMode']"
+                                                   label="Inherit mask"
+                                                   [value]="0"
+                                                   name="inheritMask">
+                                    </p-radioButton>
+                                </div>
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="editViewColumn.extraSettings['maskDisplayMode']"
+                                                   label="Use existing custom mask"
+                                                   [value]="1"
+                                                   name="inheritMask">
+                                    </p-radioButton>
+                                    <div class="form-sub-group">
+                                        <p-dropdown [(ngModel)]="editViewColumn.customColumnTypeId"
+                                                    [options]="viewMetadata.customColumnTypes"
+                                                    optionLabel="name"
+                                                    optionValue="id"
+                                                    [showClear]="true"
+                                                    placeholder="Please select"
+                                                    [disabled]="editViewColumn.extraSettings['maskDisplayMode'] !== 1"
+                                                    name="customColumnTypeMask"
+                                                    class="form-input-control"
+                                                    (onChange)="onCustomColumnTypeMaskChanged(editViewColumn, $event.value)">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="editViewColumn.extraSettings['maskDisplayMode']"
+                                                   label="Define custom mask"
+                                                   [value]="2"
+                                                   name="inheritMask">
+                                    </p-radioButton>
+                                    <div class="form-sub-group">
+                                        <input [(ngModel)]="editViewColumn.extraSettings.mask"
+                                               pInputText
+                                               name="mask"
+                                               [disabled]="editViewColumn.extraSettings['maskDisplayMode'] !== 2"
+                                               class="form-input-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section" [class.no-bottom-border]="editViewColumn.dataType !== 'bool'
+                             && editViewColumn.dataType !== 'date' && editViewColumn.dataType !== 'numeric'">
+                            <span class="form-section-name">Format</span>
+                            <div class="form-section-input-group">
+                                <div class="form-input-control-wrapper">
+                                    <p-radioButton [(ngModel)]="editViewColumn.extraSettings['customFormatMode']"
+                                                   label="No format"
+                                                   [value]="0"
+                                                   name="customFormatMode"
+                                                   (ngModelChange)="onCustomFormatModeChange(0)">
+                                    </p-radioButton>
+                                </div>
+                                <div class="form-input-control-wrapper">
+                                    <div class="hint-icon-container">
+                                        <p-radioButton [(ngModel)]="editViewColumn.extraSettings['customFormatMode']"
+                                                       label="Define custom format:"
+                                                       [value]="1"
+                                                       name="customFormatMode"
+                                                       (ngModelChange)="onCustomFormatModeChange(1)">
+                                        </p-radioButton>
+                                        <widget-grid-custom-format-tooltip></widget-grid-custom-format-tooltip>
+                                    </div>
+                                    <div class="form-sub-group">
+                                        <div class="custom-format-editor" *ngIf="editViewColumn.extraSettings['customFormatMode'] === 1">
+                                            <code-editor [(ngModel)]="editViewColumn.extraSettings['customFormat']"
+                                                         [toolbar]="true"
+                                                         format="free"
+                                                         cssClass="html"
+                                                         export="html"
+                                                         name="customFormat">
+                                            </code-editor>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container [ngSwitch]="editViewColumn.dataType">
+                            <ng-container *ngSwitchCase="'bool'">
+                                <div class="form-section">
+                                    <span class="form-section-name">Conditional data type settings</span>
+                                    <div class="form-section-input-group">
+                                        <div class="form-input-control-wrapper">
+                                            <p-checkbox [(ngModel)]="editViewColumn.extraSettings['countNullAsFalse']"
+                                                        [binary]="true"
+                                                        label="Count 'null' as 'false'"
+                                                        name="countNullAsFalse">
+                                            </p-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-section no-bottom-border two-input-columns">
+                                    <div class="form-section-input-group">
+                                        <label class="form-input-label">Shown value when 'true':</label>
+                                        <div class="form-input-control-wrapper">
+                                            <input [(ngModel)]="editViewColumn.extraSettings['trueValueLabel']"
+                                                   pInputText
+                                                   name="trueValueLabel"
+                                                   class="form-input-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-section-input-group">
+                                        <label class="form-input-label">Shown value when 'false':</label>
+                                        <div class="form-input-control-wrapper">
+                                            <input [(ngModel)]="editViewColumn.extraSettings['falseValueLabel']"
+                                                   pInputText
+                                                   name="falseValueLabel"
+                                                   class="form-input-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'numeric'">
+                                <div class="form-section no-bottom-border">
+                                    <span class="form-section-name">Decimal places</span>
+                                    <div class="form-section-input-group">
+                                        <div class="form-input-control-wrapper">
+                                            <p-inputNumber [(ngModel)]="editViewColumn.extraSettings['decimalPlaces']"
+                                                           [showButtons]="true"
+                                                           [min]="0"
+                                                           name="decimalPlaces"
+                                                           class="form-input-control">
+                                            </p-inputNumber>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'date'">
+                                <div class="form-section no-bottom-border">
+                                    <span class="form-section-name">
+                                        Date display format
+                                        <i class="material-icons form-input-label-icon"
+                                           [pTooltip]="dateDisplayFormatTooltip"
+                                           tooltipEvent="focus" appendTo="body" tabindex="0">
+                                            help_outlined
+                                        </i>
+                                    </span>
+                                    <div class="form-section-input-group">
+                                        <div class="form-input-control-wrapper">
+                                            <p-inputGroup class="form-input-control">
+                                                <input [(ngModel)]="editViewColumn.extraSettings['dateMomentFormat']"
+                                                       pInputText
+                                                       name="dateMomentFormat"
+                                                       class="form-input-control"/>
+                                                <p-inputGroupAddon>
+                                                    <p-button [text]="true" [plain]="true"
+                                                              icon="pi pi-clock"
+                                                              styleClass="justify-content-center"
+                                                              (onClick)="menu.toggle($event)"></p-button>
+                                                </p-inputGroupAddon>
+                                            </p-inputGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </form>
+            </ng-template>
+        </p-tabPanel>
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="material-icons mr-2 fill">calculate</i>
+                <span>Formulas</span>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <form #editGridViewColumnAggregationsForm="ngForm" *ngIf="editViewColumn" class="reporting-form">
+                    <div class="tab-content-top-padding tab-content-sides-padding reporting-form-body darker-panel">
+                        <div class="form-section">
+                            <span class="form-section-name">Current formulas</span>
+                            <div class="tab-content-part-message">Formulas enable you to perform arithmetic expressions
+                                on a table column.
+                            </div>
+                            <div class="reporting-inputs-row-group full-width">
+                                <div class="reporting-inputs-row-group-label">Add a Formula</div>
+                                <div class="reporting-inputs-row-group-controls">
+                                    <p-dropdown [options]="footerAggregateFunctionOptions"
+                                                name="expressionSelect"
+                                                class="form-input-control custom-expression"
+                                                appendTo="body"
+                                                placeholder="Custom expression"
+                                                (onChange)="onFooterAggregateFunctionSelected($event.value)">
+                                    </p-dropdown>
+                                    <div class="main-control reporting-input-control-right-icon">
+                                        <input #customAggregateExpressionInput
+                                               [(ngModel)]="editAggregateExpression"
+                                               pInputText
+                                               placeholder="Type the expression"
+                                               name="customExpression"
+                                               class="form-input-control"/>
+                                        <i class="material-icons mr-2 fill right-icon"
+                                           [pTooltip]="customExpressionTooltip"
+                                           tooltipEvent="focus" appendTo="body" tabindex="0">
+                                            help_outlined
+                                        </i>
+                                    </div>
+                                    <div class="reporting-inputs-row-group-action-button-container">
+                                        <button pButton
+                                                [label]="selectedAggregateExpressionIndex === null ? 'Add' : 'Update'"
+                                                type="button"
+                                                class="p-button-text reporting-inputs-row-group-action-button"
+                                                (click)="onCustomAggregateExpressionSubmitted()">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aggregate-expressions">
+                                <div
+                                    *ngFor="let aggregateExpression of editViewColumn.footer.expressions; let i = index"
+                                    class="aggregate-expression-item"
+                                    [class.selected]="selectedAggregateExpressionIndex === i"
+                                    (click)="onAggregateExpressionItemClicked(i)">
+                                    <span class="aggregate-expression-item-value"><span
+                                        class="aggregate-expression-item-value-number">{{ "[" + i + "]" }}</span>: {{ aggregateExpression }}</span>
+                                    <button pButton
+                                            type="button"
+                                            icon="pi pi-times"
+                                            class="p-button-text p-button-secondary aggregate-expression-item-remove-button"
+                                            (click)="onFooterAggregateExpressionRemove(i); $event.stopPropagation();">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <span class="form-section-name">Output value</span>
+                            <div class="tab-content-part-message">
+                                The output value is displayed in a separate row at the bottom of the table.
+                            </div>
+                            <div class="form-sub-group two-input-columns">
+                                <div class="form-section-input-group">
+                                    <label class="form-input-label">
+                                        Text:
+                                        <i class="material-icons mr-1 form-input-label-icon"
+                                           [pTooltip]="customOutputFormatTooltip"
+                                           tooltipEvent="focus" appendTo="body" tabindex="0">
+                                            help_outlined
+                                        </i>
+                                    </label>
+                                    <div class="form-input-control-wrapper">
+                                        <input pInputText [(ngModel)]="editViewColumn.footer['outputFormat']"
+                                               name="footerOutputFormat" class="form-input-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-section-input-group">
+                                    <label class="form-input-label">Alignment:</label>
+                                    <div class="form-input-control-wrapper">
+                                        <p-dropdown [(ngModel)]="editViewColumn.footer['textAlignment']"
+                                                    [options]="textAlignOptions"
+                                                    appendTo="body"
+                                                    placeholder="Select the alignment"
+                                                    name="textAlignment"
+                                                    class="form-input-control">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section no-bottom-border">
+                            <span class="form-section-name">Label</span>
+                            <div class="tab-content-part-message">If provided the label is displayed in the adjacent
+                                cell on the left.
+                            </div>
+                            <div class="form-sub-group two-input-columns">
+                                <div class="form-section-input-group">
+                                    <label class="form-input-label">Text:</label>
+                                    <div class="form-input-control-wrapper">
+                                        <input pInputText [(ngModel)]="editViewColumn.footer['leftCellLabel']"
+                                               name="footerLeftCellLabel" class="form-input-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-section-input-group">
+                                    <label class="form-input-label">Alignment:</label>
+                                    <div class="form-input-control-wrapper">
+                                        <p-dropdown [(ngModel)]="editViewColumn.footer['leftCellLabelAlignment']"
+                                                    [options]="textAlignOptions"
+                                                    appendTo="body"
+                                                    placeholder="Select the alignment"
+                                                    name="footerLeftCellLabelAlignment"
+                                                    class="form-input-control">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+        </p-tabPanel>
+    </p-tabView>
+
+    <p-footer *ngIf="editViewColumn">
+        <button pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="editGridViewColumnDialogVisible = false">
+            <i class="material-icons">clear</i>
+        </button>
+        <button pButton
+                type="submit"
+                label="Save"
+                [disabled]="editGridViewColumnForm?.invalid || editGridViewColumnAggregationsForm?.invalid"
+                (click)="onViewColumnChanged()">
+            <i class="material-icons">check</i>
+        </button>
+    </p-footer>
+</p-dialog>
+
+<p-overlayPanel #overlayPanelColumnOptions styleClass="column-options">
+    <ng-template pTemplate>
+        <p-listbox [listStyle]="{'max-height':'250px'}"
+                   [options]="footerAggregateColumnOptions"
+                   (onChange)="onCustomAggregationExpressionColumnSelected($event)">
+        </p-listbox>
+    </ng-template>
+</p-overlayPanel>
+
+<p-toast></p-toast>
+<p-menu #menu [model]="dateFormatOptions" [popup]="true"
+        styleClass="p-0 max-h-25rem w-30rem overflow-y-auto"
+        appendTo="body"></p-menu>

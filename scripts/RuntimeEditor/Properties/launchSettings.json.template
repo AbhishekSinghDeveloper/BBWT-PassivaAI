@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RuntimeEditor": {
+      "commandName": "Project",
+      "commandLineArgs": "project/BBWT.Client/src/app --embed_links --local C:/dev/BBWT3"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<div class="card--hidden" rte="hF">
+    <h1 rte="hG">Loading Time</h1>
+    <p rte="hH">
+        <label for="loadingTime" class="record-loading-time-label" rte="hI"
+            >Record loading time:</label
+        >
+        <p-checkbox
+            [(ngModel)]="settings.recordLoadingTime"
+            id="loadingTime"
+            name="loadingTime"
+            [binary]="true"
+            (onChange)="save()"
+            rte="hJ"
+        >
+        </p-checkbox>
+    </p>
+
+    <grid
+        [tableSettings]="tableSettings"
+        [gridSettings]="gridSettings"
+        rte="1gz"
+    >
+        <ng-template
+            gridColumnTemplate="displayingRow"
+            columnName="userAgent"
+            let-rowData
+        >
+            <div [title]="rowData.userAgent || 'Unknown'" rte="hN">
+                {{ getShortedUserAgentName(rowData.userAgent) }}
+            </div>
+        </ng-template>
+    </grid>
+</div>
